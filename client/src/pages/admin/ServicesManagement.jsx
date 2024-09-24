@@ -3,16 +3,16 @@ import Categories from "../../components/servicesComponents/Categories";
 import ServicesList from "../../components/servicesComponents/ServicesList";
 function ServicesManagement() {
   return (
-    <main className="flex bg-[#ffffff]">
+    <main className="flex h-screen bg-[#ffffff]">
       {/* Aqui va el componente Sidebar */}
-      <aside className="w-1/4 h-screen border-r-2 border-slate-200 grid place-content-center">
+      <aside className="w-1/4 border-r-2 border-slate-200 grid place-content-center">
         <h1 className="text-4xl text-zinc-950 font-semibold font-amaranth">
           NiceLook.
         </h1>
       </aside>
       {/* Este es el cuerpo de la pagina de gestión de servicios */}
-      <section className="flex flex-col gap-6 w-3/4 p-8">
-        <h1 className="text-4xl text-zinc-950 font-semibold">
+      <section className="flex flex-col gap-6 w-4/5 py-8 px-10">
+        <h1 className="text-4xl text-zinc-950 font-bold">
           Gestiona las categorias y servicios
         </h1>
         <div className="flex gap-6 w-full">
@@ -23,16 +23,16 @@ function ServicesManagement() {
             <div className="flex gap-2">
               <Input
                 placeholder="Barba, Corte de Cabello..."
+                variant="bordered"
                 classNames={{
-                  label: "text-black/50 dark:text-white/90",
-                  input: [
-                    "hover:border-slate-300",
-                  ],
-                  innerWrapper: "bg-transparent",
+                  label: "",
+                  input: [],
+                  innerWrapper: "",
                   inputWrapper: [
-                    "border-2 border-slate-200",
-                    "bg-transparent",
-                    "p-5",
+                    "border-2",
+                    "border-slate-200",
+                    "px-6",
+                    "py-5",
                   ],
                 }}
                 endContent={
@@ -52,14 +52,13 @@ function ServicesManagement() {
                   </svg>
                 }
               />
-              <Button
-                className="border-2 border-slate-200 font-semibold bg-transparent px-6 py-5
-              "
-              >
+              <Button className="border-2 border-slate-200 font-semibold bg-transparent py-5">
                 Crear Nuevo
               </Button>
             </div>
-            <ServicesList />
+            <div>
+              <ServicesList />
+            </div>
           </div>
         </div>
       </section>

@@ -2,7 +2,7 @@ import Service from "./Service";
 
 function ServicesList() {
   return (
-    <article className="flex flex-col gap-6 overflow-y-auto h-[73vh] pr-2">
+    <article className="flex flex-col gap-6 h-[550px] overflow-y-scroll pr-2">
       <Service />
       <Service />
       <Service />
