@@ -1,15 +1,12 @@
 import { Button, Input } from "@nextui-org/react";
-import Categories from "../../components/servicesComponents/Categories";
-import ServicesList from "../../components/servicesComponents/ServicesList";
+import Categories from "../../components/services/Categories";
+import ServicesList from "../../components/services/ServicesList";
+import Sidebar from "../../components/global/Sidebar";
 function ServicesManagement() {
   return (
     <main className="flex h-screen bg-[#ffffff]">
       {/* Aqui va el componente Sidebar */}
-      <aside className="w-1/4 border-r-2 border-slate-200 grid place-content-center">
-        <h1 className="text-4xl text-zinc-950 font-semibold font-amaranth">
-          NiceLook.
-        </h1>
-      </aside>
+      <Sidebar />
       {/* Este es el cuerpo de la pagina de gestión de servicios */}
       <section className="flex flex-col gap-6 w-4/5 py-8 px-10">
         <h1 className="text-4xl text-zinc-950 font-bold">

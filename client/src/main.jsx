@@ -12,11 +12,17 @@ import {
 import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import { NextUIProvider } from "@nextui-org/react";
+import Dashboard from "./pages/Dashboard.jsx";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <div>Error Page</div>,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
     errorElement: <div>Error Page</div>,
   },
   {
@@ -36,7 +42,14 @@ const routes = createBrowserRouter([
       {
         id: "admin-dashboard",
         path: "dashboard",
-        element: <div>Dashboard Page</div>,
+        element: <Dashboard />,
+        children: [
+          {
+            id: "admin-services",
+            path: "services",
+            element: <ServicesManagement />,
+          },
+        ]
       },
     ],
   },
