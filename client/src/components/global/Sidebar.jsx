@@ -1,5 +1,6 @@
 import ButtonCustom from "./ButtonCustom";
-import IconButtonCustom from "./IconButtonCustom";
+import { Button } from "@nextui-org/react";
+import LinkSidebar from "./LinkSidebar";
 
 const navLinks = [
   {
@@ -20,7 +21,7 @@ const navLinks = [
         />
       </svg>
     ),
-    secondary: true,
+    path: "home",
   },
   {
     name: "Perfil del establecimiento",
@@ -40,7 +41,7 @@ const navLinks = [
         />
       </svg>
     ),
-    secondary: true,
+    path: "establishment",
   },
   {
     name: "Categorias y Servicios",
@@ -65,7 +66,7 @@ const navLinks = [
         />
       </svg>
     ),
-    secondary: true,
+    path: "services",
   },
   {
     name: "Empleados",
@@ -85,13 +86,13 @@ const navLinks = [
         />
       </svg>
     ),
-    secondary: true,
+    path: "employees",
   },
 ];
 
 function Sidebar() {
   return (
-    <aside className="bg-[#ffffff] flex flex-col gap-6 pt-8 items-center border-r-2 border-slate-200">
+    <aside className="bg-[#ffffff] w-full flex flex-col gap-5  pt-8 items-center border-r-2 border-slate-200">
       <button className="lg:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -113,10 +114,10 @@ function Sidebar() {
       </h1>
       <div className="w-32 h-32 bg-slate-800 rounded-full"></div>
       <p>Stylos Peluqueria</p>
-      <ButtonCustom secondary name="Servicios" />
-      <nav className="flex flex-col gap-4">
+      <ButtonCustom secondary name="Configuración" />
+      <nav className="flex flex-col gap-4 py-2">
         {navLinks.map((link) => (
-          <IconButtonCustom key={link.name} secondary={link.secondary} primary={link.primary} name={link.name} icon={link.icon} />
+          <LinkSidebar key={link.name} name={link.name} path={link.path} icon={link.icon} />
         ))}
       </nav>
     </aside>

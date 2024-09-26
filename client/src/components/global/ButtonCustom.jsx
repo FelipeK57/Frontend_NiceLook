@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 function ButtonCustom({ name, primary, secondary, classStyles, ...props }) {
 
   ButtonCustom.propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     primary: PropTypes.bool,
     secondary: PropTypes.bool,
     classStyles: PropTypes.string,
