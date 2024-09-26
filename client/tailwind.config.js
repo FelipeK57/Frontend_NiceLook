@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import { nextui } from '@nextui-org/react'
 import { color } from 'framer-motion'
+import tailwindScrollbar from 'tailwind-scrollbar';
 
 module.exports = {
   content: [
@@ -20,6 +21,9 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui(),
+    tailwindScrollbar ({ nocompatible: true })
+  ],
 }
 
