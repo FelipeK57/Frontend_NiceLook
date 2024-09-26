@@ -1,8 +1,13 @@
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Switch } from "@nextui-org/react";
+import ButtonCustom from "../global/ButtonCustom";
 
 function createEmployeeModal(props) {
     return (
-        <Modal {...props} size="2xl">
+        <Modal {...props} size="2xl"
+            classNames={{
+                wrapper: "w-[75%] h-full flex justify-self-end ",
+                backdrop: "w-[75%] h-full flex justify-self-end ",
+            }}>
             <ModalContent>
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
@@ -100,9 +105,7 @@ function createEmployeeModal(props) {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancelar
                                 </Button>
-                                <Button type="submit" color="primary" onPress={onClose}>
-                                    Guardar
-                                </Button>
+                                <ButtonCustom primary name="Guardar" type="submit" classStyles={"px-[5%]"}  />
                             </ModalFooter>
                         </form>
                     </ModalBody>
