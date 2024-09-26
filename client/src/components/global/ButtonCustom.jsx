@@ -1,12 +1,23 @@
 import { Button } from "@nextui-org/react";
-function ButtonCustom({ name, primary, secondary }) {
+import PropTypes from "prop-types";
+function ButtonCustom({ name, primary, secondary, classStyles, ...props }) {
+
+  ButtonCustom.propTypes = {
+    name: PropTypes.string.isRequired,
+    primary: PropTypes.bool,
+    secondary: PropTypes.bool,
+    classStyles: PropTypes.string,
+    children: PropTypes.node,
+  };
+
   return (
-    <Button
+    <Button {...props}
       className={`font-bold ${primary ? "bg-primary text-slate-950" : ""}${
-        secondary ? "bg-transparent border-2 border-slate-200" : ""
-      }`}
+        secondary ? "bg-transparent border-2 border-slate-200" : ""}
+        ${classStyles}`}
     >
       {name}
+      {props.children}
     </Button>
   );
 }
