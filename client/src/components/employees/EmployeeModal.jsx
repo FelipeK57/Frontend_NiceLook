@@ -1,13 +1,44 @@
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Switch } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
+import EmployeeReviews from "./EmployeeReviewsList";
 
 function createEmployeeModal(props) {
     return (
         <Modal {...props} size="2xl"
-            classNames={{
-                wrapper: "w-[75%] h-full flex justify-self-end ",
-                backdrop: "w-[75%] h-full flex justify-self-end ",
-            }}>
+            classNames={
+                props.employeeReviews ? {
+                    base: "w-[75%] h-full !my-0 !mr-0 rounded-r-none",
+                    wrapper: "!justify-end",
+                    backdrop: "w-[75%] h-full flex justify-self-end ",
+                }
+                    :
+                    {
+                        wrapper: "w-[75%] h-full flex justify-self-end ",
+                        backdrop: "w-[75%] h-full flex justify-self-end ",
+                    }}
+            motionProps={
+                props.employeeReviews ? {
+                    variants: {
+                        enter: {
+                            x: 0,
+                            opacity: 1,
+                            transition: {
+                                duration: 0.3,
+                                ease: "easeOut",
+                            },
+                        },
+                        exit: {
+                            x: 40,
+                            opacity: 0,
+                            transition: {
+                                duration: 0.3,
+                                ease: "easeIn",
+                            },
+                        },
+                    }
+                } : null
+            }
+        >
             <ModalContent>
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
@@ -101,11 +132,12 @@ function createEmployeeModal(props) {
                                     <Switch defaultSelected color="success" size="lg"></Switch>
                                 </div>
                             </div>
+                            {props.employeeReviews ? (<EmployeeReviews />) : null}
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancelar
                                 </Button>
-                                <ButtonCustom primary name="Guardar" type="submit" classStyles={"px-[5%]"}  />
+                                <ButtonCustom primary name="Guardar" type="submit" classStyles={"px-[5%]"} />
                             </ModalFooter>
                         </form>
                     </ModalBody>
