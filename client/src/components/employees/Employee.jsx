@@ -27,7 +27,7 @@ function Employee({ colNumber, button, estado }) {
             <h3 className="text-center flex">Nombre</h3>
             <h3 className="text-center flex">1234567890</h3>
             <h3 className="text-center flex">correo@gmail.com</h3>
-            <h3 className={`text-center flex ${estado ? "text-green-500" : "text-red-500"}`}>Activo</h3>
+            <h3 className={`text-center flex ${estado ? "text-green-500" : "text-red-500"}`}>{estado ? "Activo" : "Deshabilitado"}</h3>
             {button ? (
                 <ButtonCustom secondary radius="full" isIconOnly onClick={handleOpen} >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

@@ -18,9 +18,17 @@ function EmployeesManagement() {
 
     return (
         <main className="flex max-h-screen h-screen bg-[#ffffff]">
-            <section className="flex flex-col gap-6 w-full py-8 px-10">
-                <div className="EmplyeesManagementheader flex justify-between pb-2">
-                    <h1 className="text-4xl text-zinc-950 font-bold">Gestion de empleados</h1>
+            <section className="flex flex-col gap-6 w-full py-8 px-4 md:px-10">
+                <div className="EmplyeesManagementheader flex justify-between pb-2 md:flex-row flex-col md:gap-0 gap-8">
+                    <h1 className="hidden lg:block text-4xl text-zinc-950 font-bold">Gestion de empleados</h1>
+                    <div className="flex lg:hidden gap-4 items-center">
+                        <ButtonCustom secondary isIconOnly classStyles="rounded-full 1/2lg:hidden flex" >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                            </svg>
+                        </ButtonCustom>
+                        <h1 className="block lg:hidden text-2xl md:text-4xl text-zinc-950 font-bold">Gestion de empleados</h1>
+                    </div>
                     <div className="EmployeesManagementHeaderButtons flex gap-4">
                         <Input
                             placeholder="Buscar"
@@ -42,7 +50,12 @@ function EmployeesManagement() {
                                 </svg>
                             }
                         />
-                        <ButtonCustom primary name="Crear" classStyles="w-60" onClick={handleOpen} />
+                        <ButtonCustom primary name="Crear" classStyles="1/2xl:w-60 md:w-20 1/2lg:flex hidden" onClick={handleOpen} />
+                        <ButtonCustom primary isIconOnly classStyles="rounded-full 1/2lg:hidden flex" onClick={handleOpen} >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
+                            </svg>
+                        </ButtonCustom>
                     </div>
                 </div>
                 <div className="EmployeesManagementBody">
