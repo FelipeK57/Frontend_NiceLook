@@ -16,7 +16,7 @@ function EmployeeReview() {
             </div>
             <div>
                 <h3 className="text-base text-nowrap">Comentario:</h3>
-                <p className="h-[20vh] text-justify overflow-y-auto pr-2
+                <p className="h-[16vh] text-justify overflow-y-auto pr-2
                 scrollbar scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full active:scrollbar-thumb-primary">
                     ¡Pana! Me encantó el corte, quedó súper bacano. El man que me atendió es un crack, me entendió al toque lo que quería. ¡Me siento como todo un influencer!
                 </p>

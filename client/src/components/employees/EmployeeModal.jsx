@@ -42,7 +42,8 @@ function createEmployeeModal(props) {
             <ModalContent>
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
-                        <h2 className="text-4xl text-zinc-950 font-bold">Crear Empleado</h2>
+                        <h2 className="text-4xl text-zinc-950 font-bold">{props.employeeReviews ? "Visualizar empleado" : "Crear empleado"}</h2>
+                        {props.employeeReviews && <h3 className="text-zinc-500 text-base">Puede editar los campos</h3>}
                     </ModalHeader>
                     <ModalBody>
                         <form className="flex flex-col gap-8">
@@ -109,8 +110,8 @@ function createEmployeeModal(props) {
                                         }} />
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
+                            <div className={`grid gap-4 ${props.employeeReviews ? "grid-cols-2" : "grid-cols-1"}`}>
+                                <div className={`flex flex-col ${props.employeeReviews ? "w-full" : null}`}>
                                     <label className="font-bold" htmlFor="service">Servicios que ofrece</label>
                                     <Select
                                         name="service"
@@ -119,7 +120,7 @@ function createEmployeeModal(props) {
                                         placeholder="Seleccione los servicios"
                                         selectionMode="multiple"
                                         variant="bordered"
-                                        className="max-w-xs"
+                                        className="w-full"
                                     >
                                         {/* Aqui va la lista de elementos con selectItem de nextui */}
                                         <SelectItem value="1">Barberia</SelectItem>
@@ -127,7 +128,7 @@ function createEmployeeModal(props) {
                                         <SelectItem value="3">Tintoreria</SelectItem>
                                     </Select>
                                 </div>
-                                <div className="flex flex-col gap-2">
+                                <div className={`flex-col gap-2 ${props.employeeReviews ? "flex" : "hidden"}`}>
                                     <label className="font-bold" htmlFor="estado">Estado</label>
                                     <Switch defaultSelected color="success" size="lg"></Switch>
                                 </div>
