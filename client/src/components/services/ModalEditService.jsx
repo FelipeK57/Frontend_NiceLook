@@ -7,6 +7,7 @@ import {
   ModalFooter,
   Select,
   SelectItem,
+  Switch,
 } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 import SelectCategorie from "./SelectCategorie";
@@ -33,21 +34,18 @@ const categories = [
     name: "Maquillaje",
   },
 ];
-function ModalNewService({ isOpen, onClose }) {
+function ModalEditService({ isOpen, onClose }) {
   return (
     <Modal size="xl" backdrop="blur" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
-          <h1 className="text-4xl font-bold">Crea un nuevo servicio</h1>
+          <h1 className="text-4xl font-bold">Visualiza un nuevo servicio</h1>
           <p className="text-slate-500 text-base font-medium">
-            Por favor llena todos los campos
+            Puedes editar los campos
           </p>
         </ModalHeader>
         <ModalBody>
-          <label
-            className="font-semibold text-medium lg:text-xl"
-            htmlFor="nameService"
-          >
+          <label className="font-semibold text-medium lg:text-xl" htmlFor="nameService">
             Nombre
           </label>
           <Input
@@ -63,10 +61,7 @@ function ModalNewService({ isOpen, onClose }) {
           />
           <div className="grid grid-cols-2 gap-6 items-end">
             <div className="flex flex-col gap-2">
-              <label
-                className="font-semibold text-medium lg:text-xl"
-                htmlFor="priceService"
-              >
+              <label className="font-semibold text-medium lg:text-xl" htmlFor="priceService">
                 Precio
               </label>
               <Input
@@ -117,17 +112,21 @@ function ModalNewService({ isOpen, onClose }) {
                 placeholder="Ejemplo: 10%"
               />
             </div>
+            <div className="flex flex-col lg:justify-between justify-end h-full">
+              <p className="font-semibold  text-medium lg:text-xl">Estado</p>
+              <Switch size="lg" defaultSelected color="success" />
+            </div>
           </div>
         </ModalBody>
         <ModalFooter>
           <Button color="danger" variant="light" onPress={onClose}>
             Cancelar
           </Button>
-          <ButtonCustom action={onClose} name="Crear" primary />
+          <ButtonCustom action={onClose} name="Guardar" primary />
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
 }
 
-export default ModalNewService;
+export default ModalEditService;

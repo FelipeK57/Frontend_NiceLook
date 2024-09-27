@@ -5,6 +5,7 @@ import SearchIcon from "../../components/icons/SearchIcon";
 import { useState } from "react";
 import ModalNewService from "../../components/services/ModalNewService";
 import ButtonCustom from "../../components/global/ButtonCustom";
+import SelectCategorie from "../../components/services/SelectCategorie";
 function ServicesManagement() {
   const [serviceName, setServiceName] = useState("");
   const [isModalNewServiceOpen, setIsModalNewServiceOpen] = useState(false);
@@ -19,14 +20,17 @@ function ServicesManagement() {
   return (
     <main className="flex h-screen bg-[#ffffff]">
       <section className="flex flex-col gap-6 w-full py-8 px-10">
-        <h1 className="text-4xl text-zinc-950 font-bold">
+        <h1 className="text-2xl lg:text-4xl text-zinc-950 font-bold">
           Gestiona las categorias y servicios
         </h1>
+        <div className="block lg:hidden">
+          <SelectCategorie />
+        </div>
         <div className="flex gap-6 w-full">
-          <div className="w-1/5">
+          <div className="hidden lg:block w-1/5">
             <Categories />
           </div>
-          <div className="flex flex-col gap-6 w-3/5">
+          <div className="flex flex-col gap-6 w-full lg:w-3/4">
             <div className="flex gap-2">
               <Input
                 onChange={handleServiceNameChange}
@@ -49,7 +53,7 @@ function ServicesManagement() {
               <ButtonCustom
                 classStyles={"p-5"}
                 action={handleOpen}
-                secondary
+                primary
                 name={"Crear Servicio"}
               />
               <ModalNewService

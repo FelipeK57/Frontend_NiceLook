@@ -93,8 +93,8 @@ const navLinks = [
 function Sidebar() {
   const name = localStorage.getItem("name");
   return (
-    <aside className="bg-[#ffffff] w-full flex flex-col gap-5  pt-8 items-center border-r-2 border-slate-200">
-      <button className="lg:hidden">
+    <aside className="bg-[#ffffff] w-full flex flex-col gap-5 pt-8 items-center border-r-2 border-slate-200">
+      <button className="md:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -110,7 +110,7 @@ function Sidebar() {
           />
         </svg>
       </button>
-      <h1 className="hidden lg:block font-amaranth font-bold text-5xl text-center">
+      <h1 className="hidden md:block font-amaranth font-bold text-5xl text-center">
         NiceLook.
       </h1>
       <div className="w-32 h-32 bg-slate-800 rounded-full"></div>
