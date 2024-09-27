@@ -75,10 +75,15 @@ function EmployeesList() {
                 </Suspense>
             </div>
         </article>
-        <article>
+        <article className="flex 1/2lg:hidden">
             <Accordion className=" max-h-[70vh] overflow-y-auto
             md:scrollbar md:scrollbar-thumb-slate-200  md:scrollbar-thumb-rounded-full md:scrollbar-track-rounded-full md:active:scrollbar-thumb-primary md:hover:scrollbar-thumb-slate-300
             " variant="splitted" itemClasses={itemClasses}>
+
+                {/* Aqui va la lista de empleados cargados como AccordionItems recive un AccordionCustomTitle y un AccordionCustomContent */}
+                {/* El AccordionCustomContent recive un boolean para saber si lleva o no un button */}
+                {/* El AccordionCustomTitle recive el nombre del empleado y su nuip */}
+
                 <AccordionItem key="1" aria-label="Empleado 1" title={<AccordionCustomTitle nombre="Empleado 1" nuip="# Nuip" />}>
                     <AccordionCustomContent button={true} />
                 </AccordionItem>
