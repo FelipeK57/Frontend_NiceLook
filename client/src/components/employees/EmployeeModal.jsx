@@ -1,20 +1,21 @@
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Switch } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
-import EmployeeReviews from "./EmployeeReviewsList";
+import EmployeeReviewsList from "./EmployeeReviewsList";
 
 function createEmployeeModal(props) {
     return (
         <Modal {...props} size="2xl"
             classNames={
                 props.employeeReviews ? {
-                    base: "w-[75%] h-full !my-0 !mr-0 rounded-r-none",
+                    base: "1/2lg:w-[75%] h-full overflow-y-auto sm:overflow-y-hidden  !my-0 !mr-0 !ml-0 1/2lg:ml-2 rounded-r-none sm:rounded-l-lg rounded-l-3xl sm:rounded-bl-xl",
                     wrapper: "!justify-end",
-                    backdrop: "w-[75%] h-full flex justify-self-end ",
+                    backdrop: "1/2lg:w-[75%] h-full flex justify-self-end ",
                 }
                     :
                     {
-                        wrapper: "w-[75%] h-full flex justify-self-end ",
-                        backdrop: "w-[75%] h-full flex justify-self-end ",
+                        base: "rounded-b-none sm:rounded-xl !m-0 sm:!m-1",
+                        wrapper: "1/2lg:w-[75%] h-full flex justify-self-end ",
+                        backdrop: "1/2lg:w-[75%] h-full flex justify-self-end ",
                     }}
             motionProps={
                 props.employeeReviews ? {
@@ -42,11 +43,11 @@ function createEmployeeModal(props) {
             <ModalContent>
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
-                        <h2 className="text-4xl text-zinc-950 font-bold">{props.employeeReviews ? "Visualizar empleado" : "Crear empleado"}</h2>
+                        <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employeeReviews ? "Visualizar empleado" : "Crear empleado"}</h2>
                         {props.employeeReviews && <h3 className="text-zinc-500 text-base">Puede editar los campos</h3>}
                     </ModalHeader>
                     <ModalBody>
-                        <form className="flex flex-col gap-8">
+                        <form className="flex flex-col gap-6 sm:gap-8">
                             <div className="flex flex-col gap-2">
                                 <label className="font-bold" htmlFor="name">Nombre</label>
                                 <Input
@@ -133,8 +134,8 @@ function createEmployeeModal(props) {
                                     <Switch defaultSelected color="success" size="lg"></Switch>
                                 </div>
                             </div>
-                            {props.employeeReviews ? (<EmployeeReviews />) : null}
-                            <ModalFooter>
+                            {props.employeeReviews ? (<EmployeeReviewsList />) : null}
+                            <ModalFooter className={ props.employeeReviews ? " !py-2 sm:py-4" : "py-4"}>
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancelar
                                 </Button>

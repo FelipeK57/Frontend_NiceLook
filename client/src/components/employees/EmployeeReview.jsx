@@ -1,6 +1,6 @@
 function EmployeeReview() {
     return (
-        <div className="flex flex-col min-w-[60%] mt-8 border-2 border-slate-200 rounded-2xl py-2 px-4 ">
+        <div className=" flex flex-col min-w-[60%] mt-8 border-2 border-slate-200 rounded-2xl py-2 px-4 ">
             <div className="flex  justify-between w-full">
                 <h3 className="text-lg font-bold text-nowrap">Nombre del cliente</h3>
                 <div className="flex gap-2">
