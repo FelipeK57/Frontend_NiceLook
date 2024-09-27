@@ -91,6 +91,7 @@ const navLinks = [
 ];
 
 function Sidebar() {
+  const name = localStorage.getItem("name");
   return (
     <aside className="bg-[#ffffff] w-full flex flex-col gap-5  pt-8 items-center border-r-2 border-slate-200">
       <button className="lg:hidden">
@@ -113,11 +114,16 @@ function Sidebar() {
         NiceLook.
       </h1>
       <div className="w-32 h-32 bg-slate-800 rounded-full"></div>
-      <p>Stylos Peluqueria</p>
+      <p>{name}</p>
       <ButtonCustom secondary name="Configuración" />
       <nav className="flex flex-col gap-4 py-2">
         {navLinks.map((link) => (
-          <LinkSidebar key={link.name} name={link.name} path={link.path} icon={link.icon} />
+          <LinkSidebar
+            key={link.name}
+            name={link.name}
+            path={link.path}
+            icon={link.icon}
+          />
         ))}
       </nav>
     </aside>

@@ -1,9 +1,21 @@
-import { Button, Input } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 import Categories from "../../components/services/Categories";
 import ServicesList from "../../components/services/ServicesList";
-import Sidebar from "../../components/global/Sidebar";
 import SearchIcon from "../../components/icons/SearchIcon";
+import { useState } from "react";
+import ModalNewService from "../../components/services/ModalNewService";
+import ButtonCustom from "../../components/global/ButtonCustom";
 function ServicesManagement() {
+  const [serviceName, setServiceName] = useState("");
+  const [isModalNewServiceOpen, setIsModalNewServiceOpen] = useState(false);
+
+  const handleOpen = () => setIsModalNewServiceOpen(true);
+  const handleClose = () => setIsModalNewServiceOpen(false);
+
+  const handleServiceNameChange = (event) => {
+    setServiceName(event.target.value);
+  };
+
   return (
     <main className="flex h-screen bg-[#ffffff]">
       <section className="flex flex-col gap-6 w-full py-8 px-10">
@@ -17,6 +29,8 @@ function ServicesManagement() {
           <div className="flex flex-col gap-6 w-3/5">
             <div className="flex gap-2">
               <Input
+                onChange={handleServiceNameChange}
+                value={serviceName}
                 placeholder="Barba, Corte de Cabello..."
                 variant="bordered"
                 classNames={{
@@ -30,13 +44,18 @@ function ServicesManagement() {
                     "py-5",
                   ],
                 }}
-                endContent={
-                  <SearchIcon />
-                }
+                endContent={<SearchIcon />}
               />
-              <Button className="border-2 border-slate-200 font-semibold bg-transparent py-5">
-                Crear Nuevo
-              </Button>
+              <ButtonCustom
+                classStyles={"p-5"}
+                action={handleOpen}
+                secondary
+                name={"Crear Servicio"}
+              />
+              <ModalNewService
+                isOpen={isModalNewServiceOpen}
+                onClose={handleClose}
+              />
             </div>
             <div>
               <ServicesList />
