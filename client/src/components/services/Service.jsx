@@ -3,6 +3,20 @@ import { useDisclosure } from "@nextui-org/react";
 import ModalEditService from "./ModalEditService";
 import PropTypes from "prop-types";
 
+/**
+ * Service component displays the details of a service including its name, price, commission, state, reviews, and score.
+ * It also provides buttons to view details and delete the service.
+ *
+ * @component
+ * @param {Object} props - The properties object.
+ * @param {string} props.name - The name of the service.
+ * @param {number} props.price - The price of the service.
+ * @param {number} props.commission - The commission percentage of the service.
+ * @param {boolean} props.state - The state of the service (active or inactive).
+ * @param {number} props.reviews - The number of reviews for the service.
+ * @param {number} props.score - The score of the service out of 5.
+ * @returns {JSX.Element} The rendered Service component.
+ */
 function Service({ name, price, commission, state, reviews, score }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleOpen = () => {

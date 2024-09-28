@@ -6,6 +6,18 @@ import { useState } from "react";
 import ModalNewService from "../../components/services/ModalNewService";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import SelectCategorie from "../../components/services/SelectCategorie";
+/**
+ * ServicesManagement component renders the main interface for managing categories and services.
+ * It includes a search input, a button to open a modal for creating a new service, and a list of services.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <ServicesManagement />
+ * )
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 function ServicesManagement() {
   const [serviceName, setServiceName] = useState("");
   const [isModalNewServiceOpen, setIsModalNewServiceOpen] = useState(false);

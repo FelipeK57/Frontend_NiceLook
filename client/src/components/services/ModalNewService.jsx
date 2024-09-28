@@ -5,34 +5,19 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Select,
-  SelectItem,
 } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 import SelectCategorie from "./SelectCategorie";
 
-const categories = [
-  {
-    id: 1,
-    name: "Barberia",
-  },
-  {
-    id: 2,
-    name: "SPA de uñas",
-  },
-  {
-    id: 3,
-    name: "SPA",
-  },
-  {
-    id: 4,
-    name: "Peluqueria",
-  },
-  {
-    id: 5,
-    name: "Maquillaje",
-  },
-];
+/**
+ * ModalNewService component renders a modal for creating a new service.
+ *
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isOpen - Determines if the modal is open.
+ * @param {Function} props.onClose - Function to call when the modal is closed.
+ *
+ * @returns {JSX.Element} The rendered modal component.
+ */
 function ModalNewService({ isOpen, onClose }) {
   return (
     <Modal size="xl" backdrop="blur" isOpen={isOpen} onClose={onClose}>
@@ -44,6 +29,7 @@ function ModalNewService({ isOpen, onClose }) {
           </p>
         </ModalHeader>
         <ModalBody>
+          {/* Service Name Input */}
           <label
             className="font-semibold text-medium lg:text-xl"
             htmlFor="nameService"
@@ -63,6 +49,7 @@ function ModalNewService({ isOpen, onClose }) {
           />
           <div className="grid grid-cols-2 gap-6 items-end">
             <div className="flex flex-col gap-2">
+              {/* Service Price Input */}
               <label
                 className="font-semibold text-medium lg:text-xl"
                 htmlFor="priceService"
@@ -88,11 +75,13 @@ function ModalNewService({ isOpen, onClose }) {
               />
             </div>
             <div className="flex flex-col gap-2">
+              {/* Service Category Selector */}
               <SelectCategorie />
             </div>
           </div>
           <div className="grid grid-cols-[47%_53%] gap-6 items-end">
             <div className="flex flex-col gap-2">
+              {/* Service Commission Input */}
               <label
                 className="font-semibold text-medium lg:text-xl"
                 htmlFor="comissionService"
@@ -120,6 +109,7 @@ function ModalNewService({ isOpen, onClose }) {
           </div>
         </ModalBody>
         <ModalFooter>
+          {/* Modal Footer Buttons */}
           <Button color="danger" variant="light" onPress={onClose}>
             Cancelar
           </Button>

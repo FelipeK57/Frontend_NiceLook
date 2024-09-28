@@ -23,6 +23,22 @@ const categories = [
   },
 ];
 
+/**
+ * SelectCategorie component renders a dropdown select element for categories.
+ *
+ * @component
+ * @example
+ * return (
+ *   <SelectCategorie />
+ * )
+ *
+ * @returns {JSX.Element} A dropdown select element with categories.
+ *
+ * @description
+ * This component uses the `Select` and `SelectItem` components to create a dropdown menu.
+ * It applies custom styles through the `className` and `classNames` props.
+ * The `categories` array is mapped to generate the list of selectable items.
+ */
 function SelectCategorie() {
   return (
     <Select

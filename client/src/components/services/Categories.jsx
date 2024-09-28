@@ -1,4 +1,34 @@
 import { useState } from "react";
+/**
+ * Categories component renders a list of service categories.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <Categories />
+ * )
+ * 
+ * @returns {JSX.Element} The rendered component.
+ * 
+ * @description
+ * This component displays a list of categories such as "Barberia", "SPA de uñas", etc.
+ * It allows the user to select a category, which will be highlighted.
+ * 
+ * @function
+ * @name Categories
+ * 
+ * @property {Array<Object>} categories - Array of category objects.
+ * @property {number} categories.id - Unique identifier for the category.
+ * @property {string} categories.name - Name of the category.
+ * 
+ * @property {number} categorySelected - State variable to track the selected category.
+ * @property {function} setCategorySelected - Function to update the selected category.
+ * 
+ * @property {function} handleCategorySelected - Function to handle the selection of a category.
+ * @param {number} id - The id of the selected category.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 function Categories() {
   const categories = [
     {

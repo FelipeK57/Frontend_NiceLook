@@ -5,35 +5,20 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Select,
-  SelectItem,
   Switch,
 } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 import SelectCategorie from "./SelectCategorie";
 
-const categories = [
-  {
-    id: 1,
-    name: "Barberia",
-  },
-  {
-    id: 2,
-    name: "SPA de uñas",
-  },
-  {
-    id: 3,
-    name: "SPA",
-  },
-  {
-    id: 4,
-    name: "Peluqueria",
-  },
-  {
-    id: 5,
-    name: "Maquillaje",
-  },
-];
+/**
+ * ModalEditService component renders a modal for editing a service.
+ *
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isOpen - Determines if the modal is open.
+ * @param {Function} props.onClose - Function to call when the modal is closed.
+ *
+ * @returns {JSX.Element} The rendered modal component.
+ */
 function ModalEditService({ isOpen, onClose }) {
   return (
     <Modal size="xl" backdrop="blur" isOpen={isOpen} onClose={onClose}>
