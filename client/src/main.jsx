@@ -13,6 +13,7 @@ import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import EmployeesManagement from "./pages/admin/EmployeesManagement.jsx";
+import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -33,6 +34,12 @@ const routes = createBrowserRouter([
   {
     path: "/employees",
     element: <EmployeesManagement />,
+    errorElement: <div>Error Page</div>,
+  },
+
+  {
+    path: "/EditProfilePage",
+    element: <EditProfilePage/>,
     errorElement: <div>Error Page</div>,
   },
   {
@@ -58,6 +65,12 @@ const routes = createBrowserRouter([
             id: "admin-employees",
             path: "employees",
             element: <EmployeesManagement />,
+          },
+
+          {
+            id: "admin-edit-profile",
+            path: "EditProfilePage",
+            element: <EditProfilePage />,
           },
         ]
       },

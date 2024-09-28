@@ -41,7 +41,7 @@ const navLinks = [
         />
       </svg>
     ),
-    path: "establishment",
+    path: "EditProfilePage",
   },
   {
     name: "Categorias y Servicios",
