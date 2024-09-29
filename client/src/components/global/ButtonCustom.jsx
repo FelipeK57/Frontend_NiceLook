@@ -1,7 +1,8 @@
 import { Button } from "@nextui-org/react";
-function ButtonCustom({ name, primary, secondary }) {
+function ButtonCustom({ name, primary, secondary, ...props }) {
   return (
     <Button
+      {...props}
       className={`font-bold ${primary ? "bg-primary text-slate-950" : ""}${
         secondary ? "bg-transparent border-2 border-slate-200" : ""
       }`}
