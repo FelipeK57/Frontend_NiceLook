@@ -9,9 +9,10 @@ import {
   // Navigate,
   RouterProvider,
 } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
-import { NextUIProvider } from "@nextui-org/react";
 import Dashboard from "./pages/Dashboard.jsx";
 
 const routes = createBrowserRouter([
@@ -49,7 +50,7 @@ const routes = createBrowserRouter([
             path: "services",
             element: <ServicesManagement />,
           },
-        ]
+        ],
       },
     ],
   },
@@ -57,6 +58,8 @@ const routes = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={routes} />
+    <GoogleOAuthProvider clientId="659540305448-65l2ttvn04541tpuke3c411nrocbupdv.apps.googleusercontent.com">
+      <RouterProvider router={routes} />
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );
