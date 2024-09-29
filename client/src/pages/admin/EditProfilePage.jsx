@@ -4,9 +4,9 @@ import ButtonCustom from "../../components/global/ButtonCustom";
 import { Input, link, Modal } from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/react";
 import GestModal from "../../components/edit/GestModal";
-import { useState } from "react";
 import InfoPopover from "../../components/edit/InfoPopover";
-import { Link } from "react-router-dom";
+
+
 
 const EstablishmentProfile = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -15,6 +15,10 @@ const EstablishmentProfile = () => {
         onOpen();
         console.log("hola");
     }
+
+
+
+
     return (
         <div className="px-8 pt-3">
             {/* Contenedor principal */}
@@ -38,11 +42,22 @@ const EstablishmentProfile = () => {
                         </div>
 
                         <div className="ml-6 mt-32">
-                            <input
-                                type="text"
-                                className="text-5xl font-bold text-gray-800 border-b-2 border-gray-300 focus:outline-none focus:border-gray-400"
-                                placeholder="Nombre peluquería"
-                            />
+                        <Input
+                            placeholder="Nombre de establecimiento"
+                            variant="bordered"
+                            classNames={{
+                                label: "",
+                                input: ["text-3xl font-bold text-gray-800"],
+                                innerWrapper: "",
+                                inputWrapper: [
+
+                                    "border-2",
+                                    "border-slate-200",
+                                    "px-8",
+                                    "py-8",
+                                ],
+                            }}
+                        />
                         </div>
                     </div>
 
@@ -58,28 +73,25 @@ const EstablishmentProfile = () => {
                 {/* Sección de dirección */}
                 <div className="flex items-center justify-between -translate-y-16 ml-6">
                     <div className="relative w-1/3">
-                        <Input type="text" label="Ciudad, Departamento" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
-                        <Input type="text" label="Dirreción de establecimiento" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full mt-2" }} />
+                        <Input type="text" label="Ciudad, Departamento" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-xl w-full" }} />
+                        <Input type="text" label="Dirreción de establecimiento" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-xl w-full mt-2" }} />
                     </div>
                     <div className="flex flex-col justify-end">
                         <h1 className="flex justify-end text-3xl font-bold text-gray-800">Contacto</h1>
                         <div className="flex justify-end items-center mt-4 space-x-4">
-
-                            <ContactButton icon="instagram" />
-                            <ContactButton icon="whatsapp" />
-                            <ContactButton icon="facebook" />
-                            <ContactButton type="button" icon="more" onClick={handleOpen} />
-                            <InfoPopover placement={"top"}
+                        <InfoPopover icon="mail" placement={"top"} isIconOnly className="border-2 border-slate-200 rounded-full p-2 " variant="bordered"
                                 redirectTo={"https://www.google.com/search?gs_ssp=eJzj4tLP1TfIyK1MKy5TYDRgdGDw4khLTE5Nys_PBgBmYAfL&client=opera-gx&q=facebook&sourceid=opera&ie=UTF-8&oe=UTF-8"}>
-
                             </InfoPopover>
-                            <InfoPopover placement={"top"}
-                            />
-                            <InfoPopover placement={"top"}
-                            />
-                            <InfoPopover placement={"top"}
-                            />
-
+                            <InfoPopover icon="instagram" placement={"top"} isIconOnly className="border-2 border-slate-200 rounded-full p-2 " variant="bordered"
+                                redirectTo={"https://www.google.com/search?gs_ssp=eJzj4tLP1TfIyK1MKy5TYDRgdGDw4khLTE5Nys_PBgBmYAfL&client=opera-gx&q=facebook&sourceid=opera&ie=UTF-8&oe=UTF-8"}>
+                            </InfoPopover>
+                            <InfoPopover icon="whatsapp" placement={"top"} isIconOnly className="border-2 border-slate-200 rounded-full p-2 " variant="bordered"
+                                redirectTo={"https://www.google.com/search?gs_ssp=eJzj4tLP1TfIyK1MKy5TYDRgdGDw4khLTE5Nys_PBgBmYAfL&client=opera-gx&q=facebook&sourceid=opera&ie=UTF-8&oe=UTF-8"}>
+                            </InfoPopover>
+                            <InfoPopover icon="facebook" placement={"top"} isIconOnly className="border-2 border-slate-200 rounded-full p-2 " variant="bordered"
+                                redirectTo={"https://www.google.com/search?gs_ssp=eJzj4tLP1TfIyK1MKy5TYDRgdGDw4khLTE5Nys_PBgBmYAfL&client=opera-gx&q=facebook&sourceid=opera&ie=UTF-8&oe=UTF-8"}>
+                            </InfoPopover>
+                            <ContactButton type="button" icon="more" onClick={handleOpen} />
                         </div>
                     </div>
                 </div>

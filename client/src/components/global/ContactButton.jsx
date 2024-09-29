@@ -2,9 +2,9 @@ import { EnvelopeIcon, PlusIcon } from "@heroicons/react/24/outline";
 import WhatsappIcon from "../icons/WhatsappIcon";
 import InstagramIcon from "../icons/IntagramIcon";
 import FacebookIcon from "../icons/FacebookIcon";
-const ContactButton = ({ icon, ...props }) => {
+const ContactButton = (props) => {
     const renderIcon = () => {
-        switch (icon) {
+        switch (props.icon) {
             case "mail":
                 return <EnvelopeIcon className="h-7 w-7 stroke-2" />;
             case "instagram":
@@ -24,6 +24,7 @@ const ContactButton = ({ icon, ...props }) => {
         <button {...props} className="bg-gray-200 hover:bg-gray-300 p-2 rounded-full">
             {renderIcon()}
         </button>
+        
     );
 };
 
