@@ -34,6 +34,17 @@ export default function AdminLogin() {
     });
   };
 
+  const sendToken = (token) => {
+    api
+      .post("/auth/google", token)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <>
       <main className="h-screen flex items-center">
@@ -49,12 +60,12 @@ export default function AdminLogin() {
               <h1 className="font-bold text-3xl">Regístrate</h1>
             </header>
             <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                console.log(credentialResponse);
+              onSuccess={(response) => {
+                sendToken(response.accessToken);
               }}
-              onError={() => {
-                console.log("Fallo en el login");
-              }}
+              // onError={() => {
+              //   console.log("Fallo en el inicio de sesión");
+              // }}
             />
             <Separator />
             <p>También puedes registrarte con tu correo electrónico.</p>
@@ -99,7 +110,10 @@ export default function AdminLogin() {
                 name="Entrar"
                 primary
                 isDisabled={
-                  !formData.name || !formData.lastname || !formData.email || !formData.password
+                  !formData.name ||
+                  !formData.lastname ||
+                  !formData.email ||
+                  !formData.password
                 }
                 isLoading={loading}
               />
