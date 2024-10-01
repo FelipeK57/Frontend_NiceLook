@@ -61,7 +61,7 @@ export default function AdminLogin() {
             </header>
             <GoogleLogin
               onSuccess={(response) => {
-                sendToken(response.accessToken);
+                sendToken(response.credential);
               }}
               // onError={() => {
               //   console.log("Fallo en el inicio de sesión");
