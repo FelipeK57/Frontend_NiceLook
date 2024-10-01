@@ -36,7 +36,7 @@ export default function AdminLogin() {
 
   const sendToken = (token) => {
     api
-      .post("/auth/google/", token)
+      .post("/auth/google/", { token })
       .then((response) => {
         console.log(response);
       })
@@ -47,8 +47,8 @@ export default function AdminLogin() {
 
   return (
     <>
+      <BackgroundLogin />
       <main className="h-screen flex items-center">
-        <BackgroundLogin />
         <article className="flex flex-col md:flex-row items-center w-[75%] mx-auto h-4/5">
           <section className="w-full h-full flex justify-center items-center">
             <h1 className="font-bold text-4xl">
