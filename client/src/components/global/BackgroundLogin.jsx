@@ -15,7 +15,7 @@ const BackgroundLogin = () => {
       </svg>
 
       <svg
-        className="absolute top-0 left-0 w-full rotate-180"
+        className="absolute lg:-top-10 left-0 w-full rotate-180"
         viewBox="0 0 1728 142"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
