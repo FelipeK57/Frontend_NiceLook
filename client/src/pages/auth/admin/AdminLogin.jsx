@@ -35,7 +35,6 @@ export default function AdminLogin() {
   };
 
   const sendToken = (token) => {
-    console.log(token);
     api
       .post("/auth/google/", token)
       .then((response) => {
