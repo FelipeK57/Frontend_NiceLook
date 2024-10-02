@@ -4,12 +4,14 @@ import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import CreateEmployeeModal from "./EmployeeModal";
 
-function Employee({ colNumber, button, estado }) {
+function Employee({ colNumber, button, estado,employee, user }) {
 
     Employee.propTypes = {
         colNumber: PropTypes.string,
         button: PropTypes.bool,
-        estado: PropTypes.bool
+        estado: PropTypes.bool,
+        employee: PropTypes.object.isRequired,
+        user: PropTypes.object.isRequired
     };
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,10 +25,10 @@ function Employee({ colNumber, button, estado }) {
     return (
         <div className={`EmployeeContent border-2 border-slate-200 rounded-full py-2 grid pr-10 place-items-center
         grid-cols-${colNumber} `}>
-            <h3 className=" font-bold text-center">112356</h3>
-            <h3 className="text-center flex">Nombre</h3>
-            <h3 className="text-center flex">1234567890</h3>
-            <h3 className="text-center flex">correo@gmail.com</h3>
+            <h3 className=" font-bold text-center">{employee.code}</h3>
+            <h3 className="text-center flex">{user.last_name}</h3>
+            <h3 className="text-center flex">{employee.phone}</h3>
+            <h3 className="text-center flex">{user.email}</h3>
             <h3 className={`text-center flex ${estado ? "text-green-500" : "text-red-500"}`}>{estado ? "Activo" : "Deshabilitado"}</h3>
             {button ? (
                 <ButtonCustom secondary radius="full" isIconOnly onClick={handleOpen} >
@@ -36,7 +38,7 @@ function Employee({ colNumber, button, estado }) {
                 </ButtonCustom>
             ) : null}
 
-            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employeeReviews />
+            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employee={employee} user={user} />
         </div>
     );
 }

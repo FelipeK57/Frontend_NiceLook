@@ -4,17 +4,32 @@ import EmployeesList from "../../components/employees/EmployeesList";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import CreateEmployeeModal from "../../components/employees/EmployeeModal";
-
+import { searchEmployees } from "../../api/employee/employee";
 
 function EmployeesManagement() {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [backdrop, setBackdrop] = useState("blur");
+    const [searchEmployee, setSearchEmployee] = useState("");
+    const [filteredEmployees, setFilteredEmployees] = useState([]);
 
     const handleOpen = () => {
         setBackdrop("blur");
         onOpen();
     };
+
+    const handleSearch = async (event) => {
+        const query = event.target.value;
+        setSearchEmployee(query);
+        if (query.length !== 0) {
+            const response = await searchEmployees(query);
+            setFilteredEmployees(response.data);
+        } else {
+            setFilteredEmployees([]);
+        }
+    };
+
+    console.log(filteredEmployees);
 
     return (
         <main className="flex max-h-screen h-screen bg-[#ffffff]">
@@ -31,8 +46,10 @@ function EmployeesManagement() {
                     </div>
                     <div className="EmployeesManagementHeaderButtons flex gap-4">
                         <Input
-                            placeholder="Buscar"
+                            placeholder="Buscar por nombre o apellido"
                             variant="bordered"
+                            value={searchEmployee}
+                            onChange={(e) => handleSearch(e)}
                             classNames={{
                                 label: "",
                                 input: [],
@@ -59,7 +76,7 @@ function EmployeesManagement() {
                     </div>
                 </div>
                 <div className="EmployeesManagementBody">
-                    <EmployeesList />
+                    <EmployeesList filteredEmployees={filteredEmployees.length !== 0 ? filteredEmployees : null} />
                 </div>
                 <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} />
             </section>
