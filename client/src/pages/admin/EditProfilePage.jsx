@@ -33,6 +33,7 @@ const EstablishmentProfile = () => {
     <div className="px-8 pt-3">
       {/* Contenedor principal */}
       <div>
+        <form>
         <div className="flex m-4">
           <h1 className="text-4xl font- font-bold text-gray-800">
             Edita el perfil del establecimiento
@@ -177,6 +178,7 @@ const EstablishmentProfile = () => {
             />
           </div>
         </div>
+        </form>
       </div>
       <GestModal isOpen={isOpen} backdrop={"blur"} onClose={onClose} />
     </div>
