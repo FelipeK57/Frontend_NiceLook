@@ -14,6 +14,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -33,20 +34,20 @@ const routes = createBrowserRouter([
   },
   {
     path: "/admin",
-    // element: <Navigate to="./login"/>,
     children: [
       {
-        id: "admin-login",
         path: "login",
         element: <AdminLogin />,
       },
       {
-        id: "admin-dashboard",
         path: "dashboard",
-        element: <Dashboard />,
+        element: <ProtectedRoute />,
         children: [
           {
-            id: "admin-services",
+            index: true,
+            element: <Dashboard />,
+          },
+          {
             path: "services",
             element: <ServicesManagement />,
           },
