@@ -1,5 +1,8 @@
 import { useState } from "react";
 import api from "@/api";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../../../constants";
+import { useNavigate } from "react-router-dom";
 
 import ButtonCustom from "@/components/global/ButtonCustom";
 import { Input } from "@nextui-org/input";
@@ -17,28 +20,45 @@ export default function AdminLogin() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     console.log("Form data", formData);
-    api.post("/auth/register", formData).then((response) => {
-      console
-        .log(response)
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    });
+    api
+      .post("/register/admin", {
+        first_name: formData.name,
+        last_name: formData.lastname,
+        email: formData.email,
+        password: formData.password,
+      })
+      .then((response) => {
+        console.log(response);
+        const access = response.data.access_token;
+        const refresh = response.data.refresh_token;
+        Cookies.set(ACCESS_TOKEN, access, { expires: 7 });
+        Cookies.set(REFRESH_TOKEN, refresh, { expires: 7 });
+        navigate("/admin/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  const sendToken = (token) => {
+  const authGoogle = (token) => {
     api
       .post("/auth/google/", { token })
       .then((response) => {
         console.log(response);
+        const access = response.data.access_token;
+        const refresh = response.data.refresh_token;
+        Cookies.set(ACCESS_TOKEN, access, { expires: 7 });
+        Cookies.set(REFRESH_TOKEN, refresh, { expires: 7 });
+        navigate("/admin/dashboard");
       })
       .catch((error) => {
         console.error(error);
@@ -61,7 +81,7 @@ export default function AdminLogin() {
             </header>
             <GoogleLogin
               onSuccess={(response) => {
-                sendToken(response.credential);
+                authGoogle(response.credential);
               }}
               // onError={() => {
               //   console.log("Fallo en el inicio de sesión");
