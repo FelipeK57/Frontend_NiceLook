@@ -15,5 +15,5 @@ export function searchEmployees(name) {
 }
 
 export function createEmployee(data) {
-    return EmployeesApi.post(`/create_employee/${data}`);
+    return EmployeesApi.post(`/create_employee/`,{data});
 }

@@ -26,9 +26,9 @@ function CreateEmployeeModal(props) {
         { key: 7, value: "Estetica Corporal" },
     ];
 
-    const onSubmit = handleSubmit(async data => {
-        await createEmployee(data)
-    })
+    const onSubmit = () =>{
+        alert(JSON.stringify(selectValue));
+    }
 
     useEffect(() => {
         function employeeForm() {
@@ -114,7 +114,7 @@ function CreateEmployeeModal(props) {
                         {props.employee && <h3 className="text-zinc-500 text-base">Puede editar los campos</h3>}
                     </ModalHeader>
                     <ModalBody>
-                        <form className="flex flex-col gap-6 sm:gap-8" onSubmit={handleSubmit(onSubmit)}>
+                        <form className="flex flex-col gap-6 sm:gap-8">
                             <div className="flex flex-col gap-2">
                                 <label className="font-bold" htmlFor="first_name">Nombre</label>
                                 <div className="grid grid-cols-2 gap-4">
@@ -247,7 +247,7 @@ function CreateEmployeeModal(props) {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancelar
                                 </Button>
-                                <ButtonCustom primary name="Guardar" type="submit" classStyles={"px-[5%]"} />
+                                <ButtonCustom primary name="Guardar" type="submit" onPress={onSubmit} classStyles={"px-[5%]"} />
                             </ModalFooter>
                         </form>
                     </ModalBody>
