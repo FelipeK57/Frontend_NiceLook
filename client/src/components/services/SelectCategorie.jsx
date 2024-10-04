@@ -40,7 +40,7 @@ const categories = [
  * It applies custom styles through the `className` and `classNames` props.
  * The `categories` array is mapped to generate the list of selectable items.
  */
-function SelectCategorie({ setCategory }) {
+function SelectCategorie({ category, setCategory }) {
   const selectCategory = (name) => {
     setCategory(name);
     console.log(name);
@@ -50,6 +50,7 @@ function SelectCategorie({ setCategory }) {
       labelPlacement="outside"
       placeholder="Selecciona la categoria"
       label="Categorias"
+      defaultSelectedKeys={[category]}
       className="max-w-sm"
       classNames={{
         label: "font-semibold text-medium lg:text-xl",
@@ -71,6 +72,7 @@ function SelectCategorie({ setCategory }) {
 }
 
 SelectCategorie.propTypes = {
+  category: PropTypes.string,
   setCategory: PropTypes.func,
 };
 

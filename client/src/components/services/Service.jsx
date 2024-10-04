@@ -17,12 +17,13 @@ import PropTypes from "prop-types";
  * @param {number} props.score - The score of the service out of 5.
  * @returns {JSX.Element} The rendered Service component.
  */
-function Service({ id, name, price, commission }) {
+function Service({ id, name, price, commission, category }) {
   const service = {
     id: id,
     name: name,
     price: price,
     commission: commission,
+    category: category,
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleOpen = () => {
@@ -53,7 +54,9 @@ function Service({ id, name, price, commission }) {
         <div className="flex flex-col gap-4 justify-between">
           {/* State and reviews */}
           <div className="flex gap-4 lg:justify-end">
-            <p className={`text-green-500 pr-4 font-semibold text-sm lg:text-base`}>
+            <p
+              className={`text-green-500 pr-4 font-semibold text-sm lg:text-base`}
+            >
               Activo
             </p>
           </div>
@@ -65,7 +68,15 @@ function Service({ id, name, price, commission }) {
             >
               Ver detalles
             </Button>
-            <ModalEditService isOpen={isOpen} onClose={onClose} />
+            <ModalEditService
+              idService={service.id}
+              nameService={service.name}
+              commissionService={service.commission}
+              priceService={service.price}
+              categoryService={service.category}
+              isOpen={isOpen}
+              onClose={onClose}
+            />
             <Button className="font-semibold text-red-500 rounded-xl bg-transparent">
               Eliminar
             </Button>
