@@ -7,6 +7,7 @@ import ModalNewService from "../../components/services/ModalNewService";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import SelectCategorie from "../../components/services/SelectCategorie";
 import axios from "axios";
+
 /**
  * ServicesManagement component renders the main interface for managing categories and services.
  * It includes a search input, a button to open a modal for creating a new service, and a list of services.
@@ -23,6 +24,8 @@ function ServicesManagement() {
   const [serviceName, setServiceName] = useState("");
   const [isModalNewServiceOpen, setIsModalNewServiceOpen] = useState(false);
   const [services, setServices] = useState([]);
+  const [selectCategory, setSelectCategory] = useState("");
+  const [filteredServices, setFilteredServices] = useState([]);
 
   /* Fetch list services */
   useEffect(() => {
@@ -40,6 +43,23 @@ function ServicesManagement() {
     getListServices();
   }, []);
 
+  /* Filter services based on selected category */
+  useEffect(() => {
+    if (selectCategory) {
+      if (selectCategory === "Todos") {
+        setFilteredServices(services);
+        return;
+      }
+      const servicesFiltered = services.filter(
+        (service) => service.category === selectCategory
+      );
+      console.log(servicesFiltered);
+      setFilteredServices(servicesFiltered);
+    } else {
+      setFilteredServices(services);
+    }
+  }, [selectCategory, services]);
+
   const handleOpen = () => setIsModalNewServiceOpen(true);
   const handleClose = () => setIsModalNewServiceOpen(false);
 
@@ -54,11 +74,11 @@ function ServicesManagement() {
           Gestiona las categorias y servicios
         </h1>
         <div className="block lg:hidden">
-          <SelectCategorie />
+          <SelectCategorie setSelectCategory={setSelectCategory} />
         </div>
         <div className="flex gap-6 w-full">
           <div className="hidden lg:block w-1/5">
-            <Categories />
+            <Categories setSelectCategory={setSelectCategory} />
           </div>
           <div className="flex flex-col gap-6 w-full lg:w-3/4">
             <div className="flex gap-2">
@@ -92,7 +112,7 @@ function ServicesManagement() {
               />
             </div>
             <div>
-              <ServicesList services={services} />
+              <ServicesList services={filteredServices} />
             </div>
           </div>
         </div>
