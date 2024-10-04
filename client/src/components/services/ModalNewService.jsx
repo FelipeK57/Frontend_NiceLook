@@ -8,6 +8,8 @@ import {
 } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 import SelectCategorie from "./SelectCategorie";
+import { useState } from "react";
+import axios from "axios";
 
 /**
  * ModalNewService component renders a modal for creating a new service.
@@ -19,6 +21,31 @@ import SelectCategorie from "./SelectCategorie";
  * @returns {JSX.Element} The rendered modal component.
  */
 function ModalNewService({ isOpen, onClose }) {
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [commission, setCommission] = useState("");
+  const [category, setCategory] = useState("");
+
+  const handleCreateService = async () => {
+    console.log(name, price, commission, category);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/create_service/",
+        {
+          name: name,
+          price: price,
+          commission: commission,
+          category: category,
+        }
+      );
+      console.log(response.data);
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Modal size="xl" backdrop="blur" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
@@ -37,6 +64,7 @@ function ModalNewService({ isOpen, onClose }) {
             Nombre
           </label>
           <Input
+            onChange={(e) => setName(e.target.value)}
             id="nameService"
             variant="bordered"
             classNames={{
@@ -57,6 +85,7 @@ function ModalNewService({ isOpen, onClose }) {
                 Precio
               </label>
               <Input
+                onChange={(e) => setPrice(e.target.value)}
                 id="priceService"
                 type="number"
                 variant="bordered"
@@ -76,7 +105,7 @@ function ModalNewService({ isOpen, onClose }) {
             </div>
             <div className="flex flex-col gap-2">
               {/* Service Category Selector */}
-              <SelectCategorie />
+              <SelectCategorie setCategory={setCategory} />
             </div>
           </div>
           <div className="grid grid-cols-[47%_53%] gap-6 items-end">
@@ -89,6 +118,7 @@ function ModalNewService({ isOpen, onClose }) {
                 Comisión establecimiento
               </label>
               <Input
+                onChange={(e) => setCommission(e.target.value)}
                 id="comissionService"
                 type="number"
                 variant="bordered"
@@ -113,7 +143,7 @@ function ModalNewService({ isOpen, onClose }) {
           <Button color="danger" variant="light" onPress={onClose}>
             Cancelar
           </Button>
-          <ButtonCustom action={onClose} name="Crear" primary />
+          <ButtonCustom action={handleCreateService} name="Crear" primary />
         </ModalFooter>
       </ModalContent>
     </Modal>

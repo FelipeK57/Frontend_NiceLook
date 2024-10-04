@@ -60,6 +60,21 @@ function ServicesManagement() {
     }
   }, [selectCategory, services]);
 
+  /* Filter services based on service name */
+  useEffect(() => {
+    if (serviceName) {
+      const delayDebounceFn = setTimeout(() => {
+        const servicesFiltered = services.filter((service) =>
+          service.name.toLowerCase().includes(serviceName.toLowerCase())
+        );
+        setFilteredServices(servicesFiltered);
+      }, 300);
+      return () => clearTimeout(delayDebounceFn);
+    } else {
+      setFilteredServices(services);
+    }
+  }, [serviceName]);
+
   const handleOpen = () => setIsModalNewServiceOpen(true);
   const handleClose = () => setIsModalNewServiceOpen(false);
 
