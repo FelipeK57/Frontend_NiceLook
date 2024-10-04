@@ -2,25 +2,43 @@ import { Input } from "@nextui-org/react";
 import Categories from "../../components/services/Categories";
 import ServicesList from "../../components/services/ServicesList";
 import SearchIcon from "../../components/icons/SearchIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalNewService from "../../components/services/ModalNewService";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import SelectCategorie from "../../components/services/SelectCategorie";
+import axios from "axios";
 /**
  * ServicesManagement component renders the main interface for managing categories and services.
  * It includes a search input, a button to open a modal for creating a new service, and a list of services.
- * 
+ *
  * @component
  * @example
  * return (
  *   <ServicesManagement />
  * )
- * 
+ *
  * @returns {JSX.Element} The rendered component.
  */
 function ServicesManagement() {
   const [serviceName, setServiceName] = useState("");
   const [isModalNewServiceOpen, setIsModalNewServiceOpen] = useState(false);
+  const [services, setServices] = useState([]);
+
+  /* Fetch list services */
+  useEffect(() => {
+    const getListServices = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/list_service/"
+        );
+        console.log(response.data);
+        setServices(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getListServices();
+  }, []);
 
   const handleOpen = () => setIsModalNewServiceOpen(true);
   const handleClose = () => setIsModalNewServiceOpen(false);
@@ -74,7 +92,7 @@ function ServicesManagement() {
               />
             </div>
             <div>
-              <ServicesList />
+              <ServicesList services={services} />
             </div>
           </div>
         </div>

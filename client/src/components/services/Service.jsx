@@ -17,7 +17,13 @@ import PropTypes from "prop-types";
  * @param {number} props.score - The score of the service out of 5.
  * @returns {JSX.Element} The rendered Service component.
  */
-function Service({ name, price, commission, state, reviews, score }) {
+function Service({ id, name, price, commission }) {
+  const service = {
+    id: id,
+    name: name,
+    price: price,
+    commission: commission,
+  };
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleOpen = () => {
     onOpen();
@@ -47,14 +53,9 @@ function Service({ name, price, commission, state, reviews, score }) {
         <div className="flex flex-col gap-4 justify-between">
           {/* State and reviews */}
           <div className="flex gap-4 lg:justify-end">
-            <p
-              className={`${
-                state ? "text-green-500" : "text-red-500"
-              } font-semibold text-sm lg:text-base`}
-            >
-              {state ? "Activo" : "Inactivo"}
+            <p className={`text-green-500 pr-4 font-semibold text-sm lg:text-base`}>
+              Activo
             </p>
-            <p className="font-semibold text-sm lg:text-base">{`${score}/5⭐(${reviews})`}</p>
           </div>
           {/* Buttons */}
           <div className="flex gap-2">
@@ -79,9 +80,8 @@ Service.propTypes = {
   name: PropTypes.string,
   price: PropTypes.number,
   commission: PropTypes.number,
-  state: PropTypes.bool,
-  reviews: PropTypes.number,
-  score: PropTypes.number,
+  category: PropTypes.string,
+  id: PropTypes.number,
 };
 
 export default Service;
