@@ -2,6 +2,7 @@ import { Button } from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/react";
 import ModalEditService from "./ModalEditService";
 import PropTypes from "prop-types";
+import axios from "axios";
 
 /**
  * Service component displays the details of a service including its name, price, commission, state, reviews, and score.
@@ -29,6 +30,24 @@ function Service({ id, name, price, commission, category }) {
   const handleOpen = () => {
     onOpen();
   };
+
+  const handleDeleteService = async () => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:8000/api/delete_service/",
+        {
+          params: {
+            idService: id,
+          },
+        }
+      );
+      console.log(response.data);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <article
       className="flex border-2 border-slate-200 rounded-xl gap-4
@@ -77,7 +96,10 @@ function Service({ id, name, price, commission, category }) {
               isOpen={isOpen}
               onClose={onClose}
             />
-            <Button className="font-semibold text-red-500 rounded-xl bg-transparent">
+            <Button
+              onPress={handleDeleteService}
+              className="font-semibold text-red-500 rounded-xl bg-transparent"
+            >
               Eliminar
             </Button>
           </div>
