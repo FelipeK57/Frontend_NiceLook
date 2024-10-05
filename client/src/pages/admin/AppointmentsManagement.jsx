@@ -25,6 +25,60 @@ function AppointmentsManagement() {
               tiempo: 15,
               estado: "completada",
             },
+            {
+              id: 1,
+              estilista: "María López",
+              cliente: "Ana García",
+              servicio: "Corte de cabello",
+              precio: 15000,
+              tiempo: 30,
+              estado: "completada",
+            },
+            {
+              id: 2,
+              estilista: "Carlos Pérez",
+              cliente: "Juan Martínez",
+              servicio: "Afeitado",
+              precio: 8000,
+              tiempo: 15,
+              estado: "completada",
+            },
+            {
+              id: 1,
+              estilista: "María López",
+              cliente: "Ana García",
+              servicio: "Corte de cabello",
+              precio: 15000,
+              tiempo: 30,
+              estado: "completada",
+            },
+            {
+              id: 2,
+              estilista: "Carlos Pérez",
+              cliente: "Juan Martínez",
+              servicio: "Afeitado",
+              precio: 8000,
+              tiempo: 15,
+              estado: "completada",
+            },
+            {
+              id: 1,
+              estilista: "María López",
+              cliente: "Ana García",
+              servicio: "Corte de cabello",
+              precio: 15000,
+              tiempo: 30,
+              estado: "completada",
+            },
+            {
+              id: 2,
+              estilista: "Carlos Pérez",
+              cliente: "Juan Martínez",
+              servicio: "Afeitado",
+              precio: 8000,
+              tiempo: 15,
+              estado: "completada",
+            },
           ],
         },
         {
@@ -214,7 +268,7 @@ function AppointmentsManagement() {
       ];
       
   return (
-    <main className="flex flex-col py-8 px-10">
+    <main className="flex flex-col py-8 gap-4 px-10">
       <header className="flex items-center">
         <h1 className="text-2xl lg:text-4xl text-slate-950 font-bold w-full flex flex-grow justify-start">
           Calendario de citas
@@ -227,7 +281,7 @@ function AppointmentsManagement() {
         />
       </header>
       <CategoriesAppointments />
-      <section className="flex gap-8 overflow-x-auto scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300 lg:pr-2 ">
+      <section className="flex pb-8 gap-8 overflow-x-auto scrollbar scrollbar-thumb-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar -thumb-slate-300" style={{ scrollbarGutter: 'top' }}>
         {citas.map((cita) => (
           <AppointmentsList
             key={cita.hora}
