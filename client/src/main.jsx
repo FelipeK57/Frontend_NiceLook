@@ -13,6 +13,7 @@ import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import EmployeesManagement from "./pages/admin/EmployeesManagement.jsx";
+import AppointmentsManagement from "./pages/admin/AppointmentsManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -59,7 +60,12 @@ const routes = createBrowserRouter([
             path: "employees",
             element: <EmployeesManagement />,
           },
-        ]
+          {
+            id: "admin-appointments",
+            path: "appointments",
+            element: <AppointmentsManagement />,
+          },
+        ],
       },
     ],
   },
