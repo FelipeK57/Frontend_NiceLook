@@ -15,6 +15,7 @@ import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
+import EmployeesManagement from "./pages/admin/EmployeesManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -30,6 +31,11 @@ const routes = createBrowserRouter([
   {
     path: "/services",
     element: <ServicesManagement />,
+    errorElement: <div>Error Page</div>,
+  },
+  {
+    path: "/employees",
+    element: <EmployeesManagement />,
     errorElement: <div>Error Page</div>,
   },
   {
@@ -50,6 +56,11 @@ const routes = createBrowserRouter([
           {
             path: "services",
             element: <ServicesManagement />,
+          },
+          {
+            id: "admin-employees",
+            path: "employees",
+            element: <EmployeesManagement />,
           },
         ],
       },

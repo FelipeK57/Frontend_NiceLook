@@ -2,13 +2,11 @@ import { Button, Input } from "@nextui-org/react";
 import Categories from "../../components/services/Categories";
 import ServicesList from "../../components/services/ServicesList";
 import Sidebar from "../../components/global/Sidebar";
+import SearchIcon from "../../components/icons/SearchIcon";
 function ServicesManagement() {
   return (
     <main className="flex h-screen bg-[#ffffff]">
-      {/* Aqui va el componente Sidebar */}
-      <Sidebar />
-      {/* Este es el cuerpo de la pagina de gestión de servicios */}
-      <section className="flex flex-col gap-6 w-4/5 py-8 px-10">
+      <section className="flex flex-col gap-6 w-full py-8 px-10">
         <h1 className="text-4xl text-zinc-950 font-bold">
           Gestiona las categorias y servicios
         </h1>
@@ -33,20 +31,7 @@ function ServicesManagement() {
                   ],
                 }}
                 endContent={
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="size-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                    />
-                  </svg>
+                  <SearchIcon />
                 }
               />
               <Button className="border-2 border-slate-200 font-semibold bg-transparent py-5">

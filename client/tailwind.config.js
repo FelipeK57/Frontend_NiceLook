@@ -2,6 +2,7 @@
 import { nextui } from "@nextui-org/react";
 
 const { fontFamily } = require("tailwindcss/defaultTheme");
+import tailwindScrollbar from 'tailwind-scrollbar';
 
 module.exports = {
   content: [
@@ -95,5 +96,8 @@ module.exports = {
     },
   },
   darkMode: ["class"],
-  plugins: [nextui(), require("tailwindcss-animate")],
+  plugins: [
+    nextui(), require("tailwindcss-animate"),
+    tailwindScrollbar ({ nocompatible: true })
+  ],
 };
