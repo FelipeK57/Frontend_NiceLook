@@ -1,5 +1,7 @@
 import axiox from "axios";
 
+//=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+
 const EmployeesApi = axiox.create({
     baseURL: "http://localhost:8000/employee",
 });
@@ -10,10 +12,42 @@ export function getEmployees() {
     return EmployeesApi.get("/employee_list/");
 }
 
+//query para buscar entre empleados por medio del nombre y apellido
+
 export function searchEmployees(name) {
     return EmployeesApi.get(`/search_employees/?q=${name}`);
 }
 
-export function createEmployee(data) {
-    return EmployeesApi.post(`/create_employee/`,{data});
+//query para crear un nuevo empleado
+
+export function createEmployee(name, last_name, phone, email, especialty) {
+    return EmployeesApi.post("/create_employee/", {
+        name: name,
+        last_name: last_name,
+        phone: phone,
+        email: email,
+        especialty: especialty,
+    });
+}
+
+//query para actualizar un empleado
+
+export function updateEmployee(idUser, name, last_name, phone, state) {
+    return EmployeesApi.put('/update_employee/',{
+        idUser: idUser,
+        name: name,
+        last_name: last_name,
+        phone: phone,
+        state: state
+    })
+}
+
+//=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+
+const CategoryApi = axiox.create({
+    baseURL: "http://localhost:8000/category",
+});
+
+export function getCategories() {
+    return CategoryApi.get("/category_list/")
 }

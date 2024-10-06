@@ -2,9 +2,9 @@ import { Input } from "@nextui-org/react";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import EmployeesList from "../../components/employees/EmployeesList";
 import { useDisclosure } from "@nextui-org/react";
-import { useState } from "react";
-import CreateEmployeeModal from "../../components/employees/EmployeeModal";
+import { useEffect, useRef, useState } from "react";
 import { searchEmployees } from "../../api/employee/employee";
+import CreateEmployeeModal from "../../components/employees/EmployeeModal";
 
 function EmployeesManagement() {
 
@@ -12,11 +12,14 @@ function EmployeesManagement() {
     const [backdrop, setBackdrop] = useState("blur");
     const [searchEmployee, setSearchEmployee] = useState("");
     const [filteredEmployees, setFilteredEmployees] = useState([]);
+    const [refListUpdate, setRefListUpdate] = useState(null);
+    const refList = useRef(null);
 
     const handleOpen = () => {
         setBackdrop("blur");
         onOpen();
     };
+
 
     const handleSearch = async (event) => {
         const query = event.target.value;
@@ -29,7 +32,12 @@ function EmployeesManagement() {
         }
     };
 
-    console.log(filteredEmployees);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setRefListUpdate(refList);
+        }, 200);
+        return () => clearTimeout(timer);
+    },[])
 
     return (
         <main className="flex max-h-screen h-screen bg-[#ffffff]">
@@ -76,9 +84,9 @@ function EmployeesManagement() {
                     </div>
                 </div>
                 <div className="EmployeesManagementBody">
-                    <EmployeesList filteredEmployees={filteredEmployees.length !== 0 ? filteredEmployees : null} />
+                    <EmployeesList ref={refList} filteredEmployees={filteredEmployees.length !== 0 ? filteredEmployees : null} />
                 </div>
-                <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} />
+                    <CreateEmployeeModal listRef={refListUpdate} isOpen={isOpen} onClose={onClose} backdrop={backdrop} />
             </section>
         </main>
     );

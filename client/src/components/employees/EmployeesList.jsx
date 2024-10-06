@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { forwardRef, lazy, Suspense, useEffect, useImperativeHandle, useState } from "react";
 import { Accordion, AccordionItem, Button } from "@nextui-org/react";
 import { AccordionCustomTitle, AccordionCustomContent } from "./AccordionCustomContent";
 import { getEmployees } from "../../api/employee/employee"
@@ -7,10 +7,11 @@ import PropTypes from "prop-types"
 //+++++++++ Importacion dinamica +++++++++
 const LazyEmployee = lazy(() => import("./Employee"))
 
-function EmployeesList({ filteredEmployees }) {
-
+const EmployeesList = forwardRef(({ filteredEmployees }, ref) => {
     EmployeesList.propTypes = {
-        filteredEmployees: PropTypes.array
+        filteredEmployees: PropTypes.array,
+        listRef: PropTypes.object,
+        refListUpdate: PropTypes.func,
     }
 
     const itemClasses = {
@@ -19,26 +20,33 @@ function EmployeesList({ filteredEmployees }) {
 
     const [employees, setEmployees] = useState([]);
 
+
+    function loadEmployees() {
+        const promise = new Promise((resolve, reject) => {
+            const response = getEmployees();
+            setTimeout(() => {
+                // si todo va bien, se llama a resolve
+                resolve(response);
+                reject("Ocurrio un error");
+            }, 0);
+        });
+        promise.then((resultado) => {
+            setEmployees(resultado.data);
+        });
+        promise.catch((error) => {
+            console.log(error);
+        })
+        return (promise)
+    }
+
+    useImperativeHandle(ref, () => ({
+        loadEmployees: loadEmployees
+    }));
+
     useEffect(() => {
-        function loadEmployees() {
-            const promise = new Promise((resolve, reject) => {
-                const response = getEmployees();
-                setTimeout(() => {
-                    // si todo va bien, se llama a resolve
-                    resolve(response);
-                    reject("Ocurrio un error");
-                }, 0);
-            });
-            promise.then((resultado) => {
-                setEmployees(resultado.data);
-            });
-            promise.catch((error) => {
-                console.log(error);
-            })
-            return (promise)
-        }
         loadEmployees();
-    }, [])
+        
+    }, []);
 
     return (<>
         <article className="hidden 1/2lg:block border-t-2 border-slate-950 pt-2">
@@ -58,11 +66,11 @@ function EmployeesList({ filteredEmployees }) {
 
                 {filteredEmployees ? filteredEmployees.map((employee) => (
                     <Suspense key={employee.id} fallback={<div>Loading...</div>}>
-                        <LazyEmployee user={employee.user} employee={employee} colNumber={'[1fr_1fr_1fr_1fr_1fr_0.15fr]'} button estado={employee.state} />
+                        <LazyEmployee user={employee.user} employee={employee} colNumber={'[1fr_1fr_1fr_1fr_1fr_0.15fr]'} button estado={employee.state} reloadList={loadEmployees} />
                     </Suspense>
                 )) : employees.map((employee) => (
                     <Suspense key={employee.id} fallback={<div>Loading...</div>}>
-                        <LazyEmployee user={employee.user} employee={employee} colNumber={'[1fr_1fr_1fr_1fr_1fr_0.15fr]'} button estado={employee.state} />
+                        <LazyEmployee user={employee.user} employee={employee} colNumber={'[1fr_1fr_1fr_1fr_1fr_0.15fr]'} button estado={employee.state} reloadList={loadEmployees} />
                     </Suspense>
                 ))}
 
@@ -77,18 +85,20 @@ function EmployeesList({ filteredEmployees }) {
                 {/* El AccordionCustomContent recive un boolean para saber si lleva o no un button */}
                 {/* El AccordionCustomTitle recive el nombre del empleado y su nuip */}
                 {filteredEmployees ? filteredEmployees.map((employee) => (
-                    <AccordionItem key={employee.id} aria-label="Empleado 1" title={<AccordionCustomTitle nombre={employee.user.username} nuip={employee.code} />}>
-                        <AccordionCustomContent button={true} employee={employee} user={employee.user} estado={employee.state} />
+                    <AccordionItem key={employee.id} aria-label="Empleado 1" title={<AccordionCustomTitle nombre={employee.user.last_name} nuip={employee.code} />}>
+                    <AccordionCustomContent button={true} employee={employee} user={employee.user} estado={employee.state} reloadList={loadEmployees} />
                     </AccordionItem>
                 )) : employees.map((employee) => (
-                    <AccordionItem key={employee.id} aria-label="Empleado 1" title={<AccordionCustomTitle nombre={employee.user.username} nuip={employee.code} />}>
-                        <AccordionCustomContent button={true} employee={employee} user={employee.user} estado={employee.state} />
+                    <AccordionItem key={employee.id} aria-label="Empleado 1" title={<AccordionCustomTitle nombre={employee.user.last_name} nuip={employee.code} />}>
+                        <AccordionCustomContent button={true} employee={employee} user={employee.user} estado={employee.state} reloadList={loadEmployees} />
                     </AccordionItem>
                 ))}
             </Accordion>
         </article>
     </>
     );
-}
+});
+
+EmployeesList.displayName = "EmployeesList";
 
 export default EmployeesList;

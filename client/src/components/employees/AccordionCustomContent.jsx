@@ -36,14 +36,15 @@ export function AccordionCustomTitle({nombre, nuip, qualification, children }) {
     )
 }
 
-export function AccordionCustomContent({ estado, button, children, employee, user }) {
+export function AccordionCustomContent({ estado, button, children, employee, user, reloadList }) {
 
     AccordionCustomContent.propTypes = {
         estado: PropTypes.bool.isRequired,
         button: PropTypes.bool,
         children: PropTypes.node,
         employee: PropTypes.object,
-        user: PropTypes.object
+        user: PropTypes.object,
+        reloadList: PropTypes.func.isRequired
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -77,7 +78,7 @@ export function AccordionCustomContent({ estado, button, children, employee, use
                     </ButtonCustom>
                 ) : null}
             </div>
-            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employee={employee} user={user} />
+            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employee={employee} user={user} reloadList={reloadList} />
         </div>
         <div>
             {children}
