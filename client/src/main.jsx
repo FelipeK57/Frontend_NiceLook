@@ -50,17 +50,21 @@ const routes = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            index: true,
             element: <Dashboard />,
-          },
-          {
-            path: "services",
-            element: <ServicesManagement />,
-          },
-          {
-            id: "admin-employees",
-            path: "employees",
-            element: <EmployeesManagement />,
+            children: [
+              {
+                index: true,
+                element: <div>Dashboard</div>,
+              },
+              {
+                path: "services",
+                element: <ServicesManagement />,
+              },
+              {
+                path: "employees",
+                element: <EmployeesManagement />,
+              },
+            ],
           },
         ],
       },
