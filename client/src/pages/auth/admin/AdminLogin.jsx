@@ -130,7 +130,7 @@ export default function AdminLogin() {
           </section>
           <section className="w-full h-full p-8 flex flex-col gap-5">
             <header>
-              <h1 className="font-bold text-3xl">Regístrate</h1>
+              <h1 className="font-bold text-3xl">Identifícate</h1>
             </header>
             <GoogleLogin
               onSuccess={(response) => {
@@ -141,7 +141,7 @@ export default function AdminLogin() {
               // }}
             />
             <Separator />
-            <p>También puedes registrarte con tu correo electrónico.</p>
+            <p className="text-sm">También puedes registrarte manualmente:</p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div className="flex flex-col md:flex-row gap-5">
                 <Input
