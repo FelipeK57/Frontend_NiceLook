@@ -37,7 +37,7 @@ function CategoriesAppointments() {
           className={`${
             category.name === categorySelected &&
             "bg-primary text-slate-950 border-transparent"
-          } min-w-[150px] rounded-xl cursor-pointer text-lg font-bold border-2 py-2 border-slate-200`}
+          } min-w-[150px] rounded-xl cursor-pointer flex items-center justify-center text-lg font-bold border-2 py-2 border-slate-200`}
           key={category.id}
         >
           {category.name}

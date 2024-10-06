@@ -268,7 +268,7 @@ function AppointmentsManagement() {
   ];
 
   return (
-    <main className="flex flex-col py-8 gap-2 px-10">
+    <main className="h-screen flex flex-col py-8 gap-2 px-10">
       <header className="flex items-center">
         <h1 className="text-2xl lg:text-4xl text-slate-950 font-bold w-full flex flex-grow justify-start">
           Calendario de citas

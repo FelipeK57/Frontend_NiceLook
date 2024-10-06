@@ -21,7 +21,7 @@ function Appointment({
 
   return (
     <article
-      className={`flex flex-col gap-2 border-2 rounded-xl border-slate-200 px-5 py-3 ${getColorByServiceState(
+      className={`flex flex-col gap-4 border-2 rounded-xl border-slate-200 px-5 py-3 ${getColorByServiceState(
         serviceState
       )}`}
     >
@@ -30,9 +30,9 @@ function Appointment({
         <h1 className="font-semibold text-lg">${priceService}</h1>
       </div>
       <div className="flex justify-between items-center">
-        <div>
-          <p className="font-normal text-sm text-slate-700">{serviceName}</p>
-          <p className="ont-normal text-sm text-slate-700">
+        <div className="flex flex-col gap-2">
+          <p className="font-normal text-base text-slate-700">{serviceName}</p>
+          <p className="ont-normal text-base text-slate-700">
             Cliente: {clientName}
           </p>
         </div>
