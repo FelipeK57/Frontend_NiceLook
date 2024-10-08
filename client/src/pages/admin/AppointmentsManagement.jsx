@@ -26,7 +26,7 @@ function AppointmentsManagement() {
           estado: "completada",
         },
         {
-          id: 1,
+          id: 3,
           estilista: "María López",
           cliente: "Ana García",
           servicio: "Corte de cabello",
@@ -35,7 +35,7 @@ function AppointmentsManagement() {
           estado: "completada",
         },
         {
-          id: 2,
+          id: 4,
           estilista: "Carlos Pérez",
           cliente: "Juan Martínez",
           servicio: "Afeitado",
@@ -44,7 +44,7 @@ function AppointmentsManagement() {
           estado: "completada",
         },
         {
-          id: 1,
+          id: 5,
           estilista: "María López",
           cliente: "Ana García",
           servicio: "Corte de cabello",
@@ -53,7 +53,7 @@ function AppointmentsManagement() {
           estado: "completada",
         },
         {
-          id: 2,
+          id: 6,
           estilista: "Carlos Pérez",
           cliente: "Juan Martínez",
           servicio: "Afeitado",
@@ -62,7 +62,7 @@ function AppointmentsManagement() {
           estado: "completada",
         },
         {
-          id: 1,
+          id: 7,
           estilista: "María López",
           cliente: "Ana García",
           servicio: "Corte de cabello",
@@ -71,7 +71,7 @@ function AppointmentsManagement() {
           estado: "completada",
         },
         {
-          id: 2,
+          id: 8,
           estilista: "Carlos Pérez",
           cliente: "Juan Martínez",
           servicio: "Afeitado",
