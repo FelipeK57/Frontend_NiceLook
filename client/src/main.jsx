@@ -14,6 +14,7 @@ import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import EmployeesManagement from "./pages/admin/EmployeesManagement.jsx";
 import AppointmentsManagement from "./pages/admin/AppointmentsManagement.jsx";
+import FinancePanel from "./pages/admin/FinancePanel.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -64,6 +65,11 @@ const routes = createBrowserRouter([
             id: "admin-appointments",
             path: "appointments",
             element: <AppointmentsManagement />,
+          },
+          {
+            id: "admin-finance",
+            path: "finance",
+            element: <FinancePanel />,
           },
         ],
       },

@@ -21,7 +21,7 @@ const navLinks = [
         />
       </svg>
     ),
-    path: "home",
+    path: "finance",
   },
   {
     name: "Perfil del establecimiento",
