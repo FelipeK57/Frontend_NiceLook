@@ -1,12 +1,27 @@
 import { Select, SelectItem, DatePicker } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EarningsSummaryServices from "../../components/finances/EarningsSummaryServices";
 import EarningsSummaryProducts from "../../components/finances/EarningsSummaryProducts";
 import PaymentServicesList from "../../components/finances/PaymentServicesList";
 import PaymentProductList from "../../components/finances/PaymentProductsList";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import axios from "axios";
 const items = ["Servicios", "Productos"];
+
 function FinancePanel() {
+  const fecha = new Date();
+  let year = fecha.getFullYear().toString();
+  let month = (fecha.getMonth() + 1).toString();
+  let day = fecha.getDate().toString();
+  const [date, setDate] = useState(
+    parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
+  );
+  console.log(date);
+  const [earningsEstablishment, setEarningsEstablishment] = useState(0);
+  const [earningsArtist, setEarningsArtist] = useState(0);
   const [module, setModule] = useState("Servicios");
+  const [products, setProducts] = useState([]);
+  const [services, setServices] = useState([]);
   const columnsProducts = [
     "Precio",
     "Cantidad",
@@ -18,7 +33,6 @@ function FinancePanel() {
     "Precio",
     "Ganancia",
     "Profesional",
-    "Hora",
     "Servicios",
   ];
   const paymentServices = [
@@ -70,7 +84,9 @@ function FinancePanel() {
       hour: "18:00",
       services: ["Limpieza facial", "Exfoliación", "Hidratación"],
     },
+    /*************  ✨ Codeium Command 🌟  *************/
   ];
+
   const paymentProducts = [
     {
       id: 1,
@@ -129,6 +145,32 @@ function FinancePanel() {
       products: ["Corte de pelo", "Tinte de pelo"],
     },
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const day = date.toDate().getDate();
+      const month = date.toDate().getMonth() + 1;
+      const year = date.toDate().getFullYear();
+      const response = await axios.get(
+        "http://localhost:8000/establisment/get-filter-payments-service/1/",
+        {
+          params: {
+            day: day,
+            month: month,
+            year: year,
+          },
+        }
+      );
+      console.log(response.data.ganancia_establecimiento);
+      console.log(response.data.ganancia_employee);
+      setEarningsArtist(response.data.ganancia_employee);
+      setEarningsEstablishment(response.data.ganancia_establecimiento);
+      console.log(response.data.appointments_services);
+      setServices(response.data.appointments_services);
+    };
+    fetchData();
+  }, [date]);
+
   return (
     <main className="h-screen flex flex-col py-8 gap-6 px-10">
       <header className="flex items-center justify-between">
@@ -151,6 +193,8 @@ function FinancePanel() {
           ))}
         </Select>
         <DatePicker
+          value={date}
+          onChange={setDate}
           label="Fecha"
           className="max-w-[280px] font-semibold"
           variant="bordered"
@@ -163,8 +207,8 @@ function FinancePanel() {
         <div>
           {module === "Servicios" ? (
             <EarningsSummaryServices
-              earningsEstablishment={1294000}
-              earningsArtist={849200}
+              earningsEstablishment={earningsEstablishment}
+              earningsArtist={earningsArtist}
             />
           ) : (
             <EarningsSummaryProducts earningsProducts={1294000} />
@@ -176,14 +220,14 @@ function FinancePanel() {
           <h2 className="text-3xl font-bold text-slate-950">Pagos recibidos</h2>
           <p className="text-3xl font-bold text-slate-950">
             {module === "Servicios"
-              ? `Cantidad: ${paymentServices.length}`
+              ? `Cantidad: ${services.length}`
               : `Cantidad:${paymentProducts.length}`}
           </p>
         </div>
         <div>
           {module === "Servicios" ? (
             <>
-              <ul className="grid items-start grid-cols-5 gap-2 py-4 mr-6 px-8">
+              <ul className="grid items-start grid-cols-4 gap-2 py-4 mr-6 px-8">
                 {columnsServices.map((column) => (
                   <li
                     key={column}
@@ -193,7 +237,7 @@ function FinancePanel() {
                   </li>
                 ))}
               </ul>
-              <PaymentServicesList paymentServices={paymentServices} />
+              <PaymentServicesList paymentServices={services} />
             </>
           ) : (
             <>

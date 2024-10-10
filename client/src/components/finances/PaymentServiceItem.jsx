@@ -1,22 +1,14 @@
 import PropTypes from "prop-types";
 import { Select, SelectItem } from "@nextui-org/react";
-function PaymentServicesItem({
-  id,
-  price,
-  earning,
-  hour,
-  profesional,
-  services,
-}) {
+function PaymentServicesItem({ id, profesional, total, earning, services }) {
   return (
     <li
       key={id}
-      className="grid grid-cols-5 items-center [&>p]:font-semibold gap-2 border-2 border-slate-200 rounded-2xl py-4 px-8 w-full"
+      className="grid grid-cols-4 items-center [&>p]:font-semibold gap-2 border-2 border-slate-200 rounded-2xl py-4 px-8 w-full"
     >
-      <p>${price}</p>
+      <p>{total}</p>
       <p className="text-green-500">+{earning}</p>
       <p>{profesional}</p>
-      <p>{hour}</p>
       <Select
         classNames={{
           trigger: "p-5",
@@ -28,8 +20,8 @@ function PaymentServicesItem({
         className="w-full"
       >
         {services.map((service) => (
-          <SelectItem key={service} value={service}>
-            {service}
+          <SelectItem key={service.service_name} value={service.service_name}>
+            {service.service_name}
           </SelectItem>
         ))}
       </Select>
@@ -39,10 +31,9 @@ function PaymentServicesItem({
 
 PaymentServicesItem.propTypes = {
   id: PropTypes.number,
-  price: PropTypes.number,
-  quantity: PropTypes.number,
-  hour: PropTypes.string,
   profesional: PropTypes.string,
+  total: PropTypes.number,
+  earning: PropTypes.number,
   services: PropTypes.array,
 };
 

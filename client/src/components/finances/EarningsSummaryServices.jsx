@@ -32,8 +32,15 @@ function EarningsSummaryServices({ earningsEstablishment, earningsArtist }) {
           <h1 className="text-lg font-medium text-slate-700">
             {earnings.name}
           </h1>
-          <p className="text-5xl font-bold text-slate-950">
-            ${earnings.totalEarnings}
+          <p
+            className={`text-5xl ${
+              earnings.name === "Ganancia del establecimiento"
+                ? "text-green-500"
+                : "text-slate-950"
+            } font-bold`}
+          >
+            {earnings.name === "Ganancia del establecimiento" && "+"}$
+            {earnings.totalEarnings}
           </p>
         </article>
       ))}
