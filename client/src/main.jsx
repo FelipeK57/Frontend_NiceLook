@@ -73,10 +73,17 @@ const routes = createBrowserRouter([
     path: "/employee",
     children: [
       {
-        id: "employee-services",
-        path: "services",
-        element: <EmployeeServicesManagement />,
-      }
+        id: "employee-dashboard",
+        path: "dashboard",
+        element: <Dashboard />,
+        children: [
+          {
+            id: "employee-services",
+            path: "services",
+            element: <EmployeeServicesManagement />,
+          }
+        ]
+      },
     ]
   }
 ]);
