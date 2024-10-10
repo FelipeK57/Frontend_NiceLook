@@ -13,6 +13,7 @@ import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import EmployeesManagement from "./pages/admin/EmployeesManagement.jsx";
+import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -33,6 +34,11 @@ const routes = createBrowserRouter([
   {
     path: "/employees",
     element: <EmployeesManagement />,
+    errorElement: <div>Error Page</div>,
+  },
+  {
+    path: "/services",
+    element: <ServicesManagement />,
     errorElement: <div>Error Page</div>,
   },
   {
@@ -63,6 +69,16 @@ const routes = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/employee",
+    children: [
+      {
+        id: "employee-services",
+        path: "services",
+        element: <EmployeeServicesManagement />,
+      }
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
