@@ -6,8 +6,8 @@ function ServicesList() {
         <div className="flex flex-col h-full w-full">
             <section className="flex flex-col h-1/2 w-full">
                 <h2 className="text-3xl text-zinc-950 font-bold pb-8">Mis servicios</h2>
-                <div className="grid grid-flow-row grid-cols-[1fr_1fr] gap-4 max-h-full
-                scrollbar overflow-y-scroll">
+                <div className="grid grid-flow-row grid-cols-[1fr_1fr] gap-4 max-h-full overflow-y-auto pr-2
+                scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
                     <Services />
                     <Services />
                     <Services />
@@ -41,9 +41,16 @@ function ServicesList() {
                         <SelectItem value={'moto'}>Moto</SelectItem>
                     </Select>
                 </div>
-                <div className="grid grid-flow-col grid-cols-[1fr_1fr] gap-4 max-h-full">
-                    <Services isSelected />
-                    <Services isSelected />
+                <div className="grid grid-flow-row grid-cols-[1fr_1fr] gap-4 max-h-full overflow-y-auto pr-2
+                scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
+                    <Services isSelected/>
+                    <Services isSelected/>
+                    <Services isSelected/>
+                    <Services isSelected/>
+                    <Services isSelected/>
+                    <Services isSelected/>
+                    <Services isSelected/>
+                    <Services isSelected/>
                 </div>
             </section>
         </div>
