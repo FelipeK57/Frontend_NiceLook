@@ -27,15 +27,15 @@ function EarningsSummaryServices({ earningsEstablishment, earningsArtist }) {
       {earnings.map((earnings) => (
         <article
           key={earnings.name}
-          className="flex flex-col items-start justify-between gap-10 p-8 border-2 rounded-3xl min-w-[350px] border-slate-200"
+          className="flex flex-col items-start justify-between gap-6 p-6 border-2 rounded-3xl min-w-[300px] max-w-[300px] border-slate-200"
         >
-          <h1 className="text-lg font-medium text-slate-700">
+          <h1 className="text-base font-medium text-slate-700">
             {earnings.name}
           </h1>
           <p
-            className={`text-5xl ${
+            className={`text-4xl ${
               earnings.name === "Ganancia del establecimiento"
-                ? "text-green-500"
+                ? "text-green-700"
                 : "text-slate-950"
             } font-bold`}
           >

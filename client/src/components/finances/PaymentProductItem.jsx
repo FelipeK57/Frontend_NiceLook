@@ -4,18 +4,16 @@ function PaymentProductItem({
   id,
   price,
   quantity,
-  hour,
   paymentMethod,
   products,
 }) {
   return (
     <li
       key={id}
-      className="grid grid-cols-5 items-center [&>p]:font-semibold gap-2 border-2 border-slate-200 rounded-2xl py-4 px-8 w-full"
+      className="grid grid-cols-4 items-center [&>p]:font-semibold gap-2 border-2 border-slate-200 rounded-2xl py-4 px-8 w-full"
     >
-      <p className="text-green-500">+${price}</p>
+      <p>${price}</p>
       <p>{quantity}</p>
-      <p>{hour}</p>
       <p>{paymentMethod}</p>
       <Select
         classNames={{
@@ -28,8 +26,8 @@ function PaymentProductItem({
         className="w-full"
       >
         {products.map((product) => (
-          <SelectItem key={product} value={product}>
-            {product}
+          <SelectItem key={product.product_name} value={product.product_name}>
+            {product.product_name}
           </SelectItem>
         ))}
       </Select>
@@ -41,7 +39,6 @@ PaymentProductItem.propTypes = {
   id: PropTypes.number,
   price: PropTypes.number,
   quantity: PropTypes.number,
-  hour: PropTypes.string,
   paymentMethod: PropTypes.string,
   products: PropTypes.array,
 };

@@ -2,15 +2,14 @@ import PropTypes from "prop-types";
 import PaymentProductItem from "./PaymentProductItem";
 function PaymentProductList({ paymentProducts }) {
   return (
-    <ul className="flex flex-col gap-6 h-[45vh] overflow-y-auto scrollbar scrollbar-thumb-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full pr-2 active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300 w-full">
+    <ul className="flex flex-col gap-6 max-h-[45vh] overflow-y-auto scrollbar scrollbar-thumb-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full pr-2 active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300 w-full">
       {paymentProducts.map((paymentProduct) => (
         <PaymentProductItem
-          key={paymentProduct.id}
-          id={paymentProduct.id}
-          price={paymentProduct.price}
+          key={paymentProduct.payment_id}
+          id={paymentProduct.payment_id}
+          price={paymentProduct.total}
           quantity={paymentProduct.quantity}
-          hour={paymentProduct.hour}
-          paymentMethod={paymentProduct.paymentMethod}
+          paymentMethod={paymentProduct.method}
           products={paymentProduct.products}
         />
       ))}
