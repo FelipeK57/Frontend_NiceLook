@@ -17,6 +17,10 @@ module.exports = {
       },
       colors: {
         'primary': "#FAC215"
+      },
+      screens:{
+        '1/2xl' : '1350px',
+        '1/2lg' : '1150px'
       }
     },
   },

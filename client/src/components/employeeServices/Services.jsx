@@ -12,7 +12,7 @@ function Services({ isSelected }) {
             </div>
             <div className="w-full flex flex-col">
                 <div className="flex flex-row justify-between items-center">
-                    <h3 className="text-2xl text-zinc-950 font-bold">Servicio 1</h3>
+                    <h3 className="sm:text-2xl text-lg text-zinc-950 font-bold">barberia + peluqueria</h3>
                     <h3>Votacion</h3>
                 </div>
                 <div className="flex flex-row justify-between items-center">
