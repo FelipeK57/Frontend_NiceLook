@@ -23,8 +23,11 @@ export function deleteEmployeeService(employeeId, serviceId){
     return employeeServicesApi.delete(`/employeeServiceDelete/${employeeId}/${serviceId}/`)
 }
 
-export function addEmployeeService(employeeId, data){
-    return employeeApi.post(`/addservice/${employeeId}/`, data)
+export function addEmployeeService(employeeId, serviceId, establismentId){
+    return employeeApi.post(`/addservice/${employeeId}/`,{
+        service_id: serviceId,
+        establisment_id: establismentId
+    })
 }
 
 //=====================================================================================

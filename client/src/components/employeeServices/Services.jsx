@@ -1,15 +1,48 @@
+import { addEmployeeService, deleteEmployeeService } from "../../Api/employeeServices/employeeServicesApi"
 import ButtonCustom from "../global/ButtonCustom"
 import PropTypes from "prop-types"
 
-function Services({ isSelected, service, reloadList }) {
+function Services({ isSelected, service, reloadList, employeeService }) {
     Services.propTypes = {
         isSelected: PropTypes.bool,
         service: PropTypes.object,
-        reloadList: PropTypes.func
+        reloadList: PropTypes.func,
+        employeeService: PropTypes.object
     }
 
     function handleAddService() {
-        reloadList()
+        const promise = new Promise((resolve, reject) => {
+            const response = addEmployeeService(employeeService.employee, service.id, service.establisment)
+            setTimeout(() => {
+                resolve(response)
+                reject("Ocurrio un error")
+            })
+        });
+        promise.then((response) => {
+            console.log(response)
+            reloadList()
+        });
+        promise.catch((error) => {
+            console.log(error)
+        });
+        return promise
+    }
+
+    function handleDeleteService(){
+        const promise = new Promise((resolve, reject) => {
+            const response = deleteEmployeeService(employeeService.employee, employeeService.service)
+            setTimeout(() => {
+                resolve(response)
+                reject("Ocurrio un error")
+            });
+        });
+        promise.then((resolve) =>{
+            console.log(resolve)
+            reloadList()
+        });
+        promise.catch((error) =>{
+            console.log(error)
+        })
     }
 
     return (
@@ -24,7 +57,7 @@ function Services({ isSelected, service, reloadList }) {
                 </div>
                 <div className="flex flex-row justify-between items-center">
                     <h4>Precio: ${service?.price}</h4>
-                    <ButtonCustom onPress={isSelected ? null : handleAddService} isIconOnly classStyles={"rounded-full bg-red-transparent border-2 border-slate-200    "}>
+                    <ButtonCustom onPress={isSelected ? handleDeleteService : handleAddService} isIconOnly classStyles={"rounded-full bg-red-transparent border-2 border-slate-200    "}>
                         {!isSelected ?
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />

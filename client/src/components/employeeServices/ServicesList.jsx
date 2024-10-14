@@ -8,45 +8,50 @@ function ServicesList() {
     const [establishmentServices, setEstablishmentServices] = useState([]);
     const [employeeServices, setEmployeeServices] = useState([]);
 
-    function loadEstablishmentServices() {
+    function loadEmployeeServices() {
         const promise = new Promise((resolve, reject) => {
-            const response = getEstablishmentServices(1);
+            const response = getEmployeeServices(4);
             setTimeout(() => {
-                // si todo va bien, se llama a resolve
                 resolve(response);
                 reject("Ocurrio un error");
             }, 0);
         });
         promise.then((resultado) => {
-            setEstablishmentServices(resultado.data);
+            setEmployeeServices(resultado.data);
         });
         promise.catch((error) => {
-            console.log(error);
+            console.log(error)
         })
         return (promise)
     }
 
     useEffect(() => {
-        function loadEmployeeServices() {
+
+        function loadEstablishmentServices() {
             const promise = new Promise((resolve, reject) => {
-                const response = getEmployeeServices(4);
+                const response = getEstablishmentServices(1);
                 setTimeout(() => {
+                    // si todo va bien, se llama a resolve
                     resolve(response);
                     reject("Ocurrio un error");
                 }, 0);
             });
             promise.then((resultado) => {
-                setEmployeeServices(resultado.data);
+                setEstablishmentServices(resultado.data);
             });
             promise.catch((error) => {
-                console.log(error)
+                console.log(error);
             })
             return (promise)
         }
+
+
         loadEmployeeServices();
         loadEstablishmentServices();
 
     }, []);
+
+    //console.log(employeeServices)
 
     return (
         <div className="flex flex-col h-full w-full">
@@ -56,9 +61,10 @@ function ServicesList() {
                 scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
 
                     {establishmentServices.map((establishmentService) => (
-                        employeeServices.filter((employeeService) => employeeService.service === establishmentService.id).map(() => (
-                            <Services key={establishmentService.id} service={establishmentService} isSelected />
-                        ))
+                        employeeServices.filter((employeeService) => employeeService.service === establishmentService.id).map((employeeService) => {
+                            console.log(employeeService)
+                            return<Services key={establishmentService.id} reloadList={loadEmployeeServices} employeeService={employeeService} service={establishmentService} isSelected />
+                        })
                     ))}
 
                 </div>
@@ -90,7 +96,7 @@ function ServicesList() {
                 scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
 
                     {establishmentServices.map((establishmentService) => (
-                        <Services key={establishmentService.id} service={establishmentService} reloadList={loadEstablishmentServices} />
+                        <Services key={establishmentService.id} service={establishmentService} reloadList={loadEmployeeServices} employeeService={employeeServices[0]} />
                     ))}
 
                 </div>
