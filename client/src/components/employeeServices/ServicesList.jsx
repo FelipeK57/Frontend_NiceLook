@@ -1,21 +1,66 @@
 import { Select, SelectItem } from "@nextui-org/react";
 import Services from "./Services";
+import { useEffect, useState } from "react";
+import { getEmployeeServices, getEstablishmentServices } from "../../Api/employeeServices/employeeServicesApi";
 
 function ServicesList() {
+
+    const [establishmentServices, setEstablishmentServices] = useState([]);
+    const [employeeServices, setEmployeeServices] = useState([]);
+
+    function loadEstablishmentServices() {
+        const promise = new Promise((resolve, reject) => {
+            const response = getEstablishmentServices(1);
+            setTimeout(() => {
+                // si todo va bien, se llama a resolve
+                resolve(response);
+                reject("Ocurrio un error");
+            }, 0);
+        });
+        promise.then((resultado) => {
+            setEstablishmentServices(resultado.data);
+        });
+        promise.catch((error) => {
+            console.log(error);
+        })
+        return (promise)
+    }
+
+    useEffect(() => {
+        function loadEmployeeServices() {
+            const promise = new Promise((resolve, reject) => {
+                const response = getEmployeeServices(4);
+                setTimeout(() => {
+                    resolve(response);
+                    reject("Ocurrio un error");
+                }, 0);
+            });
+            promise.then((resultado) => {
+                setEmployeeServices(resultado.data);
+            });
+            promise.catch((error) => {
+                console.log(error)
+            })
+            return (promise)
+        }
+        loadEmployeeServices();
+        loadEstablishmentServices();
+
+    }, []);
+
     return (
         <div className="flex flex-col h-full w-full">
             <section className="flex flex-col h-1/2 w-full">
                 <h2 className="sm:text-3xl text-2xl text-zinc-950 font-bold sm:pb-8 pb-2">Mis servicios</h2>
                 <div className="grid grid-flow-row 1/2lg:grid-cols-[1fr_1fr] gap-4 max-h-full overflow-y-auto pr-2
                 scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
-                    <Services />
-                    <Services />
-                    <Services />
-                    <Services />
-                    <Services />
-                    <Services />
-                    <Services />
-                    <Services />
+
+                    {establishmentServices.map((establishmentService) => (
+                        employeeServices.filter((employeeService) => employeeService.service === establishmentService.id).map(() => (
+                            <Services key={establishmentService.id} service={establishmentService} isSelected />
+                        ))
+                    ))}
+
                 </div>
             </section>
             <section className="flex flex-col h-1/2 w-full">
@@ -43,14 +88,11 @@ function ServicesList() {
                 </div>
                 <div className="grid grid-flow-row 1/2lg:grid-cols-[1fr_1fr] gap-4 max-h-full overflow-y-auto pr-2 pb-2
                 scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
-                    <Services isSelected/>
-                    <Services isSelected/>
-                    <Services isSelected/>
-                    <Services isSelected/>
-                    <Services isSelected/>
-                    <Services isSelected/>
-                    <Services isSelected/>
-                    <Services isSelected/>
+
+                    {establishmentServices.map((establishmentService) => (
+                        <Services key={establishmentService.id} service={establishmentService} reloadList={loadEstablishmentServices} />
+                    ))}
+
                 </div>
             </section>
         </div>
