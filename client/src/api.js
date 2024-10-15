@@ -11,8 +11,10 @@ api.interceptors.request.use(
   (config) => {
     const token = Cookies.get(ACCESS_TOKEN);
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      // config.headers.Authorization = `Bearer ${token}`;
+      config.headers["X-XSRF-TOKEN"] = token;
     }
+
     return config;
   },
   (error) => {
