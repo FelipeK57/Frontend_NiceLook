@@ -46,7 +46,7 @@ function Appointment({
         <div className="flex justify-end items-end h-full">
           <button
             onClick={handleOpen}
-            className="w-10 h-10 border-2 hover:bg-slate-300 hover:border-transparent transition-all border-slate-200 flex items-center justify-center rounded-full"
+            className="w-10 h-10 border-2 hover:bg-slate-100 hover:border-transparent transition-all border-slate-200 flex items-center justify-center rounded-full"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

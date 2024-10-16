@@ -7,7 +7,6 @@ import {
   ModalFooter,
 } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
-import SelectCategorie from "../services/SelectCategorie";
 
 /**
  * ModalNewService component renders a modal for creating a new service.
@@ -21,7 +20,7 @@ import SelectCategorie from "../services/SelectCategorie";
 function ModalDetailsAppointment({ isOpen, onClose }) {
   const boduDetails = [
     { item: "Profesional", value: "Fernando Castaño" },
-    { item: "Servicio", value: "Corte de Cabello" },
+    { item: "Servicios", value: "Corte de Cabello" },
     { item: "Costo", value: 15000 },
     { item: "Comision", value: 0.1 },
   ];

@@ -1,6 +1,9 @@
 import { DatePicker } from "@nextui-org/react";
 import CategoriesAppointments from "../../components/appointments/CategoriesAppointments";
 import AppointmentsList from "../../components/appointments/AppointmentsList";
+import { useEffect, useState } from "react";
+import { parseDate } from "@internationalized/date";
+import axios from "axios";
 
 function AppointmentsManagement() {
   const citas = [
@@ -267,6 +270,33 @@ function AppointmentsManagement() {
     },
   ];
 
+  const fecha = new Date();
+  let year = fecha.getFullYear().toString();
+  let month = (fecha.getMonth() + 1).toString();
+  let day = fecha.getDate().toString();
+  const [date, setDate] = useState(
+    parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const day = date.toDate().getDate();
+      const month = date.toDate().getMonth() + 1;
+      const year = date.toDate().getFullYear();
+      console.log(day, month, year);
+      const response = await axios.post(
+        "http://localhost:8000/api/appointment_list/",
+        {
+          day: day,
+          month: month,
+          year: year,
+        }
+      );
+      console.log(response.data);
+    };
+    fetchData();
+  }, [date]);
+
   return (
     <main className="h-screen flex flex-col py-8 gap-2 px-10">
       <header className="flex items-center">
@@ -274,6 +304,8 @@ function AppointmentsManagement() {
           Calendario de citas
         </h1>
         <DatePicker
+          value={date}
+          onChange={setDate}
           label="Fecha"
           className="max-w-[280px] font-semibold"
           variant="bordered"
