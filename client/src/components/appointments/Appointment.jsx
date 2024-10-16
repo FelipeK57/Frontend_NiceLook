@@ -15,11 +15,11 @@ function Appointment({
 
   const getColorByServiceState = (state) => {
     switch (state) {
-      case "pendiente":
+      case "Pendiente":
         return "border-t-yellow-500 border-t-4";
-      case "completada":
+      case "Completada":
         return "border-t-green-500 border-t-4";
-      case "cancelada":
+      case "Cancelada":
         return "border-t-red-500 border-t-4";
       default:
         return "border-t-slate-200 border-t-4";

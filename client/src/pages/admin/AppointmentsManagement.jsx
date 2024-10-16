@@ -6,270 +6,6 @@ import { parseDate } from "@internationalized/date";
 import axios from "axios";
 
 function AppointmentsManagement() {
-  const citas = [
-    {
-      hora: "7:30",
-      citas: [
-        {
-          id: 1,
-          estilista: "María López",
-          cliente: "Ana García",
-          servicio: "Corte de cabello",
-          precio: 15000,
-          tiempo: 30,
-          estado: "completada",
-        },
-        {
-          id: 2,
-          estilista: "Carlos Pérez",
-          cliente: "Juan Martínez",
-          servicio: "Afeitado",
-          precio: 8000,
-          tiempo: 15,
-          estado: "completada",
-        },
-        {
-          id: 3,
-          estilista: "María López",
-          cliente: "Ana García",
-          servicio: "Corte de cabello",
-          precio: 15000,
-          tiempo: 30,
-          estado: "completada",
-        },
-        {
-          id: 4,
-          estilista: "Carlos Pérez",
-          cliente: "Juan Martínez",
-          servicio: "Afeitado",
-          precio: 8000,
-          tiempo: 15,
-          estado: "completada",
-        },
-        {
-          id: 5,
-          estilista: "María López",
-          cliente: "Ana García",
-          servicio: "Corte de cabello",
-          precio: 15000,
-          tiempo: 30,
-          estado: "completada",
-        },
-        {
-          id: 6,
-          estilista: "Carlos Pérez",
-          cliente: "Juan Martínez",
-          servicio: "Afeitado",
-          precio: 8000,
-          tiempo: 15,
-          estado: "completada",
-        },
-        {
-          id: 7,
-          estilista: "María López",
-          cliente: "Ana García",
-          servicio: "Corte de cabello",
-          precio: 15000,
-          tiempo: 30,
-          estado: "completada",
-        },
-        {
-          id: 8,
-          estilista: "Carlos Pérez",
-          cliente: "Juan Martínez",
-          servicio: "Afeitado",
-          precio: 8000,
-          tiempo: 15,
-          estado: "completada",
-        },
-      ],
-    },
-    {
-      hora: "7:45",
-      citas: [
-        {
-          id: 1,
-          estilista: "Laura Torres",
-          cliente: "Lucía Sánchez",
-          servicio: "Tinte de cabello",
-          precio: 50000,
-          tiempo: 60,
-          estado: "cancelada",
-        },
-        {
-          id: 2,
-          estilista: "Andrés Gómez",
-          cliente: "Pedro Fernández",
-          servicio: "Lavado y secado",
-          precio: 25000,
-          tiempo: 45,
-          estado: "pendiente",
-        },
-      ],
-    },
-    {
-      hora: "9:00",
-      citas: [
-        {
-          id: 1,
-          estilista: "María López",
-          cliente: "Carolina Díaz",
-          servicio: "Peinado",
-          precio: 20000,
-          tiempo: 40,
-          estado: "completada",
-        },
-        {
-          id: 2,
-          estilista: "Carlos Pérez",
-          cliente: "Luis Rivera",
-          servicio: "Corte de cabello",
-          precio: 15000,
-          tiempo: 30,
-          estado: "completada",
-        },
-      ],
-    },
-    {
-      hora: "10:30",
-      citas: [
-        {
-          id: 1,
-          estilista: "Laura Torres",
-          cliente: "Fernanda Ramírez",
-          servicio: "Tinte de cabello",
-          precio: 55000,
-          tiempo: 60,
-          estado: "pendiente",
-        },
-        {
-          id: 2,
-          estilista: "Andrés Gómez",
-          cliente: "Raúl Méndez",
-          servicio: "Afeitado",
-          precio: 8000,
-          tiempo: 20,
-          estado: "completada",
-        },
-      ],
-    },
-    {
-      hora: "12:00",
-      citas: [
-        {
-          id: 1,
-          estilista: "Carlos Pérez",
-          cliente: "Marcela Gutiérrez",
-          servicio: "Manicure",
-          precio: 18000,
-          tiempo: 45,
-          estado: "completada",
-        },
-        {
-          id: 2,
-          estilista: "Laura Torres",
-          cliente: "José Herrera",
-          servicio: "Pedicure",
-          precio: 22000,
-          tiempo: 50,
-          estado: "cancelada",
-        },
-      ],
-    },
-    {
-      hora: "14:00",
-      citas: [
-        {
-          id: 1,
-          estilista: "María López",
-          cliente: "Andrea Orozco",
-          servicio: "Corte y lavado",
-          precio: 30000,
-          tiempo: 45,
-          estado: "completada",
-        },
-        {
-          id: 2,
-          estilista: "Andrés Gómez",
-          cliente: "Fernando Pérez",
-          servicio: "Masaje facial",
-          precio: 35000,
-          tiempo: 60,
-          estado: "pendiente",
-        },
-      ],
-    },
-    {
-      hora: "15:30",
-      citas: [
-        {
-          id: 1,
-          estilista: "Laura Torres",
-          cliente: "Luisa Morales",
-          servicio: "Tratamiento capilar",
-          precio: 45000,
-          tiempo: 60,
-          estado: "completada",
-        },
-        {
-          id: 2,
-          estilista: "Carlos Pérez",
-          cliente: "Diana Pardo",
-          servicio: "Peinado",
-          precio: 20000,
-          tiempo: 40,
-          estado: "completada",
-        },
-      ],
-    },
-    {
-      hora: "17:00",
-      citas: [
-        {
-          id: 1,
-          estilista: "María López",
-          cliente: "Jorge Ramírez",
-          servicio: "Corte de cabello",
-          precio: 15000,
-          tiempo: 30,
-          estado: "pendiente",
-        },
-        {
-          id: 2,
-          estilista: "Andrés Gómez",
-          cliente: "Sofía Gil",
-          servicio: "Afeitado",
-          precio: 8000,
-          tiempo: 20,
-          estado: "pendiente",
-        },
-      ],
-    },
-    {
-      hora: "18:30",
-      citas: [
-        {
-          id: 1,
-          estilista: "Laura Torres",
-          cliente: "Juliana López",
-          servicio: "Maquillaje",
-          precio: 25000,
-          tiempo: 45,
-          estado: "pendiente",
-        },
-        {
-          id: 2,
-          estilista: "Carlos Pérez",
-          cliente: "Miguel Rojas",
-          servicio: "Corte de cabello",
-          precio: 15000,
-          tiempo: 30,
-          estado: "pendiente",
-        },
-      ],
-    },
-  ];
-
   const fecha = new Date();
   let year = fecha.getFullYear().toString();
   let month = (fecha.getMonth() + 1).toString();
@@ -278,22 +14,74 @@ function AppointmentsManagement() {
     parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
   );
 
+  const [appointments, setAppointments] = useState([]);
+  const [groupedAppointments, setGroupedAppointments] = useState([]);
+
+  const agruparCitasPorHora = (citas) => {
+    const citasAgrupadas = new Map(); // Usamos un Map para mejor eficiencia de búsqueda/inserción
+
+    citas.forEach((cita) => {
+      // Obtener la hora en formato "HH:mm" directamente de UTC
+      const horaUTC = new Date(cita.time).toISOString().slice(11, 16);
+
+      // Si la hora no existe en el Map, la agregamos
+      if (!citasAgrupadas.has(horaUTC)) {
+        citasAgrupadas.set(horaUTC, {
+          hora: horaUTC,
+          citas: [],
+        });
+      }
+
+      // Formatear la cita con los datos relevantes
+      const citaFormateada = {
+        id: cita.id,
+        estilista: cita.employee.user.username, // Nombre del estilista
+        cliente: cita.client.user.username, // Nombre del cliente
+        servicio: cita.services.map((s) => s.name).join(", "), // Unir nombres de servicios
+        precio: cita.payment.total, // Precio total
+        tiempo: 30, // Tiempo estimado (puede variar)
+        estado: cita.estate, // Estado de la cita
+      };
+
+      // Añadir la cita al grupo correspondiente
+      citasAgrupadas.get(horaUTC).citas.push(citaFormateada);
+    });
+
+    // Convertir Map a array y ordenar por hora
+    return Array.from(citasAgrupadas.values()).sort((a, b) =>
+      a.hora.localeCompare(b.hora)
+    );
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const day = date.toDate().getDate();
       const month = date.toDate().getMonth() + 1;
       const year = date.toDate().getFullYear();
       console.log(day, month, year);
-      const response = await axios.post(
-        "http://localhost:8000/api/appointment_list/",
-        {
-          day: day,
-          month: month,
-          year: year,
-        }
-      );
-      console.log(response.data);
+
+      try {
+        // Realizar la solicitud POST a la API
+        const response = await axios.post(
+          "http://localhost:8000/api/appointment_list/",
+          {
+            day: day,
+            month: month,
+            year: year,
+          }
+        );
+
+        // Guardar las citas obtenidas
+        setAppointments(response.data);
+        // Agrupar las citas por hora y actualizar el estado
+        const citasAgrupadas = agruparCitasPorHora(response.data);
+        setGroupedAppointments(citasAgrupadas);
+        console.log(citasAgrupadas);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
     };
+
     fetchData();
   }, [date]);
 
@@ -316,13 +104,19 @@ function AppointmentsManagement() {
         className="flex pb-6 gap-8 overflow-x-auto scrollbar scrollbar-thumb-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar -thumb-slate-300"
         style={{ scrollbarGutter: "top" }}
       >
-        {citas.map((cita) => (
-          <AppointmentsList
-            key={cita.hora}
-            citas={cita.citas}
-            hora={cita.hora}
-          />
-        ))}
+        {groupedAppointments.length === 0 ? (
+          <p className="text-lg font-medium text-slate-500">
+            No hay citas programadas para este día
+          </p>
+        ) : (
+          groupedAppointments.map((groupedAppointment) => (
+            <AppointmentsList
+              key={groupedAppointment.hora}
+              citas={groupedAppointment.citas}
+              hora={groupedAppointment.hora}
+            />
+          ))
+        )}
       </section>
     </main>
   );

@@ -22,6 +22,10 @@ const categories = [
     id: 5,
     name: "Maquillaje",
   },
+  {
+    id: 6,
+    name: "Tatuajes"
+  }
 ];
 
 /**
