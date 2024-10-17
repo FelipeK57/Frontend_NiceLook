@@ -1,7 +1,6 @@
 import { Button, Input } from "@nextui-org/react";
 import Categories from "../../components/services/Categories";
 import ServicesList from "../../components/services/ServicesList";
-import Sidebar from "../../components/global/Sidebar";
 import SearchIcon from "../../components/icons/SearchIcon";
 function ServicesManagement() {
   return (
