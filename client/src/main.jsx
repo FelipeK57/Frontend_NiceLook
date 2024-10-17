@@ -16,6 +16,7 @@ import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import EmployeesManagement from "./pages/admin/EmployeesManagement.jsx";
+import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -40,6 +41,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "/admin",
+    element: <ProtectedRoute />,
     children: [
       {
         path: "login",
@@ -47,24 +49,24 @@ const routes = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <ProtectedRoute />,
+        element: <Dashboard />,
         children: [
           {
-            element: <Dashboard />,
-            children: [
-              {
-                index: true,
-                element: <div>Dashboard</div>,
-              },
-              {
-                path: "services",
-                element: <ServicesManagement />,
-              },
-              {
-                path: "employees",
-                element: <EmployeesManagement />,
-              },
-            ],
+            path: "home",
+            index: true,
+            element: <div>Dashboard</div>,
+          },
+          {
+            path: "services",
+            element: <ServicesManagement />,
+          },
+          {
+            path: "products",
+            element: <ProductsManagement />,
+          },
+          {
+            path: "employees",
+            element: <EmployeesManagement />,
           },
         ],
       },
