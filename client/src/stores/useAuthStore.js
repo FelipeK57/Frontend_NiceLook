@@ -24,7 +24,7 @@ const useAuthStore = create((set) => {
     login: (userData, access, refresh) => {
       set({
         user: userData,
-        id_establishment: userData.establishment_id,
+        id_establishment: userData.establishment,
         accessToken: access,
         refreshToken: refresh,
       });
@@ -32,7 +32,7 @@ const useAuthStore = create((set) => {
       // Guardar tokens en cookies
       Cookies.set(ACCESS_TOKEN, access, { expires: 7 });
       Cookies.set(REFRESH_TOKEN, refresh, { expires: 7 });
-      Cookies.set("establishmentId", userData.establishment_id, { expires: 7 });
+      Cookies.set("establishmentId", userData.establishment, { expires: 7 });
     },
 
     // Acción para cerrar sesión

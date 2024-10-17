@@ -10,6 +10,7 @@ import ButtonCustom from "../global/ButtonCustom";
 import SelectCategorie from "./SelectCategorie";
 import { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 /**
  * ModalNewService component renders a modal for creating a new service.
@@ -32,6 +33,7 @@ function ModalNewService({ isOpen, onClose }) {
       const response = await axios.post(
         "http://localhost:8000/api/create_service/",
         {
+          establishment_id: Cookies.get("establishmentId"),
           name: name,
           price: price,
           commission: commission,

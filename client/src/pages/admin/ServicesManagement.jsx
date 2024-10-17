@@ -7,6 +7,7 @@ import ModalNewService from "../../components/services/ModalNewService";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import SelectCategorie from "../../components/services/SelectCategorie";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 /**
  * ServicesManagement component renders the main interface for managing categories and services.
@@ -30,10 +31,16 @@ function ServicesManagement() {
   /* Fetch list services */
   useEffect(() => {
     const getListServices = async () => {
+      console.log("Fetching services");
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/list_service/"
+          "http://localhost:8000/api/list_service/", {
+            params: {
+              establishment_id: Cookies.get("establishmentId"),
+            }
+          }
         );
+        console.log("Services fetched");
         console.log(response.data);
         setServices(response.data);
       } catch (error) {
