@@ -135,6 +135,13 @@ const navLinks = [
 ];
 
 function Sidebar() {
+  const user = useAuthStore((state) => state.user);
+  const userInfo = user !== null ? user : "Usuario no identificado";
+  console.log(userInfo)
+  // useMemo(() => {
+  //   console.log("Usuario en store de zustand: ", user);
+  // }, [user]);
+
   return (
     <aside className="bg-[#ffffff] w-full flex flex-col gap-5 pt-8 items-center border-r-2 border-slate-200">
       <button className="md:hidden">
@@ -155,10 +162,12 @@ function Sidebar() {
       </button>
       {/* <h1 className="hidden lg:block font-amaranth font-bold text-5xl text-center">
         NiceLook.
-      </h1> 
+      </h1> */}
       <LogoNiceLook className="text-4xl" />
       <div className="w-32 h-32 bg-slate-800 rounded-full"></div>
-      <p>{userInfo.first_name} {userInfo.last_name}</p>
+      <p>
+        {userInfo.first_name} {userInfo.last_name}
+      </p>
       <ButtonCustom secondary name="Configuración" />
       <nav className="flex flex-col gap-4 py-2">
         {navLinks.map((link) => (

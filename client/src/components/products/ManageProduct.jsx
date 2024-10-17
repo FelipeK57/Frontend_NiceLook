@@ -11,15 +11,15 @@ import { Textarea } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { DatePicker } from "@nextui-org/date-picker";
 import ImageUpload from "../global/ImageUpload";
+import Cookies from "js-cookie";
 
 export default function ManageProduct({ isEditing, onClose, product }) {
 
   const user = useAuthStore((state) => state.user);
-
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    establisment: user && user.user_id,
+    establisment: user.establishment_id,
     description: "",
     price: 0.0,
     distributor: "",

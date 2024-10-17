@@ -87,6 +87,7 @@ export default function AdminLogin() {
         password: formData.password,
       })
       .then((response) => {
+        console.log(response.data);
         const decoded = jwtDecode(response.data.access_token);
         const access = response.data.access_token;
         const refresh = response.data.refresh_token;
@@ -117,7 +118,7 @@ export default function AdminLogin() {
         login(decoded, access, refresh);
 
         // Redirigir al dashboard
-        navigate("/admin/dashboard/home");
+        navigate("/admin/dashboard/finance");
       })
       .catch((error) => {
         console.error(error);
