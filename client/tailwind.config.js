@@ -2,7 +2,7 @@
 import { nextui } from "@nextui-org/react";
 
 const { fontFamily } = require("tailwindcss/defaultTheme");
-import tailwindScrollbar from 'tailwind-scrollbar';
+import tailwindScrollbar from "tailwind-scrollbar";
 
 module.exports = {
   content: [
@@ -93,11 +93,17 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      primary: "#FAC215",
+    },
+    screens: {
+      "1/2xl": "1350px",
+      "1/2lg": "1150px",
     },
   },
   darkMode: ["class"],
   plugins: [
-    nextui(), require("tailwindcss-animate"),
-    tailwindScrollbar ({ nocompatible: true })
+    nextui(),
+    require("tailwindcss-animate"),
+    tailwindScrollbar({ nocompatible: true }),
   ],
 };
