@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import api from "@/api";
-import Cookies from "js-cookie";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../../../constants";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import useAuthStore from "@/stores/useAuthStore";
 
 import ButtonCustom from "@/components/global/ButtonCustom";
 import { Input } from "@nextui-org/input";
@@ -15,6 +15,7 @@ import { EyeSlashFilledIcon } from "@/assets/EyeSlashFilledIcon";
 import { GoogleLogin } from "@react-oauth/google";
 
 export default function AdminLogin() {
+  const login = useAuthStore((state) => state.login);
   const [formData, setFormData] = useState({
     name: "",
     lastname: "",
@@ -86,12 +87,15 @@ export default function AdminLogin() {
         password: formData.password,
       })
       .then((response) => {
-        console.log(response);
+        const decoded = jwtDecode(response.data.access_token);
         const access = response.data.access_token;
         const refresh = response.data.refresh_token;
-        Cookies.set(ACCESS_TOKEN, access, { expires: 7 });
-        Cookies.set(REFRESH_TOKEN, refresh, { expires: 7 });
-        navigate("/admin/dashboard");
+
+        // Guardar los datos del usuario en Zustand
+        login(decoded, access, refresh);
+
+        // Redirigir al dashboard
+        navigate("/admin/dashboard/home");
       })
       .catch((error) => {
         console.log(error);
@@ -102,16 +106,18 @@ export default function AdminLogin() {
   };
 
   const authGoogle = (token) => {
-    console.log(token);
     api
       .post("/auth/google/", { token })
       .then((response) => {
-        console.log(response);
         const access = response.data.access_token;
         const refresh = response.data.refresh_token;
-        Cookies.set(ACCESS_TOKEN, access, { expires: 7 });
-        Cookies.set(REFRESH_TOKEN, refresh, { expires: 7 });
-        navigate("/admin/dashboard");
+        const decoded = jwtDecode(response.data.access_token);
+
+        // Guardar los datos del usuario en Zustand
+        login(decoded, access, refresh);
+
+        // Redirigir al dashboard
+        navigate("/admin/dashboard/home");
       })
       .catch((error) => {
         console.error(error);
