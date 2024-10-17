@@ -31,14 +31,14 @@ function AppointmentsManagement() {
           citas: [],
         });
       }
-
+      
       // Formatear la cita con los datos relevantes
       const citaFormateada = {
         id: cita.id,
         estilista: cita.employee.user.username, // Nombre del estilista
         cliente: cita.client.user.username, // Nombre del cliente
         servicio: cita.services.map((s) => s.name).join(", "), // Unir nombres de servicios
-        precio: cita.payment.total, // Precio total
+        total: cita.total, // Precio total
         tiempo: 30, // Tiempo estimado (puede variar)
         estado: cita.estate, // Estado de la cita
       };
@@ -73,12 +73,14 @@ function AppointmentsManagement() {
 
         // Guardar las citas obtenidas
         setAppointments(response.data);
+        console.log(response.data);
         // Agrupar las citas por hora y actualizar el estado
         const citasAgrupadas = agruparCitasPorHora(response.data);
         setGroupedAppointments(citasAgrupadas);
         console.log(citasAgrupadas);
-      } catch (error) {
-        console.error("Error fetching data", error);
+      }
+      catch (error) {
+        console.error(error);
       }
     };
 
