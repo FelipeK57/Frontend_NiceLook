@@ -7,7 +7,14 @@ import { useDisclosure } from "@nextui-org/react";
 import GestModal from "../../components/edit/GestModal";
 import InfoPopover from "../../components/edit/InfoPopover";
 import ReviewComponent from "../../components/global/ReviewComponent";
-import { obtenerEstablemiento, editarEstablemiento, obtenerImagen, obtenerBanner, subirLogo, subirBanner } from "../../editProfileApis.js";
+import {
+  obtenerEstablemiento,
+  editarEstablemiento,
+  obtenerImagen,
+  obtenerBanner,
+  subirLogo,
+  subirBanner,
+} from "../../editProfileApis.js";
 
 const EstablishmentProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -20,31 +27,27 @@ const EstablishmentProfile = () => {
   const [prevewLogo, setPrevewLogo] = useState("");
   const [prevewBanner, setPrevewBanner] = useState("");
 
-
   useEffect(() => {
-
     const editImagen = async () => {
       try {
         await obtenerBanner(1).then((data) => {
           setBannerImage(data.data.image_base64);
-        })
-      }
-      catch (error) {
+        });
+      } catch (error) {
         console.log("banner", error.response.data);
       }
       try {
         await obtenerImagen(1).then((data) => {
           setLogoImage(data.data.imagen_base64);
-        })
-      }
-      catch (error) {
+        });
+      } catch (error) {
         console.error("logo", error.response.data);
       }
-    }
+    };
 
     const timer = setTimeout(() => {
       editImagen();
-    }, 1000);
+    }, 200);
 
     const getEstablismentData = async () => {
       try {
@@ -53,13 +56,11 @@ const EstablishmentProfile = () => {
           setAddress(data.data.address);
           setCity(data.data.city);
           setContact_methods(data.data.contact_methods);
-          console.log(data.data)
-        })
-      }
-      catch (error) {
+        });
+      } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     getEstablismentData();
     return () => {
@@ -67,54 +68,51 @@ const EstablishmentProfile = () => {
     };
   }, []);
 
-
   const editEstablecimiento = async () => {
+    console.log("entro");
     try {
       const formData = new FormData();
       formData.append("image", bannerImage);
       await subirBanner(1, formData).then((data) => {
-        console.log(data.data)
-      })
-      window.location.reload();
-    }
-    catch (error) {
+        console.log(data.data);
+      });
+    } catch (error) {
       console.error(error.response.data);
     }
+    console.log("entro 2");
     try {
       const formData = new FormData();
       formData.append("image", logoImage);
       await subirLogo(1, formData).then((data) => {
-        console.log(data.data)
-      })
-      window.location.reload();
-    }
-    catch (error) {
+        console.log(data.data);
+      });
+    } catch (error) {
       console.error(error.response.data);
     }
+    console.log("entro 3");
     try {
-      console.log(name, address, city)
-      await editarEstablemiento(1, name, address, city).then(() => {
-        alert("Se han guardado los cambios exitosamente");
-      })
-    }
-    catch (error) {
+      console.log(name, address, city, contact_methods);
+      await editarEstablemiento(1, name, address, city, contact_methods).then(() => {
+        console.log("editado");
+      });
+    } catch (error) {
       console.error(error);
     }
-
-  }
+    console.log("finalmente sali");
+  };
 
   // Función para actualizar la imagen del banner con previsualización
   const handleBannerChange = (event) => {
     const file = event.target.files[0];
     setBannerImage(file);
-    setPrevewBanner(URL.createObjectURL(file));  // Previsualiza el banner
+    setPrevewBanner(URL.createObjectURL(file)); // Previsualiza el banner
   };
 
   // Función para actualizar la imagen del logo con previsualización
   const handleLogoChange = (event) => {
     const file = event.target.files[0];
     setLogoImage(file);
-    setPrevewLogo(URL.createObjectURL(file));  // Previsualiza el logo
+    setPrevewLogo(URL.createObjectURL(file)); // Previsualiza el logo
   };
 
   return (
@@ -216,38 +214,48 @@ const EstablishmentProfile = () => {
               Contacto
             </h1>
             <div className="flex justify-end items-center mt-4 space-x-4">
-              {contact_methods.mail ? <InfoPopover
-                icon="mail"
-                placement={"top"}
-                isIconOnly
-                className="border-2 border-slate-200 rounded-full p-2"
-                variant="bordered"
-                redirectTo={`mailto:${contact_methods?.mail}`}
-              /> : null}
-              {contact_methods.instagram ? <InfoPopover
-                icon="instagram"
-                placement={"top"}
-                isIconOnly
-                className="border-2 border-slate-200 rounded-full p-2"
-                variant="bordered"
-                redirectTo={`https://www.instagram.com/${contact_methods?.instagram}/`}
-              /> : null}
-              {contact_methods.whatsapp ? <InfoPopover
-                icon="whatsapp"
-                placement={"top"}
-                isIconOnly
-                className="border-2 border-slate-200 rounded-full p-2"
-                variant="bordered"
-                redirectTo={`https://wa.me/${contact_methods?.whatsapp}`}
-              /> : null}
-              {contact_methods.facebook ? <InfoPopover
-                icon="facebook"
-                placement={"top"}
-                isIconOnly
-                className="border-2 border-slate-200 rounded-full p-2"
-                variant="bordered"
-                redirectTo={'https://www.facebook.com/${contact_methods?.facebook}'}
-              /> : null}
+              {contact_methods.mail ? (
+                <InfoPopover
+                  icon="mail"
+                  placement={"top"}
+                  isIconOnly
+                  className="border-2 border-slate-200 rounded-full p-2"
+                  variant="bordered"
+                  redirectTo={`mailto:${contact_methods?.mail}`}
+                />
+              ) : null}
+              {contact_methods.instagram ? (
+                <InfoPopover
+                  icon="instagram"
+                  placement={"top"}
+                  isIconOnly
+                  className="border-2 border-slate-200 rounded-full p-2"
+                  variant="bordered"
+                  redirectTo={`https://www.instagram.com/${contact_methods?.instagram}/`}
+                />
+              ) : null}
+              {contact_methods.whatsapp ? (
+                <InfoPopover
+                  icon="whatsapp"
+                  placement={"top"}
+                  isIconOnly
+                  className="border-2 border-slate-200 rounded-full p-2"
+                  variant="bordered"
+                  redirectTo={`https://wa.me/${contact_methods?.whatsapp}`}
+                />
+              ) : null}
+              {contact_methods.facebook ? (
+                <InfoPopover
+                  icon="facebook"
+                  placement={"top"}
+                  isIconOnly
+                  className="border-2 border-slate-200 rounded-full p-2"
+                  variant="bordered"
+                  redirectTo={
+                    "https://www.facebook.com/${contact_methods?.facebook}"
+                  }
+                />
+              ) : null}
               <ContactButton type="button" icon="more" onClick={onOpen} />
             </div>
           </div>
@@ -265,7 +273,12 @@ const EstablishmentProfile = () => {
           </div>
         </div>
       </div>
-      <GestModal isOpen={isOpen} backdrop={"blur"} onClose={onClose} contact_methods={contact_methods} setContact_methods={setContact_methods} />
+      <GestModal
+        isOpen={isOpen}
+        onClose={onClose}
+        contact_methods={contact_methods}
+        setContact_methods={setContact_methods}
+      />
     </div>
   );
 };

@@ -15,15 +15,16 @@ export const obtenerEstablemiento = async (id) => {
 };
 
 // Función para editar los datos del establecimiento (PUT)
-export const editarEstablemiento = async (id, name, address, city) => {
+export const editarEstablemiento = async (id, name, address, city, contact_methods) => {
+  console.log(id, name, address, city);
   try {
-    const response = await axios.put(`${BASE_URL}/establisment/update-establisment/${id}/`, {
+    const response = await axios.patch(`${BASE_URL}/establisment/update-establisment/${id}/`, {
       name,
       address,
-      city
+      city,
+      contact_methods,
     });
-    alert("Se han guardado los cambios exitosamente");
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error editando el establecimiento:", error);
     throw error;
