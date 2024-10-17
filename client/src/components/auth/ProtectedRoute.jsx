@@ -1,13 +1,23 @@
-import { Navigate, Outlet } from "react-router-dom";
-// import Cookies from "js-cookie";
-// import { ACCESS_TOKEN } from "../../../constants";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "../../../constants";
 
 const ProtectedRoute = () => {
-  // const isAuthenticated = !!Cookies.get(ACCESS_TOKEN);
+  const isAuthenticated = !!Cookies.get(ACCESS_TOKEN);
+  const location = useLocation();
 
-  const isAuthenticated = true;
+  if (!isAuthenticated && location.pathname !== "/admin/login") {
+    // Si no está autenticado y no está en la página de login, redirige al login
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/admin/login" replace />;
+  if (isAuthenticated && location.pathname === "/admin/login") {
+    // Si está autenticado y está en la página de login, redirige al dashboard
+    return <Navigate to="/admin/dashboard/home" replace />;
+  }
+
+  // En cualquier otro caso, renderiza el contenido normal
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
