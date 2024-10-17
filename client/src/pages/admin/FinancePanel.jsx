@@ -6,6 +6,7 @@ import PaymentServicesList from "../../components/finances/PaymentServicesList";
 import PaymentProductList from "../../components/finances/PaymentProductsList";
 import { parseDate } from "@internationalized/date";
 import axios from "axios";
+import Cookies from "js-cookie";
 const items = ["Servicios", "Productos"];
 
 function FinancePanel() {
@@ -24,6 +25,7 @@ function FinancePanel() {
   const [earningsProducts, setEarningsProducts] = useState(0);
   const columnsProducts = ["Precio", "Cantidad", "Metodo de pago", "Productos"];
   const columnsServices = ["Precio", "Ganancia", "Profesional", "Servicios"];
+  const establishmentId = Cookies.get("establishmentId");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ function FinancePanel() {
       const month = date.toDate().getMonth() + 1;
       const year = date.toDate().getFullYear();
       const response = await axios.get(
-        "http://localhost:8000/establisment/get-filter-payments-service/1/",
+        `http://localhost:8000/establisment/get-filter-payments-service/${establishmentId}/`,
         {
           params: {
             day: day,
@@ -53,7 +55,7 @@ function FinancePanel() {
       const month = date.toDate().getMonth() + 1;
       const year = date.toDate().getFullYear();
       const response = await axios.get(
-        "http://localhost:8000/establisment/get-filter-payments-product/1/",
+        `http://localhost:8000/establisment/get-filter-payments-product/${establishmentId}/`,
         {
           params: {
             day: day,
@@ -127,8 +129,8 @@ function FinancePanel() {
             <>
               {services.length === 0 ? (
                 <p className="text-lg font-medium text-slate-500">
-                No hay pagos recibidos en esta fecha
-              </p>
+                  No hay pagos recibidos en esta fecha
+                </p>
               ) : (
                 <>
                   <ul className="grid items-start grid-cols-4 gap-2 py-4 mr-6 px-8">
