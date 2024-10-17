@@ -94,10 +94,10 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       primary: "#FAC215",
-    },
-    screens: {
-      "1/2xl": "1350px",
-      "1/2lg": "1150px",
+      screens: {
+        "1/2xl": "1350px",
+        "1/2lg": "1150px",
+      },
     },
   },
   darkMode: ["class"],

@@ -76,7 +76,7 @@ function Categories({ setSelectCategory }) {
               categorySelected === category.name
                 ? "text-slate-950 border-b-2 border-slate-950"
                 : "text-slate-500"
-            } hover:bg-slate-100 hover:text-slate-950 p-2 rounded-sm cursor-pointer`}
+            } hover:bg-slate-100 hover:text-slate-950 p-2 hover:rounded-sm cursor-pointer`}
             onClick={() => handleCategorySelected(category.name)}
             key={category.id}
           >
