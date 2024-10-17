@@ -284,3 +284,5 @@ const EstablishmentProfile = () => {
 };
 
 export default EstablishmentProfile;
+
+
