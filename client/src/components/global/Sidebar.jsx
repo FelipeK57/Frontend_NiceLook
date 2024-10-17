@@ -1,6 +1,9 @@
+// import { useMemo } from "react";
 import ButtonCustom from "./ButtonCustom";
-import { Button } from "@nextui-org/react";
+// import { Button } from "@nextui-org/react";
 import LinkSidebar from "./LinkSidebar";
+import LogoNiceLook from "../ui/LogoNiceLook";
+import useAuthStore from "@/stores/useAuthStore";
 
 const navLinks = [
   {
@@ -89,6 +92,27 @@ const navLinks = [
     path: "services",
   },
   {
+    name: "Productos",
+    icon: (
+      <svg
+        width="20"
+        height="22"
+        viewBox="0 0 20 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M19 6.5L10 1.25L1 6.5M19 6.5L10 11.75M19 6.5V15.5L10 20.75M1 6.5L10 11.75M1 6.5V15.5L10 20.75M10 11.75V20.75"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+    path: "products",
+  },
+  {
     name: "Empleados",
     icon: (
       <svg
@@ -111,7 +135,6 @@ const navLinks = [
 ];
 
 function Sidebar() {
-  const name = localStorage.getItem("name");
   return (
     <aside className="bg-[#ffffff] w-full flex flex-col gap-5 pt-8 items-center border-r-2 border-slate-200">
       <button className="md:hidden">
@@ -130,11 +153,12 @@ function Sidebar() {
           />
         </svg>
       </button>
-      <h1 className="hidden md:block font-amaranth font-bold text-5xl text-center">
+      {/* <h1 className="hidden lg:block font-amaranth font-bold text-5xl text-center">
         NiceLook.
-      </h1>
+      </h1> 
+      <LogoNiceLook className="text-4xl" />
       <div className="w-32 h-32 bg-slate-800 rounded-full"></div>
-      <p>{name}</p>
+      <p>{userInfo.first_name} {userInfo.last_name}</p>
       <ButtonCustom secondary name="Configuración" />
       <nav className="flex flex-col gap-4 py-2">
         {navLinks.map((link) => (

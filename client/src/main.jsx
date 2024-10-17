@@ -9,12 +9,16 @@ import {
   // Navigate,
   RouterProvider,
 } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import EmployeesManagement from "./pages/admin/EmployeesManagement.jsx";
 import AppointmentsManagement from "./pages/admin/AppointmentsManagement.jsx";
 import FinancePanel from "./pages/admin/FinancePanel.jsx";
+import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -39,25 +43,30 @@ const routes = createBrowserRouter([
   },
   {
     path: "/admin",
-    // element: <Navigate to="./login"/>,
+    element: <ProtectedRoute />,
     children: [
       {
-        id: "admin-login",
         path: "login",
         element: <AdminLogin />,
       },
       {
-        id: "admin-dashboard",
         path: "dashboard",
         element: <Dashboard />,
         children: [
           {
-            id: "admin-services",
+            path: "home",
+            index: true,
+            element: <div>Dashboard</div>,
+          },
+          {
             path: "services",
             element: <ServicesManagement />,
           },
           {
-            id: "admin-employees",
+            path: "products",
+            element: <ProductsManagement />,
+          },
+          {
             path: "employees",
             element: <EmployeesManagement />,
           },
@@ -79,6 +88,8 @@ const routes = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={routes} />
+    <GoogleOAuthProvider clientId="659540305448-65l2ttvn04541tpuke3c411nrocbupdv.apps.googleusercontent.com">
+      <RouterProvider router={routes} />
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );
