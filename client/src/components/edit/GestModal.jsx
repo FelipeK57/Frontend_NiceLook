@@ -7,7 +7,7 @@ import { Input } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 
 export default function gestModal(props) {
-
+  const contact_methods = props.contact_methods
 
   return (
     <>
@@ -22,25 +22,25 @@ export default function gestModal(props) {
                     <div className="border-2 self-center justify-center items-center border-slate-200 rounded-full p-2 ">
                       <EnvelopeIcon className="size-9 stroke-2" />
                     </div>
-                    <Input type="email" label="Correo Electronico" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
+                    <Input value={contact_methods.mail} type="email" label="Correo Electronico" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
                   </div>
                   <div className="justify-center content-center grid grid-cols-[0.1fr,1fr] gap-2 mt-2">
                     <div className="border-2 self-center justify-center items-center border-slate-200 rounded-full p-2 ">
                       <InstagramIcon size={"size-9"} className=" stroke-2" />
                     </div>
-                    <Input type="text" label="Instagram" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
+                    <Input value={contact_methods.instagram} type="text" label="Instagram" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
                   </div>
                   <div className="justify-center content-center grid grid-cols-[0.1fr,1fr] gap-2 mt-2">
                     <div className="border-2 self-center justify-center items-center border-slate-200 rounded-full p-2 ">
                       <WhatsappIcon size={"size-9"} className=" stroke-2" />
                     </div>
-                    <Input type="text" label="Whatsapp" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
+                    <Input value={contact_methods.whatsapp} type="text" label="Whatsapp" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
                   </div>
                   <div className="justify-center content-center grid grid-cols-[0.1fr,1fr] gap-2 mt-2">
                     <div className="border-2 self-center justify-center items-center border-slate-200 rounded-full p-2 ">
                       <FacebookIcon size={"size-9"} className=" stroke-2" />
                     </div>
-                    <Input type="text" label="Facebook" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
+                    <Input value={contact_methods.facebook} type="text" label="Facebook" classNames={{ inputWrapper: "bg-transparent border-2 border-slate-200 rounded-full w-full" }} />
                   </div>
                 </form>
               </ModalBody>

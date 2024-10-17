@@ -7,7 +7,7 @@ import { useDisclosure } from "@nextui-org/react";
 import GestModal from "../../components/edit/GestModal";
 import InfoPopover from "../../components/edit/InfoPopover";
 import ReviewComponent from "../../components/global/ReviewComponent";
-import { obtenerEstablemiento, editarEstablemiento, obtenerImagen, obtenerBanner, subirLogo, subirBanner } from "../../api/editProfile/editProfile";
+import { obtenerEstablemiento, editarEstablemiento, obtenerImagen, obtenerBanner, subirLogo, subirBanner } from "../../editProfileApis.js";
 
 const EstablishmentProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,6 +53,7 @@ const EstablishmentProfile = () => {
           setAddress(data.data.address);
           setCity(data.data.city);
           setContact_methods(data.data.contact_methods);
+          console.log(data.data)
         })
       }
       catch (error) {
@@ -91,6 +92,7 @@ const EstablishmentProfile = () => {
       console.error(error.response.data);
     }
     try {
+      console.log(name, address, city)
       await editarEstablemiento(1, name, address, city).then(() => {
         alert("Se han guardado los cambios exitosamente");
       })
