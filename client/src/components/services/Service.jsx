@@ -18,13 +18,14 @@ import axios from "axios";
  * @param {number} props.score - The score of the service out of 5.
  * @returns {JSX.Element} The rendered Service component.
  */
-function Service({ id, name, price, commission, category }) {
+function Service({ id, name, price, commission, category, state }) {
   const service = {
     id: id,
     name: name,
     price: price,
     commission: commission,
     category: category,
+    state: state
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleOpen = () => {
@@ -73,11 +74,13 @@ function Service({ id, name, price, commission, category }) {
         <div className="flex flex-col gap-4 justify-between">
           {/* State and reviews */}
           <div className="flex gap-4 lg:justify-end">
-            <p
-              className={`text-green-500 pr-4 font-semibold text-sm lg:text-base`}
-            >
-              Activo
-            </p>
+            {
+              state ? (
+                <p className="text-green-500 font-semibold pr-4 text-sm lg:text-base">Activo</p>
+              ) : (
+                <p className="text-red-500 font-semibold pr-4 text-sm lg:text-base">Inactivo</p>
+              )
+            }
           </div>
           {/* Buttons */}
           <div className="flex gap-2">
@@ -115,6 +118,7 @@ Service.propTypes = {
   commission: PropTypes.number,
   category: PropTypes.string,
   id: PropTypes.number,
+  state: PropTypes.bool,
 };
 
 export default Service;

@@ -33,6 +33,7 @@ function ServicesList({ services }) {
             price={service.price}
             commission={service.commission * 100}
             category={service.category}
+            state={service.state}
           />
         ))
       )}
