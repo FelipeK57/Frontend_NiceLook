@@ -8,7 +8,7 @@ export function AccordionCustomTitle({nombre, nuip, qualification, children }) {
 
     AccordionCustomTitle.propTypes = {
         nombre: PropTypes.string.isRequired,
-        nuip: PropTypes.string,
+        nuip: PropTypes.number,
         qualification: PropTypes.bool,
         children: PropTypes.node,
         isOpened: PropTypes.bool
@@ -36,12 +36,15 @@ export function AccordionCustomTitle({nombre, nuip, qualification, children }) {
     )
 }
 
-export function AccordionCustomContent({ estado, button, children }) {
+export function AccordionCustomContent({ estado, button, children, employee, user, reloadList }) {
 
     AccordionCustomContent.propTypes = {
         estado: PropTypes.bool.isRequired,
         button: PropTypes.bool,
-        children: PropTypes.node
+        children: PropTypes.node,
+        employee: PropTypes.object,
+        user: PropTypes.object,
+        reloadList: PropTypes.func.isRequired
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,11 +59,11 @@ export function AccordionCustomContent({ estado, button, children }) {
         <div className={children ? "hidden sm:flex flex-col gap-4" : "flex flex-col gap-4"}>
             <div className="flex gap-2">
                 <h3 className="font-semibold">Telefono:</h3>
-                <h3>1234567890</h3>
+                <h3>{employee ? employee.phone : "No asignado"}</h3>
             </div>
             <div className="flex gap-2">
                 <h3 className="font-semibold">Correo:</h3>
-                <h3>correo@gmail.com</h3>
+                <h3>{user ? user.email : "No asignado"}</h3>
             </div>
             <div className="flex gap-2">
                 <h3 className="font-semibold ">Estado:</h3>
@@ -75,7 +78,7 @@ export function AccordionCustomContent({ estado, button, children }) {
                     </ButtonCustom>
                 ) : null}
             </div>
-            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employeeReviews />
+            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employee={employee} user={user} reloadList={reloadList} />
         </div>
         <div>
             {children}
