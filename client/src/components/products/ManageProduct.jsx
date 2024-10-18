@@ -318,7 +318,7 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                 </Tooltip>
               </Skeleton>
             </div>
-            {/* {isEditing && (
+            {isEditing && (
               <Skeleton
                 isLoaded={isEditing ? product : true}
                 className="rounded-lg col-span-2"
@@ -349,7 +349,7 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                   </SelectItem>
                 </Select>
               </Skeleton>
-            )} */}
+            )}
 
             {/* <label htmlFor="entry_date">Fecha de ingreso</label> */}
             <Skeleton
