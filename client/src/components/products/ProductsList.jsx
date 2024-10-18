@@ -1,10 +1,39 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
+import api from "@/api";
+import Cookies from "js-cookie";
 
 const Product = lazy(() => import("./Product"));
 
 const Loading = () => <div>Cargando...</div>;
 
 export default function ProductsList() {
+  const [establishmentId, setEstablishmentId] = useState(undefined);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    setEstablishmentId(Cookies.get("establishmentId"));
+
+    const fetchProducts = async () => {
+      await api
+        .get("/Product/getAll/", {
+          params: {
+            id_establisment: establishmentId,
+          },
+        })
+        .then((response) => {
+          setProducts(response.data.products);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+    fetchProducts();
+    window.addEventListener("fetch-products", fetchProducts);
+    return () => {
+      window.removeEventListener("fetch-products", fetchProducts);
+    };
+  }, [establishmentId]);
+
   return (
     <article className="border-t-2 border-slate-950 pt-2">
       <div className="EmployeesListHeader grid pr-16 grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_0.15fr] py-2 ">
@@ -23,12 +52,13 @@ export default function ProductsList() {
         {/* Este es el componente de producto cargado de forma perezosa el cual recibe el numero de columnas si tiene o no un boton y el estado */}
         {/* Recordar que si se pone el button se debe agregar una columna de 0.15fr para el mismo */}
 
-        {Array.from({ length: 5 }).map((_, index) => (
-          <Suspense key={index + 1} fallback={<Loading />}>
+        {products.map((product) => (
+          <Suspense key={product.id} fallback={<Loading />}>
             <Product
               colNumber={"[1fr_1fr_1fr_1fr_1fr_1fr_1fr_0.15fr]"}
               button
-              estado={true}
+              estado={product.estate}
+              productData={product}
             />
           </Suspense>
         ))}
