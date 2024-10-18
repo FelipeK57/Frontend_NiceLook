@@ -4,7 +4,7 @@ import CreateEmployeeModal from "./EmployeeModal";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 
-function Employee({ colNumber, button, estado,employee, user, reloadList }) {
+function Employee({ colNumber, button, estado, employee, user, reloadList }) {
 
     Employee.propTypes = {
         colNumber: PropTypes.string,
@@ -39,7 +39,7 @@ function Employee({ colNumber, button, estado,employee, user, reloadList }) {
                 </ButtonCustom>
             ) : null}
 
-            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employeeReviews />
+            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employee={employee} user={user} reloadList={reloadList} />
         </div>
     );
 }
