@@ -20,8 +20,8 @@ export function searchEmployees(name) {
 
 //query para crear un nuevo empleado
 
-export function createEmployee(name, last_name, phone, email, especialty) {
-    return EmployeesApi.post("/create_employee/", {
+export function createEmployee(establishmentId, name, last_name, phone, email, especialty) {
+    return EmployeesApi.post(`/create_employee/${establishmentId}/`, {
         name: name,
         last_name: last_name,
         phone: phone,
@@ -34,7 +34,7 @@ export function createEmployee(name, last_name, phone, email, especialty) {
 
 export function updateEmployee(idUser, name, last_name, phone, state) {
     return EmployeesApi.put('/update_employee/',{
-        idUser: idUser,
+        employee_id: idUser,
         name: name,
         last_name: last_name,
         phone: phone,

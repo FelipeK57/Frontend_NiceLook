@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { createEmployee, getCategories, updateEmployee } from "../../api/employee/employee";
+import Cookies from "js-cookie";
 
 function CreateEmployeeModal(props) {
     CreateEmployeeModal.propTypes = {
@@ -30,11 +31,12 @@ function CreateEmployeeModal(props) {
     function onSubmit() {
         
         if (!props.employee) {
+            const establishmentId = Cookies.get("establishmentId");
             try {
                 employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
                 console.log(employeeSpecialtyConverted)
                 console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
-                createEmployee(employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
+                createEmployee(establishmentId,employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
                     [props.onClose(), props.listRef.current.loadEmployees()];
                 });
             } catch (error) {
