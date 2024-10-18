@@ -44,7 +44,7 @@ const navLinks = [
         />
       </svg>
     ),
-    path: "establishment",
+    path: "EditProfilePage",
   },
   {
     name: "Calendario de citas",

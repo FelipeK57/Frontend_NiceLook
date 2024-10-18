@@ -20,6 +20,7 @@ import AppointmentsManagement from "./pages/admin/AppointmentsManagement.jsx";
 import FinancePanel from "./pages/admin/FinancePanel.jsx";
 import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
+import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -40,6 +41,12 @@ const routes = createBrowserRouter([
   {
     path: "/employees",
     element: <EmployeesManagement />,
+    errorElement: <div>Error Page</div>,
+  },
+
+  {
+    path: "/EditProfilePage",
+    element: <EditProfilePage/>,
     errorElement: <div>Error Page</div>,
   },
   {
