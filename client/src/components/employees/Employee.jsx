@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import ButtonCustom from "../global/ButtonCustom"
-import CreateEmployeeModal from "./CreateEmployeeModal";
+import CreateEmployeeModal from "./EmployeeModal";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 
@@ -39,7 +39,7 @@ function Employee({ colNumber, button, estado,employee, user, reloadList }) {
                 </ButtonCustom>
             ) : null}
 
-            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employee={employee} user={user} reloadList={reloadList}  />
+            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employeeReviews />
         </div>
     );
 }

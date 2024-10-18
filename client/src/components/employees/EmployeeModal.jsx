@@ -1,6 +1,6 @@
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Switch } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
-import EmployeeReviewsList from "./EmployeeReviewsList";
+import EmployeeReviewsList from "./EmployeesList";
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";

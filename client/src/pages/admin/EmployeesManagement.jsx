@@ -1,11 +1,11 @@
 import { Input } from "@nextui-org/react";
-import Sidebar from "../../components/global/Sidebar";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import EmployeesList from "../../components/employees/EmployeesList";
 import { useDisclosure } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
-import { searchEmployees } from "../../api/employee/employee";
+import { searchEmployees } from "../../Api/employee/employee";
 import CreateEmployeeModal from "../../components/employees/EmployeeModal";
+import { SearchIcon } from "lucide-react";
 
 function EmployeesManagement() {
 
@@ -66,7 +66,7 @@ function EmployeesManagement() {
                                 <SearchIcon />
                             }
                         />
-                        <ButtonCustom primary name="Crear" classStyles="w-60" />
+                        <ButtonCustom primary name="Crear" classStyles="w-60" action={handleOpen} />
                     </div>
                 </div>
                 <div className="EmployeesManagementBody">
