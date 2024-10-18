@@ -10,7 +10,7 @@ function ServicesList() {
 
     function loadEmployeeServices() {
         const promise = new Promise((resolve, reject) => {
-            const response = getEmployeeServices(4);
+            const response = getEmployeeServices(1);
             setTimeout(() => {
                 resolve(response);
                 reject("Ocurrio un error");
@@ -37,6 +37,7 @@ function ServicesList() {
                 }, 0);
             });
             promise.then((resultado) => {
+                //console.log(resultado.data.services)
                 setEstablishmentServices(resultado.data);
             });
             promise.catch((error) => {
@@ -51,7 +52,7 @@ function ServicesList() {
 
     }, []);
 
-    //console.log(employeeServices)
+    //console.log(establishmentServices.services?.services?.services)
 
     return (
         <div className="flex flex-col h-full w-full">
@@ -60,10 +61,9 @@ function ServicesList() {
                 <div className="grid grid-flow-row 1/2lg:grid-cols-[1fr_1fr] gap-4 max-h-full overflow-y-auto pr-2
                 scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
 
-                    {establishmentServices.map((establishmentService) => (
+                    {establishmentServices.services?.map((establishmentService) => (
                         employeeServices.filter((employeeService) => employeeService.service === establishmentService.id).map((employeeService) => {
-                            console.log(employeeService)
-                            return<Services key={establishmentService.id} reloadList={loadEmployeeServices} employeeService={employeeService} service={establishmentService} isSelected />
+                            return <Services key={establishmentService.id} reloadList={loadEmployeeServices} employeeService={employeeService} service={establishmentService} isSelected />
                         })
                     ))}
 
@@ -95,9 +95,10 @@ function ServicesList() {
                 <div className="grid grid-flow-row 1/2lg:grid-cols-[1fr_1fr] gap-4 max-h-full overflow-y-auto pr-2 pb-2
                 scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
 
-                    {establishmentServices.map((establishmentService) => (
-                        <Services key={establishmentService.id} service={establishmentService} reloadList={loadEmployeeServices} employeeService={employeeServices[0]} />
-                    ))}
+                    {establishmentServices.services?.map((establishmentService) => {
+                        console.log(establishmentService)
+                        return <Services key={establishmentService.id} service={establishmentService} reloadList={loadEmployeeServices} employeeService={employeeServices[0]} />
+                    })}
 
                 </div>
             </section>

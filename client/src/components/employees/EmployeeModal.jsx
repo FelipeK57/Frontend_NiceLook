@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { createEmployee, getCategories, updateEmployee } from "../../Api/employee/employee";
+import Cookies from "js-cookie";
 
 function CreateEmployeeModal(props) {
     CreateEmployeeModal.propTypes = {
@@ -28,30 +29,33 @@ function CreateEmployeeModal(props) {
     const employeeSpecialtyConverted = [];
 
     function onSubmit() {
-        
+
+        const establishmentID = Cookies.get("establishmentId");
         if (!props.employee) {
             try {
                 employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
                 console.log(employeeSpecialtyConverted)
                 console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
-                createEmployee(employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
+                createEmployee(employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted, establishmentID).then(() => {
                     [props.onClose(), props.listRef.current.loadEmployees()];
                 });
             } catch (error) {
                 console.log(error)
             }
         } else {
-            try{
+            try {
                 console.log(employeeSpecialtyConverted)
                 updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeStatus).then(() => {
                     props.onClose();
                     props.reloadList()
                 })
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         }
     }
+
+    console.log(employeeCode)
 
     useEffect(() => {
 
