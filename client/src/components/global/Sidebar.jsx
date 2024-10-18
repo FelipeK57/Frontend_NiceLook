@@ -4,6 +4,10 @@ import ButtonCustom from "./ButtonCustom";
 import LinkSidebar from "./LinkSidebar";
 import LogoNiceLook from "../ui/LogoNiceLook";
 import useAuthStore from "@/stores/useAuthStore";
+import { Button } from "@nextui-org/react";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const navLinks = [
   {
@@ -137,10 +141,35 @@ const navLinks = [
 function Sidebar() {
   const user = useAuthStore((state) => state.user);
   const userInfo = user !== null ? user : "Usuario no identificado";
-  console.log(userInfo)
+  console.log(userInfo);
   // useMemo(() => {
   //   console.log("Usuario en store de zustand: ", user);
   // }, [user]);
+  const [logo, setLogo] = useState(null);
+  const handleLogout = () => {
+    console.log("Cerrando sesión...");
+    Cookies.remove("access");
+    Cookies.remove("refresh");
+    Cookies.remove("establishmentId");
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/image/get-logo/${Cookies.get(
+            "establishmentId"
+          )}`
+        );
+        setLogo(response.data.imagen_base64);
+      } catch (err) {
+        setLogo("https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg")
+        console.log(err);
+      }
+    };
+    fetchLogo();
+  }, []);
 
   return (
     <aside className="bg-[#ffffff] w-full flex flex-col gap-5 pt-8 items-center border-r-2 border-slate-200">
@@ -164,7 +193,7 @@ function Sidebar() {
         NiceLook.
       </h1> */}
       <LogoNiceLook className="text-4xl" />
-      <div className="w-32 h-32 bg-slate-800 rounded-full"></div>
+      <img src={logo} className="w-32 h-32 rounded-full"></img>
       <p>
         {userInfo.first_name} {userInfo.last_name}
       </p>
@@ -179,6 +208,11 @@ function Sidebar() {
           />
         ))}
       </nav>
+      <div className="flex flex-grow justify-end items-end py-10">
+        <Button onClick={handleLogout} color="danger" variant="light">
+          Cerrar Sesión
+        </Button>
+      </div>
     </aside>
   );
 }

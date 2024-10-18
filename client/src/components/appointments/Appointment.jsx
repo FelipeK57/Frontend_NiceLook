@@ -7,6 +7,10 @@ function Appointment({
   serviceName,
   clientName,
   serviceState,
+  serviceDate,
+  serviceTime,
+  clientEmail,
+  phoneClient,
 }) {
   const [isModalDetailsAppointmentOpen, setIsModalDetailsAppointmentOpen] =
     useState(false);
@@ -72,6 +76,15 @@ function Appointment({
         <ModalDetailsAppointment
           isOpen={isModalDetailsAppointmentOpen}
           onClose={handleClose}
+          state={serviceState}
+          date={serviceDate}
+          time={serviceTime}
+          artistName={artistName}
+          client={clientName}
+          clientPhone={phoneClient}
+          clientEmail={clientEmail}
+          price={priceService}
+          services={serviceName}
         />
       </div>
     </article>
@@ -83,6 +96,8 @@ Appointment.propTypes = {
   priceService: PropTypes.number,
   serviceName: PropTypes.string,
   clientName: PropTypes.string,
+  clientEmail: PropTypes.string,
+  clientPhone: PropTypes.string
 };
 
 export default Appointment;

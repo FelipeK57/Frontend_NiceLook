@@ -6,6 +6,7 @@ import PaymentServicesList from "../../components/finances/PaymentServicesList";
 import PaymentProductList from "../../components/finances/PaymentProductsList";
 import { parseDate } from "@internationalized/date";
 import axios from "axios";
+import Cookies from "js-cookie";
 const items = ["Servicios", "Productos"];
 
 function FinancePanel() {
@@ -24,6 +25,7 @@ function FinancePanel() {
   const [earningsProducts, setEarningsProducts] = useState(0);
   const columnsProducts = ["Precio", "Cantidad", "Metodo de pago", "Productos"];
   const columnsServices = ["Precio", "Ganancia", "Profesional", "Servicios"];
+  const establishmentId = Cookies.get("establishmentId");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ function FinancePanel() {
       const month = date.toDate().getMonth() + 1;
       const year = date.toDate().getFullYear();
       const response = await axios.get(
-        "http://localhost:8000/establisment/get-filter-payments-service/1/",
+        `http://localhost:8000/establisment/get-filter-payments-service/${establishmentId}/`,
         {
           params: {
             day: day,
@@ -40,6 +42,7 @@ function FinancePanel() {
           },
         }
       );
+      console.log(response.data);
       setEarningsArtist(response.data.ganancia_employee);
       setEarningsEstablishment(response.data.ganancia_establecimiento);
       setServices(response.data.appointments_services);

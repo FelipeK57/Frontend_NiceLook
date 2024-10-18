@@ -21,6 +21,12 @@ function AppointmentsList({ citas, hora }) {
               serviceName={cita.servicio}
               clientName={cita.cliente}
               serviceState={cita.estado}
+              serviceCategory={cita.categoria}
+              serviceDate={cita.fecha}
+              serviceTime={hora}
+              clientEmail={cita.emailClient}
+              phoneClient={cita.phoneClient}
+              commission={cita.commission}
             />
           ))}
         </div>

@@ -4,18 +4,20 @@ import AppointmentsList from "../../components/appointments/AppointmentsList";
 import { useEffect, useState } from "react";
 import { parseDate } from "@internationalized/date";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function AppointmentsManagement() {
   const fecha = new Date();
   let year = fecha.getFullYear().toString();
   let month = (fecha.getMonth() + 1).toString();
   let day = fecha.getDate().toString();
+  
   const [date, setDate] = useState(
     parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
   );
-
-  const [appointments, setAppointments] = useState([]);
+  const [category, setCategory] = useState("Todos");
   const [groupedAppointments, setGroupedAppointments] = useState([]);
+  const [allAppointments, setAllAppointments] = useState([]); // Para almacenar todas las citas
 
   const agruparCitasPorHora = (citas) => {
     const citasAgrupadas = new Map(); // Usamos un Map para mejor eficiencia de búsqueda/inserción
@@ -33,14 +35,23 @@ function AppointmentsManagement() {
       }
 
       // Formatear la cita con los datos relevantes
+      const nombreEstilista =
+        cita.employee.user.first_name + " " + cita.employee.user.last_name;
+      const nombreCliente =
+        cita.client.user.first_name + " " + cita.client.user.last_name;
       const citaFormateada = {
         id: cita.id,
-        estilista: cita.employee.user.username, // Nombre del estilista
-        cliente: cita.client.user.username, // Nombre del cliente
+        estilista: nombreEstilista, // Nombre del estilista
+        cliente: nombreCliente, // Nombre del cliente
         servicio: cita.services.map((s) => s.name).join(", "), // Unir nombres de servicios
-        precio: cita.payment.total, // Precio total
+        categoria: cita.services.map((s) => s.category).join(", "), // Unir nombres de categorías
+        precio: cita.total, // Precio total
         tiempo: 30, // Tiempo estimado (puede variar)
         estado: cita.estate, // Estado de la cita
+        fecha: cita.date, // Fecha de la cita
+        emailClient: cita.client.user.email, // Correo electrónico del cliente
+        phoneClient: cita.client.phone, // Teléfono del cliente
+        commission: cita.commission
       };
 
       // Añadir la cita al grupo correspondiente
@@ -65,25 +76,52 @@ function AppointmentsManagement() {
         const response = await axios.post(
           "http://localhost:8000/api/appointment_list/",
           {
+            id: Cookies.get("establishmentId"),
             day: day,
             month: month,
             year: year,
           }
         );
-
-        // Guardar las citas obtenidas
-        setAppointments(response.data);
-        // Agrupar las citas por hora y actualizar el estado
-        const citasAgrupadas = agruparCitasPorHora(response.data);
-        setGroupedAppointments(citasAgrupadas);
-        console.log(citasAgrupadas);
+        console.log(response.data);
+        if (response.data && response.data.length > 0) {
+          // Agrupar las citas por hora y actualizar el estado
+          const citasAgrupadas = agruparCitasPorHora(response.data);
+          setAllAppointments(citasAgrupadas); // Guardar todas las citas sin filtrar
+          setGroupedAppointments(citasAgrupadas); // Actualizar citas mostradas
+          console.log(citasAgrupadas);
+        } else {
+          // Si no hay citas, actualizar con un arreglo vacío
+          setAllAppointments([]);
+          setGroupedAppointments([]);
+        }
       } catch (error) {
         console.error("Error fetching data", error);
+        // En caso de error, también actualizar con un arreglo vacío
+        setAllAppointments([]);
+        setGroupedAppointments([]);
       }
     };
 
     fetchData();
   }, [date]);
+
+  useEffect(() => {
+    // Filtrar citas cuando cambia la categoría
+    if (category === "Todos") {
+      setGroupedAppointments(allAppointments); // Mostrar todas si la categoría es "Todos"
+    } else {
+      // Filtrar las citas que contienen la categoría seleccionada
+      const citasFiltradas = allAppointments
+        .map((grupo) => ({
+          ...grupo,
+          citas: grupo.citas.filter((cita) =>
+            cita.categoria.includes(category)
+          ),
+        }))
+        .filter((grupo) => grupo.citas.length > 0); // Solo grupos que tengan citas
+      setGroupedAppointments(citasFiltradas);
+    }
+  }, [category, allAppointments]);
 
   return (
     <main className="h-screen flex flex-col py-8 gap-2 px-10">
@@ -99,9 +137,9 @@ function AppointmentsManagement() {
           variant="bordered"
         />
       </header>
-      <CategoriesAppointments />
+      <CategoriesAppointments setCategory={setCategory} />
       <section
-        className="flex pb-6 gap-8 overflow-x-auto scrollbar scrollbar-thumb-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar -thumb-slate-300"
+        className="flex pb-6 gap-8 overflow-x-auto scrollbar scrollbar-thumb-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300"
         style={{ scrollbarGutter: "top" }}
       >
         {groupedAppointments.length === 0 ? (

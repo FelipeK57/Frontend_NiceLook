@@ -27,6 +27,7 @@ function ModalEditService({
   priceService,
   commissionService,
   categoryService,
+  stateService,
   isOpen,
   onClose,
 }) {
@@ -34,10 +35,11 @@ function ModalEditService({
   const [price, setPrice] = useState(priceService);
   const [commission, setCommission] = useState(commissionService);
   const [category, setCategory] = useState(categoryService);
+  const [state, setState] = useState(stateService);
 
   const handleEditService = async () => {
     try {
-      console.log(name, price, commission, category);
+      console.log(name, price, commission, category, state);
       const response = await axios.put(
         "http://localhost:8000/api/update_service/",
         {
@@ -46,6 +48,7 @@ function ModalEditService({
           price: price,
           commission: commission,
           category: category,
+          state: state,
         }
       );
       onClose();
@@ -147,7 +150,7 @@ function ModalEditService({
             </div>
             <div className="flex flex-col lg:justify-between justify-end h-full">
               <p className="font-semibold  text-medium lg:text-xl">Estado</p>
-              <Switch size="lg" defaultSelected color="success" />
+              <Switch isSelected={state} onValueChange={setState} size="lg" defaultSelected color="success" />
             </div>
           </div>
         </ModalBody>
@@ -167,6 +170,8 @@ ModalEditService.propTypes = {
   nameService: PropTypes.string,
   priceService: PropTypes.number,
   commissionService: PropTypes.number,
+  stateService: PropTypes.bool,
+  categoryService: PropTypes.string,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
 };

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 function ButtonCustom({ name, primary, secondary, action, classStyles, ...props }) {
   return (
     <Button
+      variant="shadow"
       onClick={action}
       {...props}
       className={`font-bold ${primary ? "bg-primary text-slate-950" : ""}${

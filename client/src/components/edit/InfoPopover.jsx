@@ -11,7 +11,7 @@ export default function InfoPopover(props) {
         children: PropTypes.node,
         redirectTo: PropTypes.string,
         placement: PropTypes.string,
-        icon: PropTypes.string
+        icon: PropTypes.string  
     }
     const renderIcon = () => {
         switch (props.icon) {
@@ -36,7 +36,7 @@ export default function InfoPopover(props) {
       </PopoverTrigger>
       <PopoverContent>
         <div className="px-1 py-2">
-        <Link to={props.redirectTo}>{props.icon}</Link>
+        <Link target="_blank" to={props.redirectTo}>{props.icon}</Link>
         </div>
       </PopoverContent>
     </Popover>

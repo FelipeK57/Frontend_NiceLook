@@ -96,6 +96,7 @@ function Service({ id, name, price, commission, category, state }) {
               commissionService={service.commission}
               priceService={service.price}
               categoryService={service.category}
+              stateService={service.state}
               isOpen={isOpen}
               onClose={onClose}
             />

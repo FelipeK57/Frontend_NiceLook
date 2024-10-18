@@ -15,6 +15,7 @@ import {
   subirLogo,
   subirBanner,
 } from "../../editProfileApis.js";
+import Cookies from "js-cookie";
 
 const EstablishmentProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,18 +27,19 @@ const EstablishmentProfile = () => {
   const [contact_methods, setContact_methods] = useState([]);
   const [prevewLogo, setPrevewLogo] = useState("");
   const [prevewBanner, setPrevewBanner] = useState("");
+  const establishmentId = Cookies.get("establishmentId");
 
   useEffect(() => {
     const editImagen = async () => {
       try {
-        await obtenerBanner(1).then((data) => {
+        await obtenerBanner(establishmentId).then((data) => {
           setBannerImage(data.data.image_base64);
         });
       } catch (error) {
         console.log("banner", error.response.data);
       }
       try {
-        await obtenerImagen(1).then((data) => {
+        await obtenerImagen(establishmentId).then((data) => {
           setLogoImage(data.data.imagen_base64);
         });
       } catch (error) {
@@ -51,11 +53,12 @@ const EstablishmentProfile = () => {
 
     const getEstablismentData = async () => {
       try {
-        await obtenerEstablemiento(1).then((data) => {
+        await obtenerEstablemiento(establishmentId).then((data) => {
           setName(data.data.name);
           setAddress(data.data.address);
           setCity(data.data.city);
           setContact_methods(data.data.contact_methods);
+          console.log(data.data);
         });
       } catch (error) {
         console.error(error);
@@ -73,7 +76,7 @@ const EstablishmentProfile = () => {
     try {
       const formData = new FormData();
       formData.append("image", bannerImage);
-      await subirBanner(1, formData).then((data) => {
+      await subirBanner(establishmentId, formData).then((data) => {
         console.log(data.data);
       });
     } catch (error) {
@@ -83,7 +86,7 @@ const EstablishmentProfile = () => {
     try {
       const formData = new FormData();
       formData.append("image", logoImage);
-      await subirLogo(1, formData).then((data) => {
+      await subirLogo(establishmentId, formData).then((data) => {
         console.log(data.data);
       });
     } catch (error) {
@@ -92,13 +95,14 @@ const EstablishmentProfile = () => {
     console.log("entro 3");
     try {
       console.log(name, address, city, contact_methods);
-      await editarEstablemiento(1, name, address, city, contact_methods).then(() => {
+      await editarEstablemiento(establishmentId, name, address, city, contact_methods).then(() => {
         console.log("editado");
       });
     } catch (error) {
       console.error(error);
     }
     console.log("finalmente sali");
+    window.location.reload();
   };
 
   // Función para actualizar la imagen del banner con previsualización
@@ -252,7 +256,7 @@ const EstablishmentProfile = () => {
                   className="border-2 border-slate-200 rounded-full p-2"
                   variant="bordered"
                   redirectTo={
-                    "https://www.facebook.com/${contact_methods?.facebook}"
+                    `https://www.facebook.com/${contact_methods?.facebook}/`
                   }
                 />
               ) : null}

@@ -17,13 +17,27 @@ import ButtonCustom from "../global/ButtonCustom";
  *
  * @returns {JSX.Element} The rendered modal component.
  */
-function ModalDetailsAppointment({ isOpen, onClose }) {
+function ModalDetailsAppointment({ isOpen, onClose, state, date, time, artistName, client, clientEmail, clientPhone, price, commission, services }) {
   const boduDetails = [
-    { item: "Profesional", value: "Fernando Castaño" },
-    { item: "Servicios", value: "Corte de Cabello" },
-    { item: "Costo", value: 15000 },
-    { item: "Comision", value: 0.1 },
+    { item: "Profesional", value: artistName },
+    { item: "Servicios", value: services },
+    { item: "Costo", value: price },
+    // { item: "Comision", commission },
   ];
+
+  const getColorByServiceState = (state) => {
+    switch (state) {
+      case "Pendiente":
+        return "text-yellow-500";
+      case "Completada":
+        return "text-green-500";
+      case "Cancelada":
+        return "text-red-500";
+      default:
+        return "text-slate-200";
+    }
+  };
+
   const earning = 15000 * 0.1;
   return (
     <Modal
@@ -36,26 +50,30 @@ function ModalDetailsAppointment({ isOpen, onClose }) {
       <ModalContent>
         <ModalHeader className="flex flex-col gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-yellow-500">
-              Pendiente
+            <h1
+              className={`text-2xl font-semibold ${getColorByServiceState(
+                state
+              )}`}
+            >
+              {state}
             </h1>
           </div>
           <div>
-            <h1 className="text-4xl font-bold">Cita de Kevin Bolaños</h1>
+            <h1 className="text-4xl font-bold">Cita de {client}</h1>
             <p className="text-slate-700 text-xl font-base">
-              Fecha: 07 Agosto 2024
+              Fecha: {date}
             </p>
-            <p className="text-slate-700 text-lg font-base">Hora: 20:30</p>
+            <p className="text-slate-700 text-lg font-base">Hora: {time}</p>
           </div>
           <div>
             <h1 className="text-xl font-bold">
               Metodos de contacto del cliente
             </h1>
             <p className="text-slate-700 text-base font-base">
-              Correo Electronico: myemail@example.com
+              Correo Electronico: {clientEmail}
             </p>
             <p className="text-slate-700 text-base font-base">
-              Telefono: 123456789
+              Telefono: {clientPhone}
             </p>
           </div>
         </ModalHeader>
@@ -84,10 +102,14 @@ function ModalDetailsAppointment({ isOpen, onClose }) {
         </ModalBody>
         <ModalFooter className="flex justify-between">
           {/* Modal Footer Buttons */}
-          <Button color="default" variant="bordered" onPress={onClose}>
+          {/* <Button
+            color="default"
+            variant="bordered"
+            onPress={onClose}
+          >
             Reagendar
           </Button>
-          <ButtonCustom action={onClose} name="Terminar cita" primary />
+          <ButtonCustom action={onClose} name="Terminar cita" primary /> */}
         </ModalFooter>
       </ModalContent>
     </Modal>
