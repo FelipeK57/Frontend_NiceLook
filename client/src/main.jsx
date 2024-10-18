@@ -93,7 +93,12 @@ const routes = createBrowserRouter([
             path: "finance",
             element: <FinancePanel />,
           },
-        ],
+          {
+            id: "admin-edit-profile",
+            path: "EditProfilePage",
+            element: <EditProfilePage />,
+          },
+        ],        
       },
     ],
   },
