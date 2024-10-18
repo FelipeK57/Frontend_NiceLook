@@ -3,43 +3,50 @@ import ButtonCustom from "../global/ButtonCustom";
 import useMediaQuery from "../../hooks/UseMediaQuery";
 import { useDisclosure } from "@nextui-org/react";
 import { Chip } from "@nextui-org/chip";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ManageProductDrawer from "./ManageProductDrawer";
 import ManageProductModal from "./ManageProductModal";
 
-export default function Product({ colNumber, button, estado }) {
+export default function Product({ colNumber, button, productData }) {
   const [open, setOpen] = useState(false);
   const [backdrop, setBackdrop] = useState("blur");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  // const isDesktop = true;
 
   const handleOpen = () => {
     setBackdrop("blur");
     onOpen();
   };
 
+  useMemo(() => {
+    console.log("Product props", productData.estate);
+  }, [productData]);
+
   return (
     <div
       className={`ProductContent border-2 border-slate-200 rounded-full py-2 grid pr-10 place-items-center
         grid-cols-${colNumber}`}
-      z
     >
-      <h3 className=" font-bold text-center">112356</h3>
-      <h3 className="text-center flex">Nombre</h3>
-      <h3 className="text-center flex">2</h3>
-      <Chip color="success" variant="flat">
-        Activo
+      <h3 className="font-bold text-center">{productData.code}</h3>
+      <h3 className="text-center flex">{productData.name}</h3>
+      <h3 className="text-center flex">{productData.quantity}</h3>
+      <Chip
+        color={productData.estate === true ? "success" : "error"}
+        variant="flat"
+      >
+        {productData.estate === true ? "A la venta" : "Inactivo"}
       </Chip>
-      <h3 className="text-center flex">Gucci</h3>
-      <h3 className="text-center flex">$1.000</h3>
-      <h3 className="text-center flex">Cuerpo y alma</h3>
+      <h3 className="text-center flex">{productData.brand}</h3>
+      <h3 className="text-center flex">
+        ${productData.price.toLocaleString()}
+      </h3>
+      <h3 className="text-center flex">{productData.distributor}</h3>
       {button ? (
         !isDesktop ? (
           <ManageProductDrawer
             isOpen={open}
             setIsOpen={setOpen}
-            // backdrop={backdrop}
+            productData={productData}
           >
             <ButtonCustom secondary radius="full" isIconOnly>
               <svg
@@ -82,6 +89,7 @@ export default function Product({ colNumber, button, estado }) {
         onClose={onClose}
         backdrop={backdrop}
         isEditing
+        product={productData}
       />
     </div>
   );
