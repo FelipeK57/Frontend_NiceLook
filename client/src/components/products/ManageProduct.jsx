@@ -1,9 +1,5 @@
 /* eslint-disable react/prop-types */
-import {
-  useState,
-  useMemo,
-  // useEffect,
-} from "react";
+import { useState, useMemo } from "react";
 import api from "@/api";
 import useAuthStore from "@/stores/useAuthStore";
 import { parseDate } from "@internationalized/date";
@@ -17,7 +13,6 @@ import { Tooltip } from "@nextui-org/tooltip";
 import { Skeleton } from "@nextui-org/skeleton";
 
 import ImageUpload from "../global/ImageUpload";
-// import Cookies from "js-cookie";
 
 export default function ManageProduct({ isEditing, onClose, product }) {
   const user = useAuthStore((state) => state.user);
@@ -56,29 +51,20 @@ export default function ManageProduct({ isEditing, onClose, product }) {
       formData[field] !== null
   );
 
-  // useMemo(() => {
-  //   console.log("formData", formData);
-  // }, [formData]);
-
-  // const handleResetFormData = () => {
-  //   setFormData({
-  //     name: "",
-  //     establisment: 999,
-  //     description: "",
-  //     price: 0.0,
-  //     distributor: "",
-  //     entry_date: null,
-  //     expiration_date: null,
-  //     quantity: 0,
-  //     brand: "",
-  //   });
-  // };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleSelectionChange = (e) => {
+    const selectedValue = Array.from(e);
+    const booleanValue = selectedValue[0] === "true";
+    setFormData((prevData) => ({
+      ...prevData,
+      estate: booleanValue,
     }));
   };
 
@@ -138,7 +124,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
       code: parseInt(formData.code, 10), // Convertir code a entero
       entry_date: formatDate(formData.entry_date),
       expiration_date: formatDate(formData.expiration_date),
-      // estate: Boolean(formData.estate), // Ensure it's a boolean
     };
 
     await api
@@ -153,8 +138,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
         setLoading(false);
         onClose();
       });
-
-    console.log("Editing: ", formattedData);
   };
 
   return (
@@ -165,8 +148,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
       >
         <Skeleton className="rounded-lg" isLoaded={isEditing ? product : true}>
           <section className="ProductImage flex flex-wrap flex-col content-center justify-start gap-4 p-6 items-center">
-            {/* <div className="w-32 h-32 bg-slate-800 rounded-full"></div> */}
-
             <ImageUpload />
             <Input
               label="Nombre del producto"
@@ -186,13 +167,8 @@ export default function ManageProduct({ isEditing, onClose, product }) {
           <h2 className="sticky top-0 bg-white py-2 z-[100] shadow-sm mb-4">
             Información del producto
           </h2>
-          {/* <form
-          onSubmit={handleSubmit}
-          className="ProductInfoFormSection grid grid-cols-2 items-center gap-4"
-        > */}
           <div className="ProductInfoFormSection grid grid-cols-2 items-center gap-4">
             <div className="flex flex-nowrap gap-4 col-span-2 items-center">
-              {/* <label htmlFor="code">Código</label> */}
               <Skeleton
                 className="rounded-lg"
                 isLoaded={isEditing ? product : true}
@@ -209,7 +185,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                   defaultValue={formData.code}
                 />
               </Skeleton>
-              {/* <label htmlFor="quantity">Cantidad</label> */}
               <Skeleton
                 className="rounded-lg"
                 isLoaded={isEditing ? product : true}
@@ -239,7 +214,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                 className="rounded-lg"
                 isLoaded={isEditing ? product : true}
               >
-                {/* <label htmlFor="purchase_price">Precio de compra</label> */}
                 <Tooltip
                   content={
                     <div className="px-1 py-2">
@@ -263,7 +237,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                     id="purchase_price"
                     isRequired
                     variant="bordered"
-                    // onChange={handleChange}
                     onChange={(e) => {
                       const value = e.target.value.replace(/^0+/, "");
                       if (value >= 0) {
@@ -281,7 +254,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                 className="rounded-lg"
                 isLoaded={isEditing ? product : true}
               >
-                {/* <label htmlFor="price">Precio de venta</label> */}
                 <Tooltip
                   content={
                     <div className="px-1 py-2">
@@ -306,7 +278,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                     id="price"
                     isRequired
                     variant="bordered"
-                    // onChange={handleChange}
                     onChange={(e) => {
                       const value = e.target.value.replace(/^0+/, "");
                       if (value >= 0) {
@@ -323,7 +294,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                 isLoaded={isEditing ? product : true}
                 className="rounded-lg col-span-2"
               >
-                {/* <label htmlFor="estate">Estado</label> */}
                 <Select
                   label="Estado"
                   labelPlacement="outside-left"
@@ -333,25 +303,18 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                   isRequired
                   variant="bordered"
                   selectedKeys={[formData.estate?.toString()]}
-                  onSelectionChange={(keys) => {
-                    const selectedValue = Array.from(keys)[0];
-                    setFormData((prev) => ({
-                      ...prev,
-                      estate: selectedValue === keys.value,
-                    }));
-                  }}
+                  onSelectionChange={handleSelectionChange}
                 >
-                  <SelectItem key="true" value={true}>
+                  <SelectItem key={true} value={true}>
                     A la venta
                   </SelectItem>
-                  <SelectItem key="false" value={false}>
-                    Agotado
+                  <SelectItem key={false} value={false}>
+                    Inactivo
                   </SelectItem>
                 </Select>
               </Skeleton>
             )}
 
-            {/* <label htmlFor="entry_date">Fecha de ingreso</label> */}
             <Skeleton
               className="rounded-lg"
               isLoaded={isEditing ? product : true}
@@ -374,7 +337,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
               className="rounded-lg"
               isLoaded={isEditing ? product : true}
             >
-              {/* <label htmlFor="expiration_date">Fecha de vencimiento</label> */}
               <DatePicker
                 label="Fecha de vencimiento"
                 labelPlacement="outside-left"
@@ -393,7 +355,6 @@ export default function ManageProduct({ isEditing, onClose, product }) {
               className="rounded-lg"
               isLoaded={isEditing ? product : true}
             >
-              {/* <label htmlFor="brand">Marca</label> */}
               <Input
                 label="Marca"
                 labelPlacement="outside-left"
@@ -439,23 +400,10 @@ export default function ManageProduct({ isEditing, onClose, product }) {
                 />
               </Skeleton>
             </div>
-            {/* <div className="sticky bottom-0 right-0 bg-white col-span-2 flex gap-4 flex-row justify-end">
-              <Button color="danger" variant="light" onPress={onClose}>
-                Cancelar
-              </Button>
-              <Button type="submit" color="primary" onPress={onClose}>
-                Crear
-              </Button>
-            </div> */}
           </div>
         </section>
         <div className="pt-2 col-span-2 flex gap-4 flex-row justify-end">
-          <Button
-            // color="danger"
-            variant="bordered"
-            onPress={onClose}
-            // onClick={handleResetFormData}
-          >
+          <Button variant="bordered" onPress={onClose}>
             Cancelar
           </Button>
           <Button
@@ -465,7 +413,7 @@ export default function ManageProduct({ isEditing, onClose, product }) {
             isDisabled={!isFormValid}
             isLoading={loading}
           >
-            {!isEditing ? "Crear" : "Guardar cambios"}
+            {!loading ? (!isEditing ? "Crear" : "Guardar cambios") : "Cargando"}
           </Button>
         </div>
       </form>
