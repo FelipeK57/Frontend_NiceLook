@@ -13,7 +13,7 @@ const ProtectedRoute = () => {
 
   if (isAuthenticated && location.pathname === "/admin/login") {
     // Si está autenticado y está en la página de login, redirige al dashboard
-    return <Navigate to="/admin/dashboard/home" replace />;
+    return <Navigate to="/admin/dashboard/finance" replace />;
   }
 
   // En cualquier otro caso, renderiza el contenido normal
