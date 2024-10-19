@@ -18,7 +18,7 @@ export default function ManageProductModal({ isEditing, product, ...props }) {
 
   return (
     <Modal {...props}>
-      <ModalContent className="w-full max-w-4xl">
+      <ModalContent className="w-full">
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
