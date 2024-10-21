@@ -4,8 +4,35 @@ import EmployeeReviewsList from "./EmployeeReviewsList";
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { createEmployee, getCategories, updateEmployee } from "../../api/employee/employee";
+import { createEmployee, getCategories, updateEmployee } from "../../Api/employee/employee";
 import Cookies from "js-cookie";
+
+const categories = [
+    {
+      id: 1,
+      name: "Barberia",
+    },
+    {
+      id: 2,
+      name: "SPA de uñas",
+    },
+    {
+      id: 3,
+      name: "SPA",
+    },
+    {
+      id: 4,
+      name: "Peluqueria",
+    },
+    {
+      id: 5,
+      name: "Maquillaje",
+    },
+    {
+      id: 6,
+      name: "Tatuajes"
+    }
+  ];
 
 function CreateEmployeeModal(props) {
     CreateEmployeeModal.propTypes = {
@@ -81,6 +108,7 @@ function CreateEmployeeModal(props) {
             });
             promise.then((resultado) => {
                 setCategorys(resultado.data);
+                console.log(resultado.data);
             });
             promise.catch((error) => {
                 console.log(error);
@@ -238,7 +266,7 @@ function CreateEmployeeModal(props) {
                                 </div>
                                 <div>
                                     <label className="font-bold" htmlFor="email">Correo</label>
-                                    <Input {...props.employee && { isDisabled: true }}
+                                    <Input {...props.employee && { readOnly: true }}
                                         name="email"
                                         errorMessage="Por favor ingrese un correo valido"
                                         id="email"

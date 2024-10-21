@@ -101,8 +101,9 @@ function Service({ id, name, price, commission, category, state }) {
               onClose={onClose}
             />
             <Button
+              
               onPress={handleDeleteService}
-              className="font-semibold text-red-500 rounded-xl bg-transparent"
+              className="font-semibold text-red-500 rounded-xl bg-transparent hidden"
             >
               Eliminar
             </Button>

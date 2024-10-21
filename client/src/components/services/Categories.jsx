@@ -56,6 +56,10 @@ function Categories({ setSelectCategory }) {
       id: 5,
       name: "Maquillaje",
     },
+    {
+      id: 6,
+      name: "Tatuajes",
+    }
   ];
 
   const [categorySelected, setCategorySelected] = useState("Todos");
