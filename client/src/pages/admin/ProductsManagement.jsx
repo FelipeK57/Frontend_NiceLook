@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDisclosure } from "@nextui-org/react";
 import useMediaQuery from "../../hooks/UseMediaQuery";
-import ManageProductDrawer from "../../components/products/ManageProductDrawer";
+// import ManageProductDrawer from "../../components/products/ManageProductDrawer";
 import ManageProductModal from "../../components/products/ManageProductModal";
 
 import { Input } from "@nextui-org/react";
@@ -11,7 +11,6 @@ import ProductsList from "@/components/products/ProductsList";
 import { Plus } from "lucide-react";
 
 export default function ProductsManagement() {
-  const [open, setOpen] = useState(false);
   const [backdrop, setBackdrop] = useState("blur");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -19,10 +18,6 @@ export default function ProductsManagement() {
   const handleOpenModal = () => {
     setBackdrop("blur");
     onOpen();
-  };
-
-  const handleOpenDrawer = () => {
-    console.log("Open drawer");
   };
 
   return (
@@ -44,33 +39,18 @@ export default function ProductsManagement() {
               }}
               endContent={<SearchIcon />}
             />
-            {!isDesktop ? (
-              <ManageProductDrawer
-                isOpen={open}
-                setIsOpen={setOpen}
-                // backdrop={backdrop}
-              >
-                <ButtonCustom
-                  secondary
-                  startContent={<Plus />}
-                  name="Nuevo producto"
-                  classStyles="w-60"
-                  onClick={handleOpenDrawer}
-                />
-              </ManageProductDrawer>
-            ) : (
-              <ButtonCustom
-                primary
-                startContent={<Plus />}
-                name="Nuevo producto"
-                classStyles="w-60"
-                onClick={handleOpenModal}
-              />
-            )}
+            <ButtonCustom
+              primary
+              startContent={<Plus />}
+              name="Nuevo producto"
+              classStyles="w-60"
+              onClick={handleOpenModal}
+            />
             <ManageProductModal
               isOpen={isOpen}
               onClose={onClose}
               backdrop={backdrop}
+              size={isDesktop ? "5xl" : "full"}
             />
           </div>
         </div>

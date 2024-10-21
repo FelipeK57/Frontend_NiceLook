@@ -141,7 +141,7 @@ const navLinks = [
 function Sidebar() {
   const user = useAuthStore((state) => state.user);
   const userInfo = user !== null ? user : "Usuario no identificado";
-  console.log(userInfo);
+  // console.log(userInfo)
   // useMemo(() => {
   //   console.log("Usuario en store de zustand: ", user);
   // }, [user]);
