@@ -80,7 +80,7 @@ export default function AdminLogin() {
     e.preventDefault();
     console.log("Form data", formData);
     api
-      .post("/register/admin", {
+      .post("/administrator/register/", {
         first_name: formData.name,
         last_name: formData.lastname,
         email: formData.email,
@@ -96,7 +96,7 @@ export default function AdminLogin() {
         login(decoded, access, refresh);
 
         // Redirigir al dashboard
-        navigate("/admin/dashboard/home");
+        navigate("/admin/dashboard/finance");
       })
       .catch((error) => {
         console.log(error);
@@ -325,7 +325,7 @@ export default function AdminLogin() {
                   !formData.password ||
                   !confirmPassword ||
                   !passwordsMatch ||
-                  passwordStrength != "success" ||
+                  // passwordStrength != "success" ||
                   isEmailInvalid
                 }
                 isLoading={loading}
