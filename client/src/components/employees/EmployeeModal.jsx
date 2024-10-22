@@ -4,7 +4,7 @@ import EmployeeReviewsList from "./EmployeeReviewsList";
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { createEmployee, getCategories, updateEmployee } from "../../Api/employee/employee";
+import { createEmployee, getCategories, updateEmployee } from "@/api/employee/employee";
 import Cookies from "js-cookie";
 
 const categories = [
