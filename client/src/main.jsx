@@ -46,7 +46,7 @@ const routes = createBrowserRouter([
 
   {
     path: "/EditProfilePage",
-    element: <EditProfilePage/>,
+    element: <EditProfilePage />,
     errorElement: <div>Error Page</div>,
   },
   {
@@ -98,7 +98,7 @@ const routes = createBrowserRouter([
             path: "EditProfilePage",
             element: <EditProfilePage />,
           },
-        ],        
+        ],
       },
     ],
   },
@@ -114,11 +114,28 @@ const routes = createBrowserRouter([
             id: "employee-services",
             path: "services",
             element: <EmployeeServicesManagement />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "/recepcionist",
+    children: [
+      { 
+        id: "recepcionist-dashboard",
+        path: "dashboard",
+        element: <div>Recepcionist</div>,
+        children: [
+          {
+            id: "recepcionist-appointments",
+            path: "appointments",
+            element: <h1>Appointments</h1>
           }
         ]
-      },
-    ]
-  }
+      }
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
