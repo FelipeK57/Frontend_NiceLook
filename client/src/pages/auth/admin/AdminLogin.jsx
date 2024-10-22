@@ -88,7 +88,7 @@ export default function AdminLogin() {
       })
       .then((response) => {
         console.log(response.data);
-        const decoded = jwtDecode(response.data.access_token);
+        const decoded = jwtDecode(response.data.token);
         const access = response.data.access_token;
         const refresh = response.data.refresh_token;
 
