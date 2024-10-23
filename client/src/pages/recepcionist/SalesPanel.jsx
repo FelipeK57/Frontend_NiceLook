@@ -9,7 +9,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 const items = ["Servicios", "Productos"];
 
-function FinancePanel() {
+function SalesPanel() {
   const fecha = new Date();
   let year = fecha.getFullYear().toString();
   let month = (fecha.getMonth() + 1).toString();
@@ -75,7 +75,7 @@ function FinancePanel() {
   return (
     <main className="h-screen flex flex-col py-6 gap-4 px-10">
       <header className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold text-slate-950">Panel Financiero</h1>
+        <h1 className="text-4xl font-bold text-slate-950">Ventas del día</h1>
         <Select
           label="Modulo"
           labelPlacement="inside"
@@ -101,21 +101,6 @@ function FinancePanel() {
           variant="bordered"
         />
       </header>
-      <section className="flex flex-col gap-4">
-        <h2 className="text-2xl font-bold text-slate-950">
-          Ganancias {module}
-        </h2>
-        <div>
-          {module === "Servicios" ? (
-            <EarningsSummaryServices
-              earningsEstablishment={earningsEstablishment}
-              earningsArtist={earningsArtist}
-            />
-          ) : (
-            <EarningsSummaryProducts earningsProducts={earningsProducts} />
-          )}
-        </div>
-      </section>
       <section className="flex flex-col gap-2">
         <div className="flex gap-10 items-end">
           <h2 className="text-2xl font-bold text-slate-950">Pagos recibidos</h2>
@@ -177,4 +162,4 @@ function FinancePanel() {
   );
 }
 
-export default FinancePanel;
+export default SalesPanel;
