@@ -103,11 +103,11 @@ function SalesPanel() {
       </header>
       <section className="flex flex-col gap-2">
         <div className="flex gap-10 items-end">
-          <h2 className="text-2xl font-bold text-slate-950">Pagos recibidos</h2>
+          <h2 className="text-2xl font-bold text-slate-950">Resumen</h2>
           <p className="text-2xl font-bold text-slate-950">
             {module === "Servicios"
               ? `Cantidad: ${services.length}`
-              : `Cantidad:${products.length}`}
+              : `Cantidad: ${products.length}`}
           </p>
         </div>
         <div>
@@ -115,8 +115,8 @@ function SalesPanel() {
             <>
               {services.length === 0 ? (
                 <p className="text-lg font-medium text-slate-500">
-                No hay pagos recibidos en esta fecha
-              </p>
+                  No hay ventas en esta fecha
+                </p>
               ) : (
                 <>
                   <ul className="grid items-start grid-cols-4 gap-2 py-4 mr-6 px-8">
@@ -137,7 +137,7 @@ function SalesPanel() {
             <>
               {products.length === 0 ? (
                 <p className="text-lg font-medium text-slate-500">
-                  No hay pagos recibidos en esta fecha
+                  No hay ventas en esta fecha
                 </p>
               ) : (
                 <>
