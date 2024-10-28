@@ -14,7 +14,7 @@ import { Input } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 import { useEffect, useState } from "react";
 
-export default function gestModal({ contact_methods, isOpen, onClose, setContact_methods }) {
+function GestModal({ contact_methods, isOpen, onClose, setContact_methods }) {
   const [mail, setMail] = useState("");
   const [instagram, setInstagram] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
@@ -134,3 +134,5 @@ export default function gestModal({ contact_methods, isOpen, onClose, setContact
     </>
   );
 }
+
+export default GestModal;

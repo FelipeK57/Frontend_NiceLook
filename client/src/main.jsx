@@ -21,6 +21,7 @@ import FinancePanel from "./pages/admin/FinancePanel.jsx";
 import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
 import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
+import ScheduleManagement from "./pages/employee/ScheduleManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -114,6 +115,11 @@ const routes = createBrowserRouter([
             id: "employee-services",
             path: "services",
             element: <EmployeeServicesManagement />,
+          },
+          {
+            id:"employee-schedule",
+            path: "schedule",
+            element: <ScheduleManagement/>,
           },
         ],
       },
