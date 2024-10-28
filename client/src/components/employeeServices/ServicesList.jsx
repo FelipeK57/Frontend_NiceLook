@@ -1,16 +1,19 @@
 import { Select, SelectItem } from "@nextui-org/react";
 import Services from "./Services";
 import { useEffect, useState } from "react";
-import { getEmployeeServices, getEstablishmentServices } from "../../Api/employeeServices/employeeServicesApi";
+import { getCategories, getEmployeeServices, getEstablishmentServices } from "../../Api/employeeServices/employeeServicesApi";
+// import Cookies from "js-cookie";
 
 function ServicesList() {
 
     const [establishmentServices, setEstablishmentServices] = useState([]);
     const [employeeServices, setEmployeeServices] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("Todas");
 
     function loadEmployeeServices() {
         const promise = new Promise((resolve, reject) => {
-            const response = getEmployeeServices(4);
+            const response = getEmployeeServices(1);
             setTimeout(() => {
                 resolve(response);
                 reject("Ocurrio un error");
@@ -28,6 +31,7 @@ function ServicesList() {
     useEffect(() => {
 
         function loadEstablishmentServices() {
+            // const establishmentId = Cookies.get("establishmentId");
             const promise = new Promise((resolve, reject) => {
                 const response = getEstablishmentServices(1);
                 setTimeout(() => {
@@ -37,7 +41,7 @@ function ServicesList() {
                 }, 0);
             });
             promise.then((resultado) => {
-                setEstablishmentServices(resultado.data);
+                setEstablishmentServices(resultado.data.services);
             });
             promise.catch((error) => {
                 console.log(error);
@@ -45,13 +49,30 @@ function ServicesList() {
             return (promise)
         }
 
+        function loadCategories() {
+            const promise = new Promise((resolve, reject) => {
+                const response = getCategories();
+                setTimeout(() => {
+                    resolve(response);
+                    reject("Ocurrio un error");
+                }, 0);
+            });
+            promise.then((resultado) => {
+                setCategories(resultado.data);
+            });
+            promise.catch((error) => {
+                console.log(error);
+            })
+        }
+
 
         loadEmployeeServices();
         loadEstablishmentServices();
+        loadCategories();
 
     }, []);
 
-    //console.log(employeeServices)
+    console.log(selectedCategory.target?.value)
 
     return (
         <div className="flex flex-col h-full w-full">
@@ -60,10 +81,10 @@ function ServicesList() {
                 <div className="grid grid-flow-row 1/2lg:grid-cols-[1fr_1fr] gap-4 max-h-full overflow-y-auto pr-2
                 scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
 
-                    {establishmentServices.map((establishmentService) => (
+                    {establishmentServices?.map((establishmentService) => (
                         employeeServices.filter((employeeService) => employeeService.service === establishmentService.id).map((employeeService) => {
-                            console.log(employeeService)
-                            return<Services key={establishmentService.id} reloadList={loadEmployeeServices} employeeService={employeeService} service={establishmentService} isSelected />
+                            //console.log(employeeService)
+                            return <Services key={establishmentService.id} reloadList={loadEmployeeServices} employeeService={employeeService} service={establishmentService} isSelected />
                         })
                     ))}
 
@@ -76,12 +97,12 @@ function ServicesList() {
                         name="category"
                         id="Category"
                         label="Seleccione la categoria"
-                        placeholder="Barberia"
+                        placeholder="Todas"
                         variant="bordered"
                         className="1/2xl:w-[20%] lg:w-[20vw] sm:w-[40vw] w-[100%]"
                         datatype="string"
                         defaultSelectedKeys={""}
-                        onChange={""}
+                        onChange={setSelectedCategory}
                         isRequired
                         isInvalid={""}
                         scrollShadowProps={{
@@ -89,16 +110,26 @@ function ServicesList() {
                         }}
                     >
                         {/* Aqui va la lista de elementos con selectItem de nextui */}
-                        <SelectItem value={'moto'}>Moto</SelectItem>
+                        {categories?.map((category) => (
+                            <SelectItem key={category.id} value={category.name}>{category.name}</SelectItem>
+                        ))}
                     </Select>
                 </div>
                 <div className="grid grid-flow-row 1/2lg:grid-cols-[1fr_1fr] gap-4 max-h-full overflow-y-auto pr-2 pb-2
                 scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
 
-                    {establishmentServices.map((establishmentService) => (
-                        <Services key={establishmentService.id} service={establishmentService} reloadList={loadEmployeeServices} employeeService={employeeServices[0]} />
-                    ))}
-
+                    {selectedCategory.target?.value === undefined || selectedCategory.target?.value === ""  ?
+                        establishmentServices?.map((establishmentService) => (
+                            <Services key={establishmentService.id} service={establishmentService} reloadList={loadEmployeeServices} employeeService={employeeServices[0]} />
+                        ))
+                        :
+                        establishmentServices.filter((establishmentService) => establishmentService.id === Number(selectedCategory.target?.value)).map((filteredEstablishmentService) => {
+                            console.log(filteredEstablishmentService)
+                            return (
+                                <Services key={filteredEstablishmentService.id} service={filteredEstablishmentService} reloadList={loadEmployeeServices} employeeService={employeeServices[0]} />
+                            )
+                        })
+                    }
                 </div>
             </section>
         </div>

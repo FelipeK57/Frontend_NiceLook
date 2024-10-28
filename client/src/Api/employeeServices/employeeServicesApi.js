@@ -13,6 +13,10 @@ const employeeApi = axios.create({
     baseURL: "http://localhost:8000/employee",
 })
 
+const categoryApi = axios.create({
+    baseURL: "http://localhost:8000/category"
+})
+
 //=====================================================================================
 
 export function getEmployeeServices(id) {
@@ -34,4 +38,10 @@ export function addEmployeeService(employeeId, serviceId, establismentId){
 
 export function getEstablishmentServices(id) {
     return establishmentServicesApi.get(`/servicesByEstablisment/${id}/`);
+}
+
+//=====================================================================================
+
+export function getCategories() {
+    return categoryApi.get("/category_list/")
 }

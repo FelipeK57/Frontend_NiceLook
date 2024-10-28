@@ -45,6 +45,9 @@ function Services({ isSelected, service, reloadList, employeeService }) {
         })
     }
 
+    // console.log("Employee services: ",employeeService)
+    // console.log("Service: ",service)
+
     return (
         <div className="flex flex-row w-full border-slate-200 border-2 rounded-2xl p-4 gap-2">
             <div className="bg-slate-400 w-1/8 h-full rounded-2xl">

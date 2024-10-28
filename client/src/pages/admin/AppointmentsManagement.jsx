@@ -4,6 +4,7 @@ import AppointmentsList from "../../components/appointments/AppointmentsList";
 import { useEffect, useState } from "react";
 import { parseDate } from "@internationalized/date";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function AppointmentsManagement() {
   const fecha = new Date();
@@ -61,16 +62,18 @@ function AppointmentsManagement() {
       console.log(day, month, year);
 
       try {
+        const id = Cookies.get("establishmentId");
         // Realizar la solicitud POST a la API
         const response = await axios.post(
           "http://localhost:8000/api/appointment_list/",
           {
+            id: id,
             day: day,
             month: month,
             year: year,
           }
         );
-
+        console.log(response.data);
         // Guardar las citas obtenidas
         setAppointments(response.data);
         // Agrupar las citas por hora y actualizar el estado
