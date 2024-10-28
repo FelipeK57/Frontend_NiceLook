@@ -22,6 +22,7 @@ import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
 import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
 import ScheduleManagement from "./pages/employee/ScheduleManagement.jsx";
+import RecordManagement from "./pages/employee/RecordManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -121,6 +122,11 @@ const routes = createBrowserRouter([
             path: "schedule",
             element: <ScheduleManagement/>,
           },
+          {
+          id:"employee-record",
+          path: "record",
+          element: <RecordManagement/>,
+        },
         ],
       },
     ],
