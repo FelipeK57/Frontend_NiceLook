@@ -34,6 +34,7 @@ function ServicesList({ services }) {
             commission={service.commission * 100}
             category={service.category}
             state={service.state}
+            image={service.image_base64}
           />
         ))
       )}

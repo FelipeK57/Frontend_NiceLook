@@ -18,14 +18,15 @@ import axios from "axios";
  * @param {number} props.score - The score of the service out of 5.
  * @returns {JSX.Element} The rendered Service component.
  */
-function Service({ id, name, price, commission, category, state }) {
+function Service({ id, name, price, commission, category, state, image }) {
   const service = {
     id: id,
     name: name,
     price: price,
     commission: commission,
     category: category,
-    state: state
+    state: state,
+    image: image,
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleOpen = () => {
@@ -56,7 +57,10 @@ function Service({ id, name, price, commission, category, state }) {
     >
       {" "}
       {/* Image */}
-      <div className="hidden lg:block w-[100px] h-[100px] rounded-lg bg-slate-300" />
+      <img
+        className="hidden lg:block w-[100px] h-[100px] rounded-lg"
+        src={image}
+      />
       {/* Skeleton  */}
       <div className="flex flex-col gap-4 flex-grow lg:flex-row justify-between w-5/6">
         {/* Main details  */}
@@ -74,13 +78,15 @@ function Service({ id, name, price, commission, category, state }) {
         <div className="flex flex-col gap-4 justify-between">
           {/* State and reviews */}
           <div className="flex gap-4 lg:justify-end">
-            {
-              state ? (
-                <p className="text-green-500 font-semibold pr-4 text-sm lg:text-base">Activo</p>
-              ) : (
-                <p className="text-red-500 font-semibold pr-4 text-sm lg:text-base">Inactivo</p>
-              )
-            }
+            {state ? (
+              <p className="text-green-500 font-semibold pr-4 text-sm lg:text-base">
+                Activo
+              </p>
+            ) : (
+              <p className="text-red-500 font-semibold pr-4 text-sm lg:text-base">
+                Inactivo
+              </p>
+            )}
           </div>
           {/* Buttons */}
           <div className="flex gap-2">
@@ -97,11 +103,11 @@ function Service({ id, name, price, commission, category, state }) {
               priceService={service.price}
               categoryService={service.category}
               stateService={service.state}
+              imageService={service.image}
               isOpen={isOpen}
               onClose={onClose}
             />
             <Button
-              
               onPress={handleDeleteService}
               className="font-semibold text-red-500 rounded-xl bg-transparent hidden"
             >

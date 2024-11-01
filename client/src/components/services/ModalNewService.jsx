@@ -51,7 +51,7 @@ function ModalNewService({ isOpen, onClose }) {
   const handleSelectCategory = (name) => {
     setCategory(name);
     setError({ ...error, category: "" });
-  }
+  };
 
   const handleButtonClick = () => {
     document.getElementById("fileInput").click();
@@ -72,16 +72,23 @@ function ModalNewService({ isOpen, onClose }) {
     if (Object.values(newErrors).some((error) => error !== "")) {
       return;
     }
+    const formData = new FormData();
+    formData.append("establishment_id", Cookies.get("establishmentId"));
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("commission", commission);
+    formData.append("category", category);
+    formData.append("image", image);
+
     console.log("Creating service...");
     try {
       const response = await axios.post(
         "http://localhost:8000/api/create_service/",
+        formData,
         {
-          establishment_id: Cookies.get("establishmentId"),
-          name: name,
-          price: price,
-          commission: commission,
-          category: category,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       console.log(response.data);
@@ -170,7 +177,9 @@ function ModalNewService({ isOpen, onClose }) {
               onChange={handleImageChange}
             />
             <ButtonCustom
-              classStyles={`py-5 ${!!error.image && "text-[#f31260] border-[#f31260]"}`}
+              classStyles={`py-5 ${
+                !!error.image && "text-[#f31260] border-[#f31260]"
+              }`}
               action={handleButtonClick}
               name="Subir"
               secondary
@@ -179,9 +188,7 @@ function ModalNewService({ isOpen, onClose }) {
           </div>
           {previewImage && (
             <div>
-              <label
-                className={"font-semibold text-medium lg:text-xl"}
-              >
+              <label className={"font-semibold text-medium lg:text-xl"}>
                 Vista previa
               </label>
               <img
