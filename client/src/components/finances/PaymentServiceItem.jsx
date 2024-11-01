@@ -18,6 +18,7 @@ function PaymentServicesItem({ id, profesional, total, earning, services }) {
         labelPlacement="inside"
         variant="bordered"
         className="w-full"
+        selectionMode="none"
       >
         {services.map((service) => (
           <SelectItem key={service.service_name} value={service.service_name}>

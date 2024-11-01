@@ -118,7 +118,7 @@ function SalesPanel() {
                 : `Cantidad: ${products.length}`}
             </p>
           </div>
-          {module === "Servicios" ? (
+          {/* {module === "Servicios" ? (
             <>
               <ButtonCustom name={"Crear cita"} primary action={handleOpen} />
               <ModalCreateAppointment
@@ -134,7 +134,7 @@ function SalesPanel() {
                 alert("Crear una venta");
               }}
             />
-          )}
+          )} */}
         </div>
         {/* {<div>
           {module === "Servicios" ? (
