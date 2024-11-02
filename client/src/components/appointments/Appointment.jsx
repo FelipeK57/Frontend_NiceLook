@@ -1,7 +1,27 @@
+/* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
-import ModalDetailsAppointment from "./ModelDetailsAppointment";
+import ModalDetailsAppointment from "./ModalDetailsAppointment";
 import { useState } from "react";
+/**
+ * Componente Appointment
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {string} props.id - Identificador de la cita
+ * @param {string} props.artistName - Nombre del artista
+ * @param {number} props.priceService - Precio del servicio
+ * @param {string} props.serviceName - Nombre del servicio
+ * @param {string} props.clientName - Nombre del cliente
+ * @param {string} props.serviceState - Estado del servicio (Pendiente, Completada, Cancelada)
+ * @param {string} props.serviceDate - Fecha del servicio
+ * @param {string} props.serviceTime - Hora del servicio
+ * @param {string} props.clientEmail - Correo electrónico del cliente
+ * @param {string} props.phoneClient - Teléfono del cliente
+ * @param {boolean} props.isEmployee - Indica si el usuario es empleado
+ * 
+ * @returns {JSX.Element} - Elemento JSX que representa una cita
+ */
 function Appointment({
+  id,
   artistName,
   priceService,
   serviceName,
@@ -11,6 +31,7 @@ function Appointment({
   serviceTime,
   clientEmail,
   phoneClient,
+  isEmployee,
 }) {
   const [isModalDetailsAppointmentOpen, setIsModalDetailsAppointmentOpen] =
     useState(false);
@@ -76,6 +97,7 @@ function Appointment({
         <ModalDetailsAppointment
           isOpen={isModalDetailsAppointmentOpen}
           onClose={handleClose}
+          id={id}
           state={serviceState}
           date={serviceDate}
           time={serviceTime}
@@ -85,6 +107,7 @@ function Appointment({
           clientEmail={clientEmail}
           price={priceService}
           services={serviceName}
+          isEmployee={isEmployee}
         />
       </div>
     </article>
@@ -97,7 +120,7 @@ Appointment.propTypes = {
   serviceName: PropTypes.string,
   clientName: PropTypes.string,
   clientEmail: PropTypes.string,
-  clientPhone: PropTypes.string
+  clientPhone: PropTypes.string,
 };
 
 export default Appointment;
