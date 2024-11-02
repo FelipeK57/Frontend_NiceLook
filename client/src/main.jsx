@@ -21,6 +21,7 @@ import FinancePanel from "./pages/admin/FinancePanel.jsx";
 import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
 import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
+import EmployeeLogin from "./pages/auth/employee/EmployeeLogin.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -46,7 +47,7 @@ const routes = createBrowserRouter([
 
   {
     path: "/EditProfilePage",
-    element: <EditProfilePage />,
+    element: <EditProfilePage/>,
     errorElement: <div>Error Page</div>,
   },
   {
@@ -98,13 +99,18 @@ const routes = createBrowserRouter([
             path: "EditProfilePage",
             element: <EditProfilePage />,
           },
-        ],
+        ],        
       },
     ],
   },
   {
     path: "/employee",
     children: [
+      {
+        id: "employee-login",
+        path: "login",
+        element: <EmployeeLogin />,
+      },
       {
         id: "employee-dashboard",
         path: "dashboard",
@@ -114,28 +120,11 @@ const routes = createBrowserRouter([
             id: "employee-services",
             path: "services",
             element: <EmployeeServicesManagement />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "/recepcionist",
-    children: [
-      { 
-        id: "recepcionist-dashboard",
-        path: "dashboard",
-        element: <div>Recepcionist</div>,
-        children: [
-          {
-            id: "recepcionist-appointments",
-            path: "appointments",
-            element: <h1>Appointments</h1>
           }
         ]
-      }
-    ],
-  },
+      },
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
