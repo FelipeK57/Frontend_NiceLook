@@ -3,7 +3,10 @@ import { Modal, Button, Switch, ModalFooter, ModalHeader, ModalBody, ModalConten
 import { getEmployeeSchedules, updateEmployeeSchedule } from '../../Api/employee/employee';
 
 const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
-    const [isTwoShifts, setIsTwoShifts] = useState(false);
+    const [isTwoShifts, setIsTwoShifts] = useState(() => {
+        const storedValue = localStorage.getItem('isTwoShifts');
+        return storedValue !== null ? JSON.parse(storedValue) : false;
+    });
     const [selectedHoursJoin, setSelectedHoursJoin] = useState("09:00");
     const [selectedHoursExit, setSelectedHoursExit] = useState("12:00");
     const [selectedHoursJoin2, setSelectedHoursJoin2] = useState("14:00");
@@ -22,26 +25,30 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
 
     // Efecto para cargar el horario guardado al abrir el modal
     useEffect(() => {
-        if (isOpen) {
-            const fetchSchedule = async () => {
-                try {
-                    const response = await getEmployeeSchedules(employeeId);
-                    if (response.data && response.data.length > 0) {
-                        const schedule = response.data[0];
-                        setScheduleId(schedule.id);
-                        setIsTwoShifts(schedule.double_day);
-                        setSelectedHoursJoin(schedule.time_start_day_one);
-                        setSelectedHoursExit(schedule.time_end_day_one);
-                        setSelectedDays(schedule.working_days.reduce((days, day) => ({ ...days, [day]: true }), {}));
-                        if (schedule.double_day) {
-                            setSelectedHoursJoin2(schedule.time_start_day_two);
-                            setSelectedHoursExit2(schedule.time_end_day_two);
-                        }
+        const fetchSchedule = async () => {
+            try {
+                const response = await getEmployeeSchedules(employeeId);
+                if (response.data && response.data.length > 0) {
+                    const schedule = response.data[0];
+                    setScheduleId(schedule.id);
+                    setIsTwoShifts(schedule.double_day);  // Establecer el estado de acuerdo con el valor cargado
+                    setSelectedHoursJoin(schedule.time_start_day_one);
+                    setSelectedHoursExit(schedule.time_end_day_one);
+                    setSelectedDays(schedule.working_days.reduce((days, day) => ({ ...days, [day]: true }), {}));
+                    if (schedule.double_day) {
+                        setSelectedHoursJoin2(schedule.time_start_day_two);
+                        setSelectedHoursExit2(schedule.time_end_day_two);
                     }
-                } catch (error) {
-                    console.error("Error al cargar el horario:", error);
+                    console.log("Horario cargado:", schedule); // Log para verificar datos cargados
+                } else {
+                    console.log("No se encontró horario para el empleado.");
                 }
-            };
+            } catch (error) {
+                console.error("Error al cargar el horario:", error);
+            }
+        };
+
+        if (isOpen) {
             fetchSchedule();
         }
     }, [isOpen, employeeId]);
@@ -56,7 +63,7 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
     const saveSchedule = async () => {
         const workingDays = Object.keys(selectedDays).filter(day => selectedDays[day]);
         const scheduleData = {
-            double_day: isTwoShifts,
+            double_day: isTwoShifts,  // Enviar el estado actual de dos jornadas al backend
             time_start_day_one: selectedHoursJoin,
             time_end_day_one: selectedHoursExit,
             working_days: workingDays,
@@ -65,6 +72,8 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
                 time_end_day_two: selectedHoursExit2,
             }),
         };
+
+        console.log("Guardando horario con datos:", scheduleData); // Log para verificar datos guardados
 
         setIsLoading(true);
         try {
@@ -80,9 +89,15 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
             setIsLoading(false);
         }
     };
+    useEffect(() => {
+        const storedValue = localStorage.getItem('isTwoShifts');
+        setIsTwoShifts(storedValue !== null ? JSON.parse(storedValue) : false);
+    }, []);
+
 
     return (
         <Modal
+            key={isOpen ? "open" : "closed"}  // Clave para forzar recreación del modal al abrir
             closeButton
             isOpen={isOpen}
             onOpenChange={onOpenChange}
@@ -99,7 +114,7 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
                     <h1 className="text-4xl text-[#252527] font-bold">Gestionar horario</h1>
                 </ModalHeader>
                 <ModalBody>
-                <p className="text-gray-600">Gestione su tiempo en servicio</p>
+                    <p className="text-gray-600">Gestione su tiempo en servicio</p>
                     <div className="flex flex-col lg:flex-row lg:space-x-8">
                         <div className="flex flex-col space-y-4 w-full lg:w-1/2">
                             <span className="font-bold text-xl">Días</span>
@@ -116,7 +131,13 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
                                 ))}
                             </div>
                             <span className="font-bold text-xl mt-4">Dos jornadas</span>
-                            <Switch checked={isTwoShifts} onChange={(e) => setIsTwoShifts(e.target.checked)} />
+                            <Switch
+                                checked={isTwoShifts}
+                                onChange={(e) => {
+                                    setIsTwoShifts(e.target.checked);
+                                    localStorage.setItem('isTwoShifts', JSON.stringify(e.target.checked));
+                                }}
+                            />
                         </div>
 
                         <div className="flex flex-col space-y-4 w-full lg:w-1/2">
