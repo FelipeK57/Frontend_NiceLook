@@ -1,8 +1,8 @@
-import axiox from "axios";
+import axios from "axios";
 
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
-const EmployeesApi = axiox.create({
+const EmployeesApi = axios.create({
     baseURL: "http://localhost:8000/employee",
 });
 
@@ -39,15 +39,19 @@ export function updateEmployee(idUser, name, last_name, phone, state) {
         last_name: last_name,
         phone: phone,
         state: state
-    })
+    });
 }
 
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
-const CategoryApi = axiox.create({
+const CategoryApi = axios.create({
     baseURL: "http://localhost:8000/category",
 });
 
 export function getCategories() {
     return CategoryApi.get("/category_list/")
+}
+
+export function getEmployeeSchedule(employeeId, year, month, day) {
+    return EmployeesApi.get(`/schedule_employee/${employeeId}/?year=${year}&month=${month}&day=${day}`);
 }

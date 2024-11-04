@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Switch, ModalFooter, ModalHeader, ModalBody, ModalContent } from '@nextui-org/react';
 
-const ScheduleModal = ({ isOpen, onClose }) => {
+const ScheduleModal = ({ isOpen, onOpenChange }) => {
     const [isTwoShifts, setIsTwoShifts] = useState(false); // Por defecto, "Dos jornadas" está desactivado
 
     const [selectedHoursJoin, setSelectedHoursJoin] = useState([]);
@@ -39,7 +39,7 @@ const ScheduleModal = ({ isOpen, onClose }) => {
         <Modal
             closeButton
             isOpen={isOpen}
-            onClose={onClose}
+            onOpenChange={onOpenChange}
             size='3xl'
             backdrop="blur"
             classNames={{
