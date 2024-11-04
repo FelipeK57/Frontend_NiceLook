@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { getEmployeeSchedule } from "../../Api/employee/employee";
+import { createEmployeeSchedule, getEmployeeSchedule } from "../../Api/employee/employee";
 import ButtonCustom from "../../components/global/ButtonCustom";
-// import DatePicker from "../../components/appointmentsEmployee/DatePicker";
 import Day from "../../components/appointmentsEmployee/Day";
 import ScheduleModal from "../../components/appointmentsEmployee/ScheduleModal";
 import { DatePicker } from "@nextui-org/react";
@@ -11,29 +10,23 @@ import dayjs from "dayjs";
 import { parseDate } from "@internationalized/date";
 
 const Agenda = () => {
-  
-  //const [date, setDate] = useState(dayjs.tz(dayjs().format(), dayjs.tz.guess()).toDate());
   const fecha = new Date();
   let year = fecha.getFullYear().toString();
   let month = (fecha.getMonth() + 1).toString();
   let day = fecha.getDate().toString();
-  
+
   const [date, setDate] = useState(
     parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
   );
-  
 
   useEffect(() => {
     dayjs.locale('es');
-
-
   }, []);
+
   const selectDate = (e) => {
     setDate(e);
     handleDateChange(e);
   };
-
-  //============================================================================================================
 
   const [appointments, setAppointments] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -43,10 +36,9 @@ const Agenda = () => {
 
   const fetchAppointments = (date) => {
     const year = date.year;
-    const month = date.month ; // Asegúrate de que el mes esté en el rango correcto
+    const month = date.month;
     const day = date.day;
     console.log(year, month, day);
-
 
     const promise = new Promise((resolve, reject) => {
       const response = getEmployeeSchedule(employeeId, year, month, day);
@@ -59,22 +51,21 @@ const Agenda = () => {
     promise.then((response) => {
       setAppointments(response.data);
       setError(null);
+    });
 
-    })
-
-    promise.catch((error, response) => {
-      console.log(response);
+    promise.catch((error) => {
       if (error) {
-        if (error.response.status === 400) {
+        if (error.response && error.response.status === 400) {
           setError("Parámetros de fecha inválidos. Por favor verifica el año, mes y día.");
-        } else if (error.response.status === 404) {
+        } else if (error.response && error.response.status === 404) {
           setError("No hay citas pendientes para esta fecha.");
         } else {
-          setError("Ocurrió un error al obtener las citas: " + error.response.data.error);
+          setError("Ocurrió un error al obtener las citas.");
         }
       }
-    })
+    });
   };
+
   const handleDateChange = (date) => {
     setSelectedDate(date);
     fetchAppointments(date);
@@ -83,6 +74,23 @@ const Agenda = () => {
   useEffect(() => {
     fetchAppointments(selectedDate);
   }, [selectedDate]);
+
+  // Nueva función para gestionar la acción de guardar en el modal
+
+
+  const handleSaveSchedule = async (scheduleData) => {
+    try {
+        const response = await createEmployeeSchedule(employeeId, scheduleData);
+        if (response.status === 201) {
+            console.log("Horario guardado exitosamente:", response.data);
+            fetchAppointments(selectedDate);
+            onOpenChange(false);
+        }
+    } catch (error) {
+        console.error("Error al guardar el horario:", error.response?.data || error.message);
+        alert("Hubo un problema al guardar el horario: " + (error.response?.data?.message || error.message));
+    }
+};
 
   return (
     <div className="p-6">
@@ -95,7 +103,8 @@ const Agenda = () => {
           onPress={onOpen}
         />
         <div className="ml-auto">
-          <DatePicker value={date}
+          <DatePicker 
+            value={date}
             onChange={(e) => selectDate(e)}
             label="Fecha"
             className="max-w-[280px] font-semibold"
@@ -114,7 +123,12 @@ const Agenda = () => {
         </div>
       </div>
 
-      <ScheduleModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <ScheduleModal
+    isOpen={isOpen}
+    onOpenChange={onOpenChange}
+    onSave={handleSaveSchedule}
+    employeeId={employeeId} // Pasar el employeeId para cargar el horario
+/>
     </div>
   );
 };

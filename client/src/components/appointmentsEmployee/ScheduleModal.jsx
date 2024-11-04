@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Button, Switch, ModalFooter, ModalHeader, ModalBody, ModalContent } from '@nextui-org/react';
+import { getEmployeeSchedules, updateEmployeeSchedule } from '../../Api/employee/employee';
 
-const ScheduleModal = ({ isOpen, onOpenChange }) => {
-    const [isTwoShifts, setIsTwoShifts] = useState(false); // Por defecto, "Dos jornadas" está desactivado
-
-    const [selectedHoursJoin, setSelectedHoursJoin] = useState([]);
-    const [selectedHoursExit, setSelectedHoursExit] = useState([]);
-    const [selectedHoursJoin2, setSelectedHoursJoin2] = useState([]);
-    const [selectedHoursExit2, setSelectedHoursExit2] = useState([]);
-    useEffect(() => {
-        console.log("Join",selectedHoursJoin)
-        console.log("Exit",selectedHoursExit)
-        console.log("Join2",selectedHoursJoin2)
-        console.log("Exit2",selectedHoursExit2)
-    }, [selectedHoursJoin, selectedHoursExit, selectedHoursJoin2, selectedHoursExit2])
-  
-
-    // Estado para gestionar los días seleccionados, todos desactivados inicialmente
+const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
+    const [isTwoShifts, setIsTwoShifts] = useState(false);
+    const [selectedHoursJoin, setSelectedHoursJoin] = useState("09:00");
+    const [selectedHoursExit, setSelectedHoursExit] = useState("12:00");
+    const [selectedHoursJoin2, setSelectedHoursJoin2] = useState("14:00");
+    const [selectedHoursExit2, setSelectedHoursExit2] = useState("18:00");
     const [selectedDays, setSelectedDays] = useState({
         LUN: false,
         MAR: false,
@@ -26,8 +17,35 @@ const ScheduleModal = ({ isOpen, onOpenChange }) => {
         SAB: false,
         DOM: false,
     });
+    const [scheduleId, setScheduleId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    // Función para manejar la selección de días
+    // Efecto para cargar el horario guardado al abrir el modal
+    useEffect(() => {
+        if (isOpen) {
+            const fetchSchedule = async () => {
+                try {
+                    const response = await getEmployeeSchedules(employeeId);
+                    if (response.data && response.data.length > 0) {
+                        const schedule = response.data[0];
+                        setScheduleId(schedule.id);
+                        setIsTwoShifts(schedule.double_day);
+                        setSelectedHoursJoin(schedule.time_start_day_one);
+                        setSelectedHoursExit(schedule.time_end_day_one);
+                        setSelectedDays(schedule.working_days.reduce((days, day) => ({ ...days, [day]: true }), {}));
+                        if (schedule.double_day) {
+                            setSelectedHoursJoin2(schedule.time_start_day_two);
+                            setSelectedHoursExit2(schedule.time_end_day_two);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error al cargar el horario:", error);
+                }
+            };
+            fetchSchedule();
+        }
+    }, [isOpen, employeeId]);
+
     const toggleDay = (day) => {
         setSelectedDays((prev) => ({
             ...prev,
@@ -35,12 +53,40 @@ const ScheduleModal = ({ isOpen, onOpenChange }) => {
         }));
     };
 
+    const saveSchedule = async () => {
+        const workingDays = Object.keys(selectedDays).filter(day => selectedDays[day]);
+        const scheduleData = {
+            double_day: isTwoShifts,
+            time_start_day_one: selectedHoursJoin,
+            time_end_day_one: selectedHoursExit,
+            working_days: workingDays,
+            ...(isTwoShifts && {
+                time_start_day_two: selectedHoursJoin2,
+                time_end_day_two: selectedHoursExit2,
+            }),
+        };
+
+        setIsLoading(true);
+        try {
+            if (scheduleId) {
+                await updateEmployeeSchedule(scheduleId, scheduleData);
+            } else {
+                await onSave(scheduleData); // Crea el horario si no existe
+            }
+            onOpenChange(false);
+        } catch (error) {
+            console.error("Error al guardar/actualizar el horario:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <Modal
             closeButton
             isOpen={isOpen}
             onOpenChange={onOpenChange}
-            size='3xl'
+            size="3xl"
             backdrop="blur"
             classNames={{
                 base: "w-[900px] rounded-b-none sm:rounded-xl !m-0 sm:!m-1",
@@ -49,112 +95,72 @@ const ScheduleModal = ({ isOpen, onOpenChange }) => {
             }}
         >
             <ModalContent>
-                {(onClose) => (
-                    <>
-                        <ModalHeader>
-                            <h1 className="text-4xl text-[#252527] font-bold">Gestionar horario</h1>
-                        </ModalHeader>
-                        <ModalBody>
-                        <p className="text-gray-600">Gestione su tiempo en servicio</p>
-                            <div className="flex flex-col lg:flex-row lg:space-x-8">
-                                {/* Sección Izquierda */}
-                                <div className="flex flex-col space-y-4 w-full lg:w-1/2">
-                                    
-                                    
-                                    {/* Días de la semana */}
-                                    <div className="flex flex-col space-y-4">
-                                        <span className="font-bold text-xl">Días</span>
-                                        <div className="grid grid-cols-5 gap-3">
-                                            {['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SAB', 'DOM'].map((day, index) => (
-                                                <button
-                                                    key={index}
-                                                    onClick={() => toggleDay(day)}
-                                                    className={`w-10 h-10 p-7 rounded-full ${
-                                                        selectedDays[day] ? 'bg-[#252527] text-white' : 'bg-gray-200 text-black'
-                                                    } flex justify-center items-center`}
-                                                >
-                                                    {day}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Switch de Dos jornadas */}
-                                    <div className="flex flex-col space-x-2 mt-4">
-                                        <span className="font-bold mb-4 mt-4 text-xl">Dos jornadas</span>
-                                        <Switch
-                                            checked={isTwoShifts}
-                                            onChange={(e) => setIsTwoShifts(e.target.checked)}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Sección Derecha */}
-                                <div className="flex flex-col space-y-4 w-full lg:w-1/2">
-                                <span className="font-bold text-xl">Jornada 1</span>
-                                    {/* Jornada 1 */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="flex flex-col">
-                                            <label className="text-[#252527]">Hora de inicio</label>
-                                            <select onChange={(e) => setSelectedHoursJoin(e.target.value)} className="border rounded-md p-2">
-                                                <option >9 a.m.</option>
-                                                <option>10 a.m.</option>
-                                                <option>11 a.m.</option>
-                                            </select>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <label className="text-[#252527]">Hora de salida</label>
-                                            <select onChange={(e) => setSelectedHoursExit(e.target.value)} className="border rounded-md p-2">
-                                                <option>12 m.</option>
-                                                <option>1 p.m.</option>
-                                                <option>2 p.m.</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    {/* Jornada 2 (si Dos jornadas está activado) */}
-                                    <div
-                                        className={`transition-all duration-700 ease-in-out ${
-                                            isTwoShifts ? 'opacity-100 max-h-full' : 'opacity-0 max-h-0 overflow-hidden'
-                                        }`}
+                <ModalHeader>
+                    <h1 className="text-4xl text-[#252527] font-bold">Gestionar horario</h1>
+                </ModalHeader>
+                <ModalBody>
+                <p className="text-gray-600">Gestione su tiempo en servicio</p>
+                    <div className="flex flex-col lg:flex-row lg:space-x-8">
+                        <div className="flex flex-col space-y-4 w-full lg:w-1/2">
+                            <span className="font-bold text-xl">Días</span>
+                            <div className="grid grid-cols-5 gap-3">
+                                {['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SAB', 'DOM'].map((day, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => toggleDay(day)}
+                                        className={`w-10 h-10 p-7 rounded-full ${selectedDays[day] ? 'bg-[#252527] text-white' : 'bg-gray-200 text-black'
+                                            } flex justify-center items-center`}
                                     >
-                                        <span className="font-bold text-xl">Jornada 2</span>
-                                        <div className="grid grid-cols-2 gap-4 mt-4">
-                                            <div className="flex flex-col">
-                                                <label className="text-gray-600">Hora de inicio</label>
-                                                <select onChange={(e) => setSelectedHoursJoin2(e.target.value)} className="border rounded-md p-2">
-                                                    <option>2 p.m.</option>
-                                                    <option>3 p.m.</option>
-                                                    <option>4 p.m.</option>
-                                                </select>
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <label className="text-gray-600">Hora de salida</label>
-                                                <select onChange={(e) => setSelectedHoursExit2(e.target.value)} className="border rounded-md p-2">
-                                                    <option>6 p.m.</option>
-                                                    <option>7 p.m.</option>
-                                                    <option>8 p.m.</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        {day}
+                                    </button>
+                                ))}
+                            </div>
+                            <span className="font-bold text-xl mt-4">Dos jornadas</span>
+                            <Switch checked={isTwoShifts} onChange={(e) => setIsTwoShifts(e.target.checked)} />
+                        </div>
+
+                        <div className="flex flex-col space-y-4 w-full lg:w-1/2">
+                            <span className="font-bold text-xl">Jornada 1</span>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="flex flex-col">
+                                    <label>Hora de inicio</label>
+                                    <input type="time" value={selectedHoursJoin} onChange={(e) => setSelectedHoursJoin(e.target.value)} />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label>Hora de salida</label>
+                                    <input type="time" value={selectedHoursExit} onChange={(e) => setSelectedHoursExit(e.target.value)} />
                                 </div>
                             </div>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button auto flat color="error" onPress={onClose}>
-                                Cancelar
-                            </Button>
-                            <Button auto onClick={onClose} color="primary">
-                                Guardar
-                            </Button>
-                        </ModalFooter>
-                    </>
-                )}
+
+                            {isTwoShifts && (
+                                <div>
+                                    <span className="font-bold text-xl">Jornada 2</span>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="flex flex-col">
+                                            <label>Hora de inicio</label>
+                                            <input type="time" value={selectedHoursJoin2} onChange={(e) => setSelectedHoursJoin2(e.target.value)} />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <label>Hora de salida</label>
+                                            <input type="time" value={selectedHoursExit2} onChange={(e) => setSelectedHoursExit2(e.target.value)} />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </ModalBody>
+                <ModalFooter>
+                    <Button auto flat color="error" onClick={() => onOpenChange(false)}>
+                        Cancelar
+                    </Button>
+                    <Button auto onClick={saveSchedule} color="primary" disabled={isLoading}>
+                        {isLoading ? "Guardando..." : "Guardar"}
+                    </Button>
+                </ModalFooter>
             </ModalContent>
         </Modal>
     );
 };
 
-// Exportación correcta del componente
 export default ScheduleModal;

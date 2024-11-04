@@ -1,7 +1,6 @@
 import { Card, Badge } from "@nextui-org/react";
 import ScheduleList from "../appointmentsEmployee/ScheduleList";
 import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
 import dayjs from 'dayjs';
 
 
@@ -52,7 +51,7 @@ function Day({ appointments, date }) {
                     <div className="flex flex-row justify-between items-center">
                         <p className="font-bold text-xl">{spanishDay}</p>
                         <div className="w-10 h-10 rounded-full justify-center items-center bg-white flex">
-                            <Badge color="secondary" content={date.day} size="xl" className="flex bg-transparent text-3xl rounded-full border-none"></Badge>
+                            <Badge color="secondary" content={validAppointments.length} size="xl" className="flex bg-transparent text-3xl rounded-full border-none"></Badge>
                         </div>
                     </div>
                 </Card>

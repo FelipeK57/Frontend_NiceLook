@@ -13,8 +13,8 @@ function ScheduleList({ appointments }) {
                         service={appointment.services && Array.isArray(appointment.services)
                             ? appointment.services.map((s) => s.name).join(" + ")
                             : "Sin servicio"}
-                        price={appointment.total} // Ajusta esto si el precio está en otra parte
-                        time={appointment.time} // Asegúrate de que esta prop sea correcta
+                        price={appointment.total} 
+                        time={appointment.time} 
                         paymentMethod={appointment.method}
                     />
                 ))
