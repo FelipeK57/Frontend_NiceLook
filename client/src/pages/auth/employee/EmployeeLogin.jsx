@@ -3,6 +3,11 @@ import { GoogleLogin } from "@react-oauth/google";
 import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react";
 import EmployeeLoginForm from "./EmployeeLoginForm";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { loginEmployee } from "../../../Api/employee/employee";
+import useAuthStore from "../../../stores/useAuthStore";
+import { loginReceptionist } from "../../../Api/receptionist/receptionistApi";
 
 function EmployeeLogin() {
 
@@ -13,18 +18,88 @@ function EmployeeLogin() {
     const [isCode, setIsCode] = useState(false)
     const [codeValid, setCodeValid] = useState(false)
 
+    const navigate = useNavigate();
+    const login = useAuthStore((state) => state.login);
+
     const handleLoginAs = (e) => {
         setLoginAs(e);
     }
 
     const handleGetBack = () => {
-        if(codeValid){
+        if (codeValid) {
             setCodeValid(false);
-        }else if(isCode){
+        } else if (isCode) {
             setIsCode(false);
-        }else if(isRegister){
+        } else if (isRegister) {
             setIsRegister(false);
         }
+    }
+
+    // const authEmployeeGoogle = (token) => {
+    //     Employee
+    //         .post("/EmployeeLogin/", { token })
+    //         .then((response) => {
+    //             const access = response.data.access_token;
+    //             const refresh = response.data.refresh_token;
+    //             const decoded = jwtDecode(response.data.access_token);
+
+    //             // Guardar los datos del usuario en Zustand
+    //             login(decoded, access, refresh);
+
+    //             // Redirigir al dashboard
+    //             navigate("/employee/dashboard/finance");
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //         });
+    // };
+
+    function authGoogleEmployee(token) {
+        const promise = new Promise((resolve, reject) => {
+            const response = loginEmployee(token);
+            setTimeout(() => {
+                resolve(response);
+                reject("Ocurrio un error");
+            }, 0)
+        })
+        promise.then((response) => {
+            const access = response.data.access_token;
+            const refresh = response.data.refresh_token;
+            const decoded = jwtDecode(response.data.access_token);
+
+            // Guardar los datos del usuario en Zustand
+            login(decoded, access, refresh);
+
+            navigate("/employee/dashboard/services");
+        })
+        promise.catch((error) => {
+            console.log(error.message);
+        })
+    }
+
+    function authGoogleReceptionist(token) {
+        const promise = new Promise((resolve, reject) => {
+            const response = loginReceptionist(token);
+            setTimeout(() => {
+                resolve(response);
+                reject("Ocurrio un error");
+            }, 0)
+        });
+        promise.then((response) => {
+            const access = response.data.access_token;
+            const refresh = response.data.refresh_token;
+            const decoded = jwtDecode(response.data.access_token);
+            console.log(decoded);
+
+            // Guardar los datos del usuario en Zustand
+            login(decoded, access, refresh);
+
+            // navigate("/receptionist/dashboard/services");
+            console.log("inicio de session como recepcionista completado correctamente");
+        })
+        promise.catch((error) => {
+            console.log(error.message);
+        })
     }
 
     return (
@@ -66,18 +141,22 @@ function EmployeeLogin() {
                                 <h2 className="text-4xl font-bold">
                                     {isRegister ? "Recuperar contraseña" : "Inicia sesion"}
                                 </h2>
-                                {isRegister &&<p className="text-xl">O tambien puedes iniciar sesion con:</p>}
+                                {isRegister && <p className="text-xl">O tambien puedes iniciar sesion con:</p>}
                                 <GoogleLogin
                                     size="large"
                                     shape="circle"
-                                // onSuccess={(response) => {
-                                //     authGoogle(response.credential);
-                                // }}
-                                // onError={() => {
-                                //   console.log("Fallo en el inicio de sesión");
-                                // }}
+                                    onSuccess={(response) => {
+                                        if (loginAs === "employee") {
+                                            authGoogleEmployee(response.credential);
+                                        } else {
+                                            authGoogleReceptionist(response.credential);
+                                        }
+                                    }}
+                                    onError={() => {
+                                        console.log("Fallo en el inicio de sesión");
+                                    }}
                                 />
-                                {!isRegister &&<p className="text-xl">O tambien puedes iniciar sesion con tus credenciales como:</p>}
+                                {!isRegister && <p className="text-xl">O tambien puedes iniciar sesion con tus credenciales como:</p>}
                             </div>
                             <div className="w-full flex flex-col justify-evenly h-[85%]">
                                 <div className={`w-full flex justify-center border-b-2 border-slate-400`}>
@@ -100,7 +179,7 @@ function EmployeeLogin() {
                                     codeValid={codeValid}
                                     setCodeValid={setCodeValid} />
 
-                                {!isRegister &&<Button
+                                {!isRegister && <Button
                                     variant="gost"
                                     lassName="w-fit text-xl text-blue-400 self-center"
                                     onPress={() => setIsRegister(true)}>

@@ -22,6 +22,7 @@ import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
 import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
 import EmployeeLogin from "./pages/auth/employee/EmployeeLogin.jsx";
+import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -105,6 +106,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "/employee",
+    element: <ProtectedEmployeeRoute />,
     children: [
       {
         id: "employee-login",
