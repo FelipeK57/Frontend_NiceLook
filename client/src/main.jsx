@@ -23,7 +23,6 @@ import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx"
 import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
 import SalesPanel from "./pages/recepcionist/SalesPanel.jsx";
 import Appointments from "./pages/recepcionist/Appointments.jsx";
-import SalesPanel from "./pages/recepcionist/SalesPanel.jsx";
 import EmployeeLogin from "./pages/auth/employee/EmployeeLogin.jsx";
 import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx";
 
