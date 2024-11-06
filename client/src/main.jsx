@@ -22,6 +22,8 @@ import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
 import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
 import SalesPanel from "./pages/recepcionist/SalesPanel.jsx";
+import Appointments from "./pages/recepcionist/Appointments.jsx";
+import SalesPanel from "./pages/recepcionist/SalesPanel.jsx";
 import EmployeeLogin from "./pages/auth/employee/EmployeeLogin.jsx";
 import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx";
 
@@ -139,15 +141,15 @@ const routes = createBrowserRouter([
           {
             id: "recepcionist-appointments",
             path: "appointments",
-            element: <h1>Appointments</h1>,
+            element: <Appointments />
           },
           {
             id: "recepcionist-finance",
             path: "finance",
-            element: <SalesPanel />,
-          },
-        ],
-      },
+            element: <SalesPanel/>
+          }
+        ]
+      }
     ],
   },
 ]);
