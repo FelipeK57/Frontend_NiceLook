@@ -6,8 +6,8 @@ function PaymentServicesItem({ id, profesional, total, earning, services }) {
       key={id}
       className="grid grid-cols-4 items-center [&>p]:font-semibold gap-2 border-2 border-slate-200 rounded-2xl py-2 px-8 w-full"
     >
-      <p>{total}</p>
-      <p className="text-green-700">+{earning}</p>
+      <p>${total}</p>
+      <p className="text-green-700">+${earning}</p>
       <p>{profesional}</p>
       <Select
         classNames={{

@@ -7,38 +7,32 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/react";
-import CreateAppointmentForm from "./CreateAppointmentForm";
 import { useState } from "react";
+import SelectCategorie from "../services/SelectCategorie";
+import InputCustom from "../global/InputCustom";
 
 function ModalCreateAppointment({ isOpen, onClose }) {
   const [category, setCategory] = useState("");
-
   const handleCloseModal = () => {
-    onClose();
     setCategory("");
+    onClose();
   };
 
   return (
-    <Modal size="sm" backdrop="blur" isOpen={isOpen} onClose={onClose}>
+    <Modal size="lg" backdrop="blur" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
-          <h1 className="text-4xl font-bold">Crear una cita</h1>
-          <p className="text-slate-500 text-base font-medium">
-            Por favor llena todos los campos
-          </p>
+          <h1 className="text-4xl font-bold">Inicia sesión</h1>
         </ModalHeader>
         <ModalBody>
-          <CreateAppointmentForm
-            setCategory={setCategory}
-            category={category}
-          />
+          <InputCustom label="Correo Electronico" placeholder={"ejemplo@gmail.com"}isInvalid={true} errorMessage={"Debes ingresar un correo valido, ejemplo: micorreo@gmail.com"} />
         </ModalBody>
         <ModalFooter>
           {/* Modal Footer Buttons */}
-          <Button color="danger" variant="light" onPress={handleCloseModal}>
-            Cancelar
+          <Button color="default" variant="light" onPress={handleCloseModal}>
+            Crear cuenta
           </Button>
-          <ButtonCustom name="Crear" primary />
+          <ButtonCustom name="Siguiente" primary />
         </ModalFooter>
       </ModalContent>
     </Modal>

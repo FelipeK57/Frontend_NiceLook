@@ -20,7 +20,7 @@ function InputCustom({
       variant="bordered"
       classNames={{
         label: "font-semibold text-xl",
-        inputWrapper: ["border-2", "border-slate-200", "px-6", "py-5", "m-0"],
+        inputWrapper: ["border-2", "border-slate-200", "px-4", "py-5", "m-0"],
       }}
       isInvalid={isInvalid}
       errorMessage={errorMessage}

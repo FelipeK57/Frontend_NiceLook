@@ -11,8 +11,6 @@ import SelectCategorie from "./SelectCategorie";
 import { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { set } from "react-hook-form";
-import { FileInput } from "lucide-react";
 import InputCustom from "../global/InputCustom";
 
 /**
