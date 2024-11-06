@@ -8,8 +8,9 @@ import { Button } from "@nextui-org/react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-const navLinks = [
+const adminNavLinks = [
   {
     name: "Inicio",
     icon: (
@@ -138,6 +139,49 @@ const navLinks = [
   },
 ];
 
+const recepcionistNavLinks = [
+  {
+    name: "Ventas del dia",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="size-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"
+        />
+      </svg>
+    ),
+    path: "finance",
+  },
+  {
+    name: "Calendario de citas",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="size-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
+        />
+      </svg>
+    ),
+    path: "appointments",
+  },
+];
+
 function Sidebar() {
   const user = useAuthStore((state) => state.user);
   const userInfo = user !== null ? user : "Usuario no identificado";
@@ -164,15 +208,19 @@ function Sidebar() {
         );
         setLogo(response.data.imagen_base64);
       } catch (err) {
-        setLogo("https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg")
+        setLogo(
+          "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg"
+        );
         console.log(err);
       }
     };
     fetchLogo();
   }, []);
 
+  const url = useLocation().pathname;
+
   return (
-    <aside className="bg-[#ffffff] w-full flex flex-col gap-5 pt-8 items-center border-r-2 border-slate-200">
+    <aside className="bg-slate-50 w-full grid py-2 2xl:py-6 grid-rows-[auto_1fr_auto] justify-center gap-4 2xl:gap-10 border-r-2 border-slate-200">
       <button className="md:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -192,23 +240,34 @@ function Sidebar() {
       {/* <h1 className="hidden lg:block font-amaranth font-bold text-5xl text-center">
         NiceLook.
       </h1> */}
-      <LogoNiceLook className="text-4xl" />
-      <img src={logo} className="w-32 h-32 rounded-full"></img>
-      <p>
-        {userInfo.first_name} {userInfo.last_name}
-      </p>
-      <ButtonCustom secondary name="Configuración" />
-      <nav className="flex flex-col gap-4 py-2">
-        {navLinks.map((link) => (
-          <LinkSidebar
-            key={link.name}
-            name={link.name}
-            path={link.path}
-            icon={link.icon}
-          />
-        ))}
+      <div className="flex 2xl:gap-5 gap-3 flex-col items-center">
+        <LogoNiceLook className="text-4xl" />
+        <img src={logo} className="size-16 2xl:size-32 rounded-full"></img>
+        <p>
+          {userInfo.first_name} {userInfo.last_name}
+        </p>
+        <ButtonCustom secondary name="Configuración" />
+      </div>
+      <nav className="flex flex-col gap-2 2xl:gap-6">
+        {url.includes("admin")
+          ? adminNavLinks.map((link) => (
+              <LinkSidebar
+                key={link.name}
+                name={link.name}
+                path={link.path}
+                icon={link.icon}
+              />
+            ))
+          : recepcionistNavLinks.map((link) => (
+              <LinkSidebar
+                key={link.name}
+                name={link.name}
+                path={link.path}
+                icon={link.icon}
+              />
+            ))}
       </nav>
-      <div className="flex flex-grow justify-end items-end py-10">
+      <div className="flex items-center justify-center">
         <Button onClick={handleLogout} color="danger" variant="light">
           Cerrar Sesión
         </Button>

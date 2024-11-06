@@ -123,14 +123,14 @@ const EstablishmentProfile = () => {
     <div className="px-8 pt-3">
       {/* Contenedor principal */}
       <div>
-        <div className="flex m-4">
+        <div className="flex m-4 mb-0">
           <h1 className="text-4xl font-bold text-gray-800">
             Edita el perfil del establecimiento
           </h1>
         </div>
 
         {/* Sección de edición del banner */}
-        <div className="relative w-full h-[30rem] bg-gray-50 rounded-md border-2 border-slate-200">
+        <div className="relative w-full h-[300px] 2xl:h-[450px] bg-gray-50 rounded-md border-2 border-slate-200">
           <img
             src={prevewBanner || bannerImage} // Usa la imagen previsualizada o la imagen original
             alt="Banner"
@@ -146,7 +146,7 @@ const EstablishmentProfile = () => {
         {/* Sección del logo y nombre */}
         <div className="flex -translate-y-20 items-center ml-6 mt-6 justify-between">
           <div className="flex items-center">
-            <div className="relative w-48 h-48 bg-gray-100 rounded-md border-2 border-slate-200 overflow-hidden shadow-sm">
+            <div className="relative w-36 h-36 2xl:w-48 2xl:h-48 bg-gray-100 rounded-md border-2 border-slate-200 overflow-hidden shadow-sm">
               <img
                 src={prevewLogo || logoImage} // Usa la imagen previsualizada o la imagen original
                 alt="Logo"
@@ -159,7 +159,7 @@ const EstablishmentProfile = () => {
               />
             </div>
 
-            <div className="ml-6 mt-32">
+            <div className="ml-6 mt-20 2xl:mt-32">
               <Input
                 placeholder="Nombre de establecimiento"
                 value={name}
@@ -266,7 +266,7 @@ const EstablishmentProfile = () => {
         </div>
 
         {/* Botón de guardar cambios */}
-        <div className="absolute bottom-10 right-[30%]">
+        <div className="">
           <div className="flex justify-center">
             <ButtonCustom
               onPress={editEstablecimiento}

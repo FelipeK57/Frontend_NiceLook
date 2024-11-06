@@ -24,8 +24,8 @@ const categories = [
   },
   {
     id: 6,
-    name: "Tatuajes"
-  }
+    name: "Tatuajes",
+  },
 ];
 
 /**
@@ -44,7 +44,7 @@ const categories = [
  * It applies custom styles through the `className` and `classNames` props.
  * The `categories` array is mapped to generate the list of selectable items.
  */
-function SelectCategorie({ category, setCategory }) {
+function SelectCategorie({ category, setCategory, message, invalid }) {
   const selectCategory = (name) => {
     setCategory(name);
     console.log(name);
@@ -55,13 +55,14 @@ function SelectCategorie({ category, setCategory }) {
       placeholder="Selecciona la categoria"
       label="Categorias"
       defaultSelectedKeys={[category]}
-      className="max-w-sm"
       classNames={{
-        label: "font-semibold text-medium lg:text-xl",
-        trigger: "p-5",
-        listboxWrapper: "max-h-[400px]",
+        label: "font-semibold text-xl",
+        trigger: "p-5 border-2 border-slate-200 m-0",
       }}
       variant="bordered"
+      isInvalid={invalid}
+      errorMessage={message}
+      className="m-0"
     >
       {categories.map((category) => (
         <SelectItem
@@ -78,6 +79,8 @@ function SelectCategorie({ category, setCategory }) {
 SelectCategorie.propTypes = {
   category: PropTypes.string,
   setCategory: PropTypes.func,
+  invalid: PropTypes.bool,
+  message: PropTypes.string,
 };
 
 export default SelectCategorie;

@@ -18,7 +18,7 @@ import Service from "./Service"; // Import the Service component
  */
 function ServicesList({ services }) {
   return (
-    <article className="flex flex-col pb-4 lg:pb-0 gap-6 lg:h-[75vh] lg:overflow-y-auto scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300 lg:pr-2">
+    <article className="flex flex-col lg:pb-0 gap-6 max-h-[70vh] 2xl:max-h-[80vh] lg:overflow-y-auto scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300 lg:pr-2">
       {/* Render individual Service components with their respective props */}
       {services.length === 0 ? (
         <p className="text-center text-lg text-slate-500 font-medium">
@@ -34,6 +34,7 @@ function ServicesList({ services }) {
             commission={service.commission * 100}
             category={service.category}
             state={service.state}
+            image={service.image_base64}
           />
         ))
       )}

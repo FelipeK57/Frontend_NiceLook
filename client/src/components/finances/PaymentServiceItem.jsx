@@ -4,10 +4,10 @@ function PaymentServicesItem({ id, profesional, total, earning, services }) {
   return (
     <li
       key={id}
-      className="grid grid-cols-4 items-center [&>p]:font-semibold gap-2 border-2 border-slate-200 rounded-2xl py-4 px-8 w-full"
+      className="grid grid-cols-4 items-center [&>p]:font-semibold gap-2 border-2 border-slate-200 rounded-2xl py-2 px-8 w-full"
     >
-      <p>{total}</p>
-      <p className="text-green-700">+{earning}</p>
+      <p>${total}</p>
+      <p className="text-green-700">+${earning}</p>
       <p>{profesional}</p>
       <Select
         classNames={{
@@ -18,6 +18,7 @@ function PaymentServicesItem({ id, profesional, total, earning, services }) {
         labelPlacement="inside"
         variant="bordered"
         className="w-full"
+        selectionMode="none"
       >
         {services.map((service) => (
           <SelectItem key={service.service_name} value={service.service_name}>

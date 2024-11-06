@@ -1,4 +1,4 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import {
   Modal,
   ModalContent,
@@ -10,6 +10,7 @@ import {
 import ButtonCustom from "../global/ButtonCustom";
 import SelectCategorie from "./SelectCategorie";
 import PropTypes from "prop-types";
+import InputCustom from "../global/InputCustom";
 import { useState } from "react";
 import axios from "axios";
 /**
@@ -28,6 +29,7 @@ function ModalEditService({
   commissionService,
   categoryService,
   stateService,
+  imageService,
   isOpen,
   onClose,
 }) {
@@ -35,20 +37,55 @@ function ModalEditService({
   const [price, setPrice] = useState(priceService);
   const [commission, setCommission] = useState(commissionService);
   const [category, setCategory] = useState(categoryService);
+  const [image, setImage] = useState(imageService);
   const [state, setState] = useState(stateService);
+  const [previewImage, setPreviewImage] = useState(imageService);
+  const [error, setError] = useState({
+    name: "",
+    price: "",
+    commission: "",
+    category: "",
+    image: null,
+  });
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+      setImage(file);
+      setError({ ...error, image: "" });
+    }
+  };
+
+  const handleSelectCategory = (name) => {
+    setCategory(name);
+    setError({ ...error, category: "" });
+  };
+
+  const handleButtonClick = () => {
+    document.getElementById("fileInput").click();
+  };
 
   const handleEditService = async () => {
     try {
-      console.log(name, price, commission, category, state);
+      const formData = new FormData();
+      formData.append("service_id", idService);
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("commission", commission);
+      formData.append("category", category);
+      formData.append("state", state);
+      if (image != imageService) {
+        formData.append("image", image);
+      }
+      console.log(idService, name, price, commission, category, state);
       const response = await axios.put(
         "http://localhost:8000/api/update_service/",
+        formData,
         {
-          service_id: idService,
-          name: name,
-          price: price,
-          commission: commission,
-          category: category,
-          state: state,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       onClose();
@@ -68,90 +105,96 @@ function ModalEditService({
             Puedes editar los campos
           </p>
         </ModalHeader>
-        <ModalBody>
-          <label
-            className="font-semibold text-medium lg:text-xl"
-            htmlFor="nameService"
-          >
-            Nombre
-          </label>
-          <Input
+        <ModalBody className="grid grid-cols-2 gap-6 justify-stretch">
+          <InputCustom
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            id="nameService"
-            variant="bordered"
-            classNames={{
-              label: "",
-              input: [],
-              innerWrapper: "",
-              inputWrapper: ["border-2", "border-slate-200", "px-6", "py-5"],
+            label={"Nombre del servicio"}
+            type={"text"}
+            onChange={(e) => {
+              setName(e.target.value);
+              setError({ ...error, name: "" });
             }}
-            placeholder="Ejemplo: Corte de Cabello"
+            isInvalid={!!error.name}
+            errorMessage={error.name}
+            placeholder={"Ejemplo: Corte de cabello"}
           />
-          <div className="grid grid-cols-2 gap-6 items-end">
-            <div className="flex flex-col gap-2">
-              <label
-                className="font-semibold text-medium lg:text-xl"
-                htmlFor="priceService"
-              >
-                Precio
-              </label>
-              <Input
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                id="priceService"
-                type="number"
-                variant="bordered"
-                classNames={{
-                  label: "",
-                  input: [],
-                  innerWrapper: "",
-                  inputWrapper: [
-                    "border-2",
-                    "border-slate-200",
-                    "px-6",
-                    "py-5",
-                  ],
-                }}
-                placeholder="Ejemplo: 20000"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <SelectCategorie category={category} setCategory={setCategory} />
-            </div>
+          <InputCustom
+            value={price}
+            label={"Precio"}
+            type={"number"}
+            onChange={(e) => {
+              const value = e.target.value;
+              setPrice(value >= 0 ? value : "");
+              setError({ ...error, price: "" });
+            }}
+            isInvalid={!!error.price}
+            errorMessage={error.price}
+            placeholder={"Ejemplo: 15000"}
+          />
+          <SelectCategorie
+            category={category}
+            setCategory={handleSelectCategory}
+            invalid={!!error.category}
+            message={error.category}
+          />
+          <InputCustom
+            value={commission}
+            label={"Comisión"}
+            type={"number"}
+            onChange={(e) => {
+              const value = e.target.value;
+              setCommission(value >= 0 ? value : "");
+              setError({ ...error, commission: "" });
+            }}
+            isInvalid={!!error.commission}
+            errorMessage={error.commission}
+            placeholder={"Ejemplo: 10"}
+          />
+          <div className="flex flex-col gap-2">
+            <label
+              className={`font-semibold text-xl ${
+                !!error.image && "text-[#f31260]"
+              }`}
+              htmlFor="comissionService"
+            >
+              Imagen
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+            <ButtonCustom
+              classStyles={`py-5 ${
+                !!error.image && "text-[#f31260] border-[#f31260]"
+              }`}
+              action={handleButtonClick}
+              name="Subir"
+              secondary
+            />
+            {<p className="text-[#f31260] text-[12px]">{error.image}</p>}
           </div>
-          <div className="grid grid-cols-[47%_53%] gap-6 items-end">
-            <div className="flex flex-col gap-2">
-              <label
-                className="font-semibold text-medium lg:text-xl"
-                htmlFor="comissionService"
-              >
-                Comisión establecimiento
-              </label>
-              <Input
-                value={commission}
-                onChange={(e) => setCommission(e.target.value)}
-                id="comissionService"
-                type="number"
-                variant="bordered"
-                classNames={{
-                  label: "",
-                  input: [],
-                  innerWrapper: "",
-                  inputWrapper: [
-                    "border-2",
-                    "border-slate-200",
-                    "px-6",
-                    "py-5",
-                  ],
-                }}
-                placeholder="Ejemplo: 10%"
-              />
-            </div>
-            <div className="flex flex-col lg:justify-between justify-end h-full">
-              <p className="font-semibold  text-medium lg:text-xl">Estado</p>
-              <Switch isSelected={state} onValueChange={setState} size="lg" defaultSelected color="success" />
-            </div>
+          <div className="flex flex-col justify-start gap-4 h-full">
+            <p className="font-semibold  text-medium lg:text-xl">Estado</p>
+            <Switch
+              isSelected={state}
+              onValueChange={setState}
+              size="lg"
+              defaultSelected
+              color="success"
+            />
+          </div>
+          <div>
+            <label className={"font-semibold text-medium lg:text-xl"}>
+              Vista previa
+            </label>
+            <img
+              src={previewImage}
+              alt="Vista previa"
+              className="w-40 h-40 object-cover rounded-lg mb-4 shadow-md"
+            />
           </div>
         </ModalBody>
         <ModalFooter>

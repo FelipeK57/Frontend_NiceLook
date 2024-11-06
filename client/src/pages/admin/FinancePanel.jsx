@@ -73,7 +73,7 @@ function FinancePanel() {
     fetchData();
   }, [date]);
   return (
-    <main className="h-screen flex flex-col py-8 gap-6 px-10">
+    <main className="h-screen flex flex-col py-6 gap-4 px-10">
       <header className="flex items-center justify-between">
         <h1 className="text-4xl font-bold text-slate-950">Panel Financiero</h1>
         <Select
@@ -97,11 +97,11 @@ function FinancePanel() {
           value={date}
           onChange={setDate}
           label="Fecha"
-          className="max-w-[280px] font-semibold"
+          className="max-w-[200px] font-semibold"
           variant="bordered"
         />
       </header>
-      <section className="flex flex-col gap-6">
+      <section className="flex flex-col gap-4">
         <h2 className="text-2xl font-bold text-slate-950">
           Ganancias {module}
         </h2>
@@ -116,7 +116,7 @@ function FinancePanel() {
           )}
         </div>
       </section>
-      <section className="flex flex-col gap-6">
+      <section className="flex flex-col gap-2">
         <div className="flex gap-10 items-end">
           <h2 className="text-2xl font-bold text-slate-950">Pagos recibidos</h2>
           <p className="text-2xl font-bold text-slate-950">
