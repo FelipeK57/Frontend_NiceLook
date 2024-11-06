@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/react";
 import { GoogleLogin } from "@react-oauth/google";
 import { AnimatePresence, motion } from "framer-motion"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EmployeeLoginForm from "./EmployeeLoginForm";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,20 @@ function EmployeeLogin() {
     const [isRegister, setIsRegister] = useState(false)
     const [isCode, setIsCode] = useState(false)
     const [codeValid, setCodeValid] = useState(false)
+
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [isSmallScreen, setIsSmallScreen] = useState(windowWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+            setIsSmallScreen(window.innerWidth < 768);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const navigate = useNavigate();
     const login = useAuthStore((state) => state.login);
@@ -34,25 +48,6 @@ function EmployeeLogin() {
             setIsRegister(false);
         }
     }
-
-    // const authEmployeeGoogle = (token) => {
-    //     Employee
-    //         .post("/EmployeeLogin/", { token })
-    //         .then((response) => {
-    //             const access = response.data.access_token;
-    //             const refresh = response.data.refresh_token;
-    //             const decoded = jwtDecode(response.data.access_token);
-
-    //             // Guardar los datos del usuario en Zustand
-    //             login(decoded, access, refresh);
-
-    //             // Redirigir al dashboard
-    //             navigate("/employee/dashboard/finance");
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    // };
 
     function authGoogleEmployee(token) {
         const promise = new Promise((resolve, reject) => {
@@ -106,12 +101,12 @@ function EmployeeLogin() {
         <section className="relative w-full overflow-hidden h-screen flex justify-center items-center">
             <AnimatePresence mode="wait" >
                 <motion.div key={"circule1"} initial={{ x: -300, y: 0 }}
-                    animate={!isRegister ? { x: -1100, y: -1050 } : { x: 0, y: -1650, scaleX: 1.5 }}
+                    animate={!isRegister ? ( isSmallScreen ? { x: -1500, y: -800, scaleX: 1.5 } : { x: -1100, y: -1050 }) : { x: 0, y: -1650, scaleX: 1.5 }}
                     transition={{ duration: 0.8 }}
                     className={`bg-black absolute rounded-full w-[250vh] h-[250vh] z-[-1]`}>
                 </motion.div>
                 <motion.div key={"circule2"} initial={{ x: 300, y: 0 }}
-                    animate={!isRegister ? { x: 1100, y: 1050 } : { x: 0, y: 1650, scaleX: 1.5 }}
+                    animate={!isRegister ? ( isSmallScreen ? { x: 1500, y: 800, scaleX: 1.5 } : { x: 1100, y: 1050 }) : { x: 0, y: 1650, scaleX: 1.5 }}
                     transition={{ duration: 0.8 }}
                     className={`bg-tulip-tree-400 absolute rounded-full w-[250vh] h-[250vh] z-[-1]`}>
 
@@ -131,19 +126,21 @@ function EmployeeLogin() {
                             </svg>
 
                         </Button>}
-                    <div className="grid grid-cols-2 h-full p-14 w-full">
-                        <div className="items-center justify-center flex flex-col">
-                            <h1 className="font-bold text-4xl">Te damos la bienvenida a</h1>
-                            <span className="font-bold text-4xl">Nice<span className="text-slate-700">Look</span><span className="text-tulip-tree-400">.</span></span>
+                    <div className="grid lg:grid-cols-2 grid-cols-1 lg:grid-rows-1 grid-rows-[0.2fr_1.8fr] h-full sm:p-14 p-8 pt-4 w-full">
+                        <div className="items-center justify-center flex flex-col sm:pr-14">
+                            <h1 className="font-bold text-4xl 2xl:flex hidden">Te damos la bienvenida a</h1>
+                            <span className="font-bold text-4xl 2xl:flex hidden">Nice<span className="text-slate-700">Look</span><span className="text-tulip-tree-400">.</span></span>
+                            <h1 className="font-bold lg:text-4xl sm:text-3xl text-2xl 2xl:hidden text-center">Esto es Nice<span className="text-slate-700">Look</span><span className="text-tulip-tree-400">.</span></h1>
                         </div>
-                        <div className="h-full items-center p-10 border-l-2 border-slate-700">
-                            <div className="flex flex-col w-full self-start gap-4">
-                                <h2 className="text-4xl font-bold">
+                        <div className="h-full items-center sm:p-10 p-2 lg:border-l-2 border-slate-700">
+                            <div className="flex flex-col w-full self-start gap-4 items-center sm:items-start">
+                                <h2 className="lg:text-4xl sm:text-3xl text-2xl text-center sm:text-start font-bold">
                                     {isRegister ? "Recuperar contraseña" : "Inicia sesion"}
                                 </h2>
-                                {isRegister && <p className="text-xl">O tambien puedes iniciar sesion con:</p>}
+                                {isRegister && <p className="xl:text-xl sm:text-lg">O tambien puedes iniciar sesion con:</p>}
+
                                 <GoogleLogin
-                                    size="large"
+                                    size={isSmallScreen ? "small" : "large"}
                                     shape="circle"
                                     onSuccess={(response) => {
                                         if (loginAs === "employee") {
@@ -156,16 +153,16 @@ function EmployeeLogin() {
                                         console.log("Fallo en el inicio de sesión");
                                     }}
                                 />
-                                {!isRegister && <p className="text-xl">O tambien puedes iniciar sesion con tus credenciales como:</p>}
+                                {!isRegister && <p className="xl:text-xl sm:text-lg">O tambien puedes iniciar sesion con tus credenciales como:</p>}
                             </div>
-                            <div className="w-full flex flex-col justify-evenly h-[85%]">
+                            <div className="w-full flex flex-col justify-evenly sm:h-[85%] h-[75%]">
                                 <div className={`w-full flex justify-center border-b-2 border-slate-400`}>
                                     <Button onPress={() => handleLoginAs("employee")}
-                                        className={`text-xl w-1/3 rounded-r-none rounded-b-none ${loginAs === "employee" ? "bg-tulip-tree-400" : "bg-slate-400"}`}>
+                                        className={`sm:text-xl 2xl:w-1/3 w-1/2 rounded-r-none rounded-b-none ${loginAs === "employee" ? "bg-tulip-tree-400" : "bg-slate-400"}`}>
                                         Empleado
                                     </Button>
                                     <Button onPress={() => handleLoginAs("receptionist")}
-                                        className={`text-xl w-1/3 rounded-l-none rounded-b-none ${loginAs === "receptionist" ? "bg-tulip-tree-400 " : "bg-slate-400"}`}>
+                                        className={`sm:text-xl 2xl:w-1/3 w-2/4 rounded-l-none rounded-b-none ${loginAs === "receptionist" ? "bg-tulip-tree-400 " : "bg-slate-400"}`}>
                                         Recepcionista
                                     </Button>
                                 </div>
