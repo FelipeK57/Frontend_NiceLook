@@ -22,6 +22,8 @@ import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
 import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
 import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
 import SalesPanel from "./pages/recepcionist/SalesPanel.jsx";
+import EmployeeLogin from "./pages/auth/employee/EmployeeLogin.jsx";
+import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -47,7 +49,7 @@ const routes = createBrowserRouter([
 
   {
     path: "/EditProfilePage",
-    element: <EditProfilePage />,
+    element: <EditProfilePage/>,
     errorElement: <div>Error Page</div>,
   },
   {
@@ -99,13 +101,19 @@ const routes = createBrowserRouter([
             path: "EditProfilePage",
             element: <EditProfilePage />,
           },
-        ],
+        ],        
       },
     ],
   },
   {
     path: "/employee",
+    element: <ProtectedEmployeeRoute />,
     children: [
+      {
+        id: "employee-login",
+        path: "login",
+        element: <EmployeeLogin />,
+      },
       {
         id: "employee-dashboard",
         path: "dashboard",
@@ -139,9 +147,9 @@ const routes = createBrowserRouter([
             element: <SalesPanel/>
           }
         ]
-      }
-    ],
-  },
+      },
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

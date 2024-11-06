@@ -135,7 +135,7 @@ export default function AdminLogin() {
               Esto es <LogoNiceLook />
             </h1>
           </section>
-          <section className="w-full h-full p-8 flex flex-col gap-5">
+          <section className="w-full h-full p-8 flex flex-col gap-5 justify-center">
             <header>
               <h1 className="font-bold text-3xl">Identifícate</h1>
             </header>

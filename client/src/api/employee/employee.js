@@ -51,3 +51,11 @@ const CategoryApi = axiox.create({
 export function getCategories() {
     return CategoryApi.get("/category_list/")
 }
+
+//=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+
+export function loginEmployee(token) {
+    return EmployeesApi.post("/EmployeeLogin/", {
+        token: token
+    });
+}
