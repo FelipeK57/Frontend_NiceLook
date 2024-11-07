@@ -126,10 +126,11 @@ function ModalDetailsAppointment({
         setEditMode(false);
         setLoading(false);
       });
+    window.location.reload();
   };
 
   const handleFinishAppointment = (e) => {
-    e.preventDefault();
+    e.preventDefault;
     setLoading(true);
     api
       .patch(`api/appointment_change_state/`, {
@@ -276,7 +277,7 @@ function ModalDetailsAppointment({
               >
                 Reagendar
               </Button> */}
-              {!state === "Completada" && (
+              {state !== "Completada" && (
                 <ButtonCustom
                   action={handleFinishAppointment}
                   primary
