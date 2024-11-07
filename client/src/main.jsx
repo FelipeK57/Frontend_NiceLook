@@ -27,6 +27,7 @@ import EmployeeLogin from "./pages/auth/employee/EmployeeLogin.jsx";
 import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx";
 import ScheduleManagement from "./pages/employee/ScheduleManagement.jsx";
 import RecordManagement from "./pages/employee/RecordManagement.jsx";
+import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistRoute.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -143,6 +144,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "/recepcionist",
+    element: <ProtectedReceptionistRoute />,
     children: [
       {
         id: "recepcionist-dashboard",
