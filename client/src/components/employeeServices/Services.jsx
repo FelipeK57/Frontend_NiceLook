@@ -1,14 +1,18 @@
+import { useEffect, useState } from "react";
 import { addEmployeeService, deleteEmployeeService } from "../../Api/employeeServices/employeeServicesApi"
 import ButtonCustom from "../global/ButtonCustom"
 import PropTypes from "prop-types"
 
-function Services({ isSelected, service, reloadList, employeeService }) {
+function Services({ isSelected, service, reloadList, employeeService, establishmentServices }) {
     Services.propTypes = {
         isSelected: PropTypes.bool,
         service: PropTypes.object,
         reloadList: PropTypes.func,
-        employeeService: PropTypes.object
+        employeeService: PropTypes.object,
+        establishmentServices: PropTypes.array
     }
+
+    const [selectedService, setSelectedService] = useState(null)
 
     function handleAddService() {
         const promise = new Promise((resolve, reject) => {
@@ -28,7 +32,7 @@ function Services({ isSelected, service, reloadList, employeeService }) {
         return promise
     }
 
-    function handleDeleteService(){
+    function handleDeleteService() {
         const promise = new Promise((resolve, reject) => {
             const response = deleteEmployeeService(employeeService.employee, employeeService.service)
             setTimeout(() => {
@@ -36,14 +40,25 @@ function Services({ isSelected, service, reloadList, employeeService }) {
                 reject("Ocurrio un error")
             });
         });
-        promise.then((resolve) =>{
+        promise.then((resolve) => {
             console.log(resolve)
             reloadList()
         });
-        promise.catch((error) =>{
+        promise.catch((error) => {
             console.log(error)
         })
     }
+
+
+
+    useEffect(() => {
+
+        establishmentServices.find ((establishmentService) => {
+            establishmentService.id === employeeService?.service ? setSelectedService(establishmentService) : null
+        })
+
+    }, [establishmentServices, employeeService])
+
 
     return (
         <div className="flex flex-row w-full border-slate-200 border-2 rounded-2xl p-4 gap-2">
@@ -52,11 +67,11 @@ function Services({ isSelected, service, reloadList, employeeService }) {
             </div>
             <div className="w-full flex flex-col">
                 <div className="flex flex-row justify-between items-center">
-                    <h3 className="sm:text-2xl text-lg text-zinc-950 font-bold">{service?.name}</h3>
+                    <h3 className="sm:text-2xl text-lg text-zinc-950 font-bold">{selectedService?.name ? selectedService?.name : service?.name}</h3>
                     <h3>Votacion</h3>
                 </div>
                 <div className="flex flex-row justify-between items-center">
-                    <h4>Precio: ${service?.price}</h4>
+                    <h4>Precio: ${ selectedService?.price ? selectedService?.price : service?.price}</h4>
                     <ButtonCustom onPress={isSelected ? handleDeleteService : handleAddService} isIconOnly classStyles={"rounded-full bg-red-transparent border-2 border-slate-200    "}>
                         {!isSelected ?
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

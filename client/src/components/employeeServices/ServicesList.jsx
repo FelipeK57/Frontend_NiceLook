@@ -5,6 +5,7 @@ import {
   getEmployeeServices,
   getEstablishmentServices,
 } from "../../Api/employeeServices/employeeServicesApi";
+import Cookies from "js-cookie";
 
 function ServicesList() {
   const [establishmentServices, setEstablishmentServices] = useState([]);
@@ -12,14 +13,14 @@ function ServicesList() {
 
   function loadEmployeeServices() {
     const promise = new Promise((resolve, reject) => {
-      const response = getEmployeeServices(1);
+      const response = getEmployeeServices(Cookies.get("employee_id"));
       setTimeout(() => {
         resolve(response);
         reject("Ocurrio un error");
       }, 0);
     });
     promise.then((resultado) => {
-      console.log(resultado.data);
+      console.log("resultado de la peticion de servicios de empleado: ",resultado.data);
       setEmployeeServices(resultado.data);
     });
     promise.catch((error) => {
@@ -31,7 +32,7 @@ function ServicesList() {
   useEffect(() => {
     function loadEstablishmentServices() {
       const promise = new Promise((resolve, reject) => {
-        const response = getEstablishmentServices(1);
+        const response = getEstablishmentServices(Cookies.get("establishmentId"));
         setTimeout(() => {
           // si todo va bien, se llama a resolve
           resolve(response);
@@ -39,11 +40,11 @@ function ServicesList() {
         }, 0);
       });
       promise.then((resultado) => {
-        console.log(resultado.data);
+        console.log("resultado de la peticion de servicios de establecimiento: ",resultado.data);
         setEstablishmentServices(resultado.data.services);
       });
       promise.catch((error) => {
-        console.log(error);
+        console.log("resultado de la peticion de servicios de establecimiento: ",error);
       });
       return promise;
     }
@@ -68,6 +69,8 @@ function ServicesList() {
               service={employeeService}
               reloadList={loadEmployeeServices}
               employeeService={employeeService}
+              isSelected={true}
+              establishmentServices={establishmentServices}
             />
           ))}
         </div>
@@ -107,6 +110,7 @@ function ServicesList() {
               service={service}
               reloadList={loadEmployeeServices}
               employeeService={service}
+              establishmentServices={establishmentServices}
             />
           ))}
         </div>
