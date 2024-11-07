@@ -128,15 +128,15 @@ const routes = createBrowserRouter([
             element: <EmployeeServicesManagement />,
           },
           {
-            id:"employee-schedule",
+            id: "employee-schedule",
             path: "schedule",
-            element: <ScheduleManagement/>,
+            element: <ScheduleManagement />,
           },
           {
-          id:"employee-record",
-          path: "record",
-          element: <RecordManagement/>,
-        },
+            id: "employee-record",
+            path: "record",
+            element: <RecordManagement />,
+          },
         ],
       },
     ],
@@ -152,15 +152,15 @@ const routes = createBrowserRouter([
           {
             id: "recepcionist-appointments",
             path: "appointments",
-            element: <Appointments />
+            element: <Appointments />,
           },
           {
             id: "recepcionist-finance",
             path: "finance",
-            element: <SalesPanel/>
-          }
-        ]
-      }
+            element: <SalesPanel />,
+          },
+        ],
+      },
     ],
   },
 ]);

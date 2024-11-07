@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { createEmployeeSchedule, getEmployeeSchedule } from "../../Api/employee/employee";
+import {
+  createEmployeeSchedule,
+  getEmployeeSchedule,
+} from "../../Api/employee/employee";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import Day from "../../components/appointmentsEmployee/Day";
 import ScheduleModal from "../../components/appointmentsEmployee/ScheduleModal";
@@ -20,7 +23,7 @@ const Agenda = () => {
   );
 
   useEffect(() => {
-    dayjs.locale('es');
+    dayjs.locale("es");
   }, []);
 
   const selectDate = (e) => {
@@ -45,7 +48,7 @@ const Agenda = () => {
       setTimeout(() => {
         resolve(response);
         reject("Ocurrio un error");
-      }, 0)
+      }, 0);
     });
 
     promise.then((response) => {
@@ -56,7 +59,9 @@ const Agenda = () => {
     promise.catch((error) => {
       if (error) {
         if (error.response && error.response.status === 400) {
-          setError("Parámetros de fecha inválidos. Por favor verifica el año, mes y día.");
+          setError(
+            "Parámetros de fecha inválidos. Por favor verifica el año, mes y día."
+          );
         } else if (error.response && error.response.status === 404) {
           setError("No hay citas pendientes para esta fecha.");
         } else {
@@ -77,25 +82,32 @@ const Agenda = () => {
 
   // Nueva función para gestionar la acción de guardar en el modal
 
-
   const handleSaveSchedule = async (scheduleData) => {
     try {
-        const response = await createEmployeeSchedule(employeeId, scheduleData);
-        if (response.status === 201) {
-            console.log("Horario guardado exitosamente:", response.data);
-            fetchAppointments(selectedDate);
-            onOpenChange(false);
-        }
+      const response = await createEmployeeSchedule(employeeId, scheduleData);
+      if (response.status === 201) {
+        console.log("Horario guardado exitosamente:", response.data);
+        fetchAppointments(selectedDate);
+        onOpenChange(false);
+      }
     } catch (error) {
-        console.error("Error al guardar el horario:", error.response?.data || error.message);
-        alert("Hubo un problema al guardar el horario: " + (error.response?.data?.message || error.message));
+      console.error(
+        "Error al guardar el horario:",
+        error.response?.data || error.message
+      );
+      alert(
+        "Hubo un problema al guardar el horario: " +
+          (error.response?.data?.message || error.message)
+      );
     }
-};
+  };
 
   return (
     <div className="p-6">
       <div className="flex items-center mb-4">
-        <h3 className="text-5xl text-[#252527] font-bold ml-4 p-4">Mi agenda</h3>
+        <h3 className="text-5xl text-[#252527] font-bold ml-4 p-4">
+          Mi agenda
+        </h3>
         <ButtonCustom
           name="Gestionar Horario"
           classStyles={"size-15 text-base left-8 border-gray-300"}
@@ -103,7 +115,7 @@ const Agenda = () => {
           onPress={onOpen}
         />
         <div className="ml-auto">
-          <DatePicker 
+          <DatePicker
             value={date}
             onChange={(e) => selectDate(e)}
             label="Fecha"
@@ -116,19 +128,25 @@ const Agenda = () => {
       <div className="flex relative pb-6 gap-8">
         <div className="flex flex-row gap-6 w-full overflow-auto scrollbar scrollbar-thumb-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300">
           {error ? (
-            <p className="text-red-500 text-2xl ml-8">{'No hay citas pendientes'}</p>
+            <p className="text-red-500 text-2xl ml-8">
+              {"No hay citas pendientes"}
+            </p>
           ) : (
-            <Day day={day} date={date} appointments={appointments.appointments} />
+            <Day
+              day={day}
+              date={date}
+              appointments={appointments.appointments}
+            />
           )}
         </div>
       </div>
 
       <ScheduleModal
-    isOpen={isOpen}
-    onOpenChange={onOpenChange}
-    onSave={handleSaveSchedule}
-    employeeId={employeeId} // Pasar el employeeId para cargar el horario
-/>
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onSave={handleSaveSchedule}
+        employeeId={employeeId} // Pasar el employeeId para cargar el horario
+      />
     </div>
   );
 };

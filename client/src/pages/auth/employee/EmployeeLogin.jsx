@@ -89,8 +89,8 @@ function EmployeeLogin() {
             // Guardar los datos del usuario en Zustand
             login(decoded, access, refresh);
 
-            // navigate("/receptionist/dashboard/services");
-            console.log("inicio de session como recepcionista completado correctamente");
+            navigate("/recepionist/dashboard/finance");
+
         })
         promise.catch((error) => {
             console.log(error.message);

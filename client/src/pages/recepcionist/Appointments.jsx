@@ -45,7 +45,7 @@ function Appointments() {
         cliente: nombreCliente, // Nombre del cliente
         servicio: cita.services.map((s) => s.name).join(", "), // Unir nombres de servicios
         categoria: cita.services.map((s) => s.category).join(", "), // Unir nombres de categorías
-        precio: cita.total, // Precio total
+        precio: cita.total_price, // Precio total
         tiempo: 30, // Tiempo estimado (puede variar)
         estado: cita.estate, // Estado de la cita
         fecha: cita.date, // Fecha de la cita

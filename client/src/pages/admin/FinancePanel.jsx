@@ -52,26 +52,32 @@ function FinancePanel() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const day = date.toDate().getDate();
-      const month = date.toDate().getMonth() + 1;
-      const year = date.toDate().getFullYear();
-      const response = await axios.get(
-        "http://localhost:8000/establisment/get-filter-payments-product/1/",
-        {
-          params: {
-            day: day,
-            month: month,
-            year: year,
-          },
-        }
-      );
-      setEarningsProducts(response.data.ganancia_establecimiento);
-      console.log(response.data.ganancia_establecimiento);
-      setProducts(response.data.product_payments);
-      console.log(response.data.product_payments);
+      try {
+        const day = date.toDate().getDate();
+        const month = date.toDate().getMonth() + 1;
+        const year = date.toDate().getFullYear();
+        const response = await axios.get(
+          `http://localhost:8000/receptionist/products_sold/`,
+          {
+            params: {
+              day: day,
+              month: month,
+              year: year,
+              id_establisment: establishmentId,
+            },
+          }
+        );
+        console.log(response.data.products);
+        console.log(response.data.total);
+        setEarningsProducts(response.data.total);
+        setProducts(response.data.products);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchData();
   }, [date]);
+  
   return (
     <main className="h-screen flex flex-col py-6 gap-4 px-10">
       <header className="flex items-center justify-between">

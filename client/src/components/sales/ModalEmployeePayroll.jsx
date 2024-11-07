@@ -14,7 +14,7 @@ import Cookies from "js-cookie";
 
 function ModalEmployeePayroll({ isOpen, onClose, day, month, year }) {
   const [payroll, setPayroll] = useState(0);
-  const [code, setCode] = useState(null);
+  const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState("");
@@ -58,7 +58,7 @@ function ModalEmployeePayroll({ isOpen, onClose, day, month, year }) {
   };
 
   return (
-    <Modal size="md" backdrop="blur" isOpen={isOpen} onClose={onClose}>
+    <Modal size="sm" backdrop="blur" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
           <h1 className="text-4xl font-bold">Pago del empleado</h1>
