@@ -25,6 +25,8 @@ import SalesPanel from "./pages/recepcionist/SalesPanel.jsx";
 import Appointments from "./pages/recepcionist/Appointments.jsx";
 import EmployeeLogin from "./pages/auth/employee/EmployeeLogin.jsx";
 import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx";
+import ScheduleManagement from "./pages/employee/ScheduleManagement.jsx";
+import RecordManagement from "./pages/employee/RecordManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -125,6 +127,16 @@ const routes = createBrowserRouter([
             path: "services",
             element: <EmployeeServicesManagement />,
           },
+          {
+            id:"employee-schedule",
+            path: "schedule",
+            element: <ScheduleManagement/>,
+          },
+          {
+          id:"employee-record",
+          path: "record",
+          element: <RecordManagement/>,
+        },
         ],
       },
     ],

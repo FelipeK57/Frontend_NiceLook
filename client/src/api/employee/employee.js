@@ -1,8 +1,8 @@
-import axiox from "axios";
+import axios from "axios";
 
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
-const EmployeesApi = axiox.create({
+const EmployeesApi = axios.create({
     baseURL: "http://localhost:8000/employee",
 });
 
@@ -39,18 +39,43 @@ export function updateEmployee(idUser, name, last_name, phone, state) {
         last_name: last_name,
         phone: phone,
         state: state
-    })
+    });
 }
 
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
-const CategoryApi = axiox.create({
+const CategoryApi = axios.create({
     baseURL: "http://localhost:8000/category",
 });
 
 export function getCategories() {
     return CategoryApi.get("/category_list/")
 }
+
+export function getEmployeeSchedule(employeeId, year, month, day) {
+    return EmployeesApi.get(`/schedule_employee/${employeeId}/?year=${year}&month=${month}&day=${day}`);
+}
+
+export function getHistoryAppointments(employeeId, year, month, day) {
+    return EmployeesApi.get(`/history_appointments/${employeeId}/?year=${year}&month=${month}&day=${day}`);
+}
+
+
+// Función para crear el horario de un empleado
+export function createEmployeeSchedule(employeeId, data) {
+    return EmployeesApi.post(`/create_time/${employeeId}/`, data);
+}
+
+// Obtiene el horario de un empleado
+export function getEmployeeSchedules(employeeId) {
+    return EmployeesApi.get(`/get_time/${employeeId}/`);
+}
+
+// Actualiza el horario de un empleado
+export function updateEmployeeSchedule(timeId, data) {
+    return EmployeesApi.patch(`/update_time/${timeId}/`, data);
+}
+
 
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
