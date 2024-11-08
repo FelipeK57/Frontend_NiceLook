@@ -59,6 +59,7 @@ function EmployeeLogin() {
             }, 0)
         })
         promise.then((response) => {
+            console.log(response);
             const access = response.data.access_token;
             const refresh = response.data.refresh_token;
             const decoded = jwtDecode(response.data.access_token);
