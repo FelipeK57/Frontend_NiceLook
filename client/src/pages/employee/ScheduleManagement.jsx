@@ -11,6 +11,7 @@ import { DatePicker } from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/react";
 import dayjs from "dayjs";
 import { parseDate } from "@internationalized/date";
+import Cookies from "js-cookie";
 
 const Agenda = () => {
   const fecha = new Date();
@@ -34,7 +35,7 @@ const Agenda = () => {
   const [appointments, setAppointments] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [error, setError] = useState(null);
-  const employeeId = 1;
+  const [employeeId, setEmployeeId] = useState(Cookies.get("id_employee"));
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const fetchAppointments = (date) => {

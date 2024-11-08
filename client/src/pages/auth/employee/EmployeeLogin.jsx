@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { loginEmployee } from "../../../Api/employee/employee";
 import useAuthStore from "../../../stores/useAuthStore";
 import { loginReceptionist } from "../../../Api/receptionist/receptionistApi";
+import Cookies from "js-cookie";
 
 function EmployeeLogin() {
 
@@ -61,6 +62,8 @@ function EmployeeLogin() {
             const access = response.data.access_token;
             const refresh = response.data.refresh_token;
             const decoded = jwtDecode(response.data.access_token);
+            const id_employee = response.data.id_employee;
+            Cookies.set("id_employee", id_employee, { expires: 7 });
 
             // Guardar los datos del usuario en Zustand
             login(decoded, access, refresh);
