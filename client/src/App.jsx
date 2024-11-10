@@ -1,8 +1,13 @@
+import { Outlet } from "react-router-dom";
+
+import Navbar from "./components/ui/Navbar";
+
 function App() {
   return (
-    <div>
-      <h1>NiceLook.</h1>
-    </div>
+    <>
+      <Navbar />
+      <Outlet />
+    </>
   );
 }
 
