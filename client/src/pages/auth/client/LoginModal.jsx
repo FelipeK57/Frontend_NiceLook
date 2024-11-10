@@ -1,5 +1,6 @@
 import ButtonCustom from "@/components/global/ButtonCustom";
 import InputCustom from "@/components/global/InputCustom";
+import LogoNiceLook from "@/components/ui/LogoNiceLook";
 import {
   Modal,
   ModalContent,
@@ -7,8 +8,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
-  Link,
+  useDisclosure
 } from "@nextui-org/react";
 
 function LoginModal() {
@@ -19,26 +19,26 @@ function LoginModal() {
       <Button onPress={onOpen} color="primary">
         Iniciar Sesión
       </Button>
-      <Modal isOpen={isOpen} backdrop="blur" onOpenChange={onOpenChange} placement="top-center">
+      <Modal isOpen={isOpen} backdrop="blur" onOpenChange={onOpenChange} placement="center">
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                <h1 className="text-3xl font-bold">Inicia sesión</h1>
+                <h1 className="text-3xl font-bold">Inicia sesión en <LogoNiceLook /></h1>
               </ModalHeader>
               <ModalBody className="flex flex-col gap-6">
                 <InputCustom
-                  label={"Correo electronico"}
-                  placeholder={"email@gmail.com"}
+                  label={"Correo electronico*"}
+                  placeholder={"Correo electronico"}
                   type={"email"}
                 />
-                <InputCustom label={"Contraseña"} placeholder={"contraseña"} type={"password"} />
+                <InputCustom label={"Contraseña*"} placeholder={"Contraseña"} type={"password"} />
               </ModalBody>
               <ModalFooter>
                 <Button onPress={onClose} variant="light" color="danger">
                   Cerrar
                 </Button>
-                <ButtonCustom primary name={"Continuar"} />
+                <ButtonCustom primary name={"Iniciar"} />
               </ModalFooter>
             </>
           )}
