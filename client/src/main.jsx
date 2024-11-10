@@ -28,7 +28,7 @@ import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx
 import ScheduleManagement from "./pages/employee/ScheduleManagement.jsx";
 import RecordManagement from "./pages/employee/RecordManagement.jsx";
 import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistRoute.jsx";
-import ClientLogin from "./pages/auth/client/ClientLogin.jsx";
+import TestComponents from "./TestComponents.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -167,8 +167,8 @@ const routes = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
-    element: <ClientLogin />,
+    path: "/test_components",
+    element: <TestComponents />,
   },
 ]);
 
