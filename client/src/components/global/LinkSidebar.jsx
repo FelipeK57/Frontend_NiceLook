@@ -6,7 +6,6 @@ function LinkSidebar({ name, icon, path }) {
 
   const location = useLocation();
   useEffect(() => {
-    console.log(location.pathname);
     if (location.pathname.includes(path)) {
       setIsActive(true);
     } else {
