@@ -1,10 +1,20 @@
-import LoginModal from "./pages/auth/client/LoginModal";
-import RegisterModal from "./pages/auth/client/RegisterModal";
+import { Button } from "@nextui-org/react";
+import useAuthStore from "./stores/useAuthStore";
+import AuthModal from "./components/auth/AuthModal";
 function TestComponents() {
+  const { isAuthenticated, triggerAuthModal } = useAuthStore();
+
+  const handleProtectedAction = () => {
+    if (!isAuthenticated) {
+      triggerAuthModal();
+    } else {
+      console.log("Protected action executed");
+    }
+  };
   return (
     <main className="grid place-content-center gap-4 h-screen">
-      <LoginModal />
-      <RegisterModal />
+      <Button color="primary" onClick={handleProtectedAction}>Reservar cita</Button>
+      <AuthModal />
     </main>
   );
 }

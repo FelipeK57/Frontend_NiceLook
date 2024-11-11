@@ -102,7 +102,7 @@ function RegisterModal() {
   return (
     <>
       <Button onPress={onOpen} color="primary">
-        Registrate ahora
+        Registrarme
       </Button>
       <Modal
         isOpen={isOpen}

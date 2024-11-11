@@ -12,9 +12,10 @@ import {
 } from "@nextui-org/react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-import { set } from "react-hook-form";
+import useAuthStore from "@/stores/useAuthStore";
 
 function LoginModal() {
+  const { login, triggerAuthModal } = useAuthStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [email, setEmail] = useState("");
@@ -25,40 +26,45 @@ function LoginModal() {
   });
 
   const handleLogin = () => {
-    const newErrors = {
-      email: "",
-      password: "",
-    };
+    try {
+      const newErrors = {
+        email: "",
+        password: "",
+      };
 
-    if (!email) {
-      newErrors.email = "El correo es requerido";
+      if (!email) {
+        newErrors.email = "El correo es requerido";
+      }
+
+      if (!email.includes("@")) {
+        newErrors.email = "El correo no es valido: debe contener un @";
+      }
+
+      if (!password) {
+        newErrors.password = "La contraseña es requerida";
+      }
+
+      if (password.length < 6) {
+        newErrors.password = "La contraseña debe tener al menos 6 caracteres";
+      }
+
+      setError(newErrors);
+
+      if (Object.values(newErrors).some((error) => error !== "")) {
+        return;
+      }
+
+      console.log(email, password);
+      login();
+      setEmail("");
+      setPassword("");
+      setError({
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      console.error("Error al iniciar sesión", error);
     }
-
-    if (!email.includes("@")) {
-      newErrors.email = "El correo no es valido: debe contener un @";
-    }
-
-    if (!password) {
-      newErrors.password = "La contraseña es requerida";
-    }
-
-    if (password.length < 6) {
-      newErrors.password = "La contraseña debe tener al menos 6 caracteres";
-    }
-
-    setError(newErrors);
-
-    if (Object.values(newErrors).some((error) => error !== "")) {
-      return;
-    }
-
-    console.log(email, password);
-    setEmail("");
-    setPassword("");
-    setError({
-      email: "",
-      password: "",
-    });
   };
 
   const handleClose = () => {
@@ -74,7 +80,7 @@ function LoginModal() {
   return (
     <>
       <Button onPress={onOpen} color="primary">
-        Iniciar Sesión
+        Iniciar sesión
       </Button>
       <Modal
         isOpen={isOpen}
