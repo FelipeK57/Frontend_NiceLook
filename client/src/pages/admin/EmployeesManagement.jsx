@@ -3,7 +3,7 @@ import ButtonCustom from "../../components/global/ButtonCustom";
 import EmployeesList from "../../components/employees/EmployeesList";
 import { useDisclosure } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
-import { searchEmployees } from "../../Api/employee/employee";
+import { searchEmployees } from "../../api/employee/employee";
 import CreateEmployeeModal from "../../components/employees/EmployeeModal";
 
 function EmployeesManagement() {

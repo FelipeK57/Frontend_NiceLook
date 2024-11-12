@@ -28,12 +28,27 @@ import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx
 import ScheduleManagement from "./pages/employee/ScheduleManagement.jsx";
 import RecordManagement from "./pages/employee/RecordManagement.jsx";
 import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistRoute.jsx";
+import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
+import HomePage from "./pages/HomePage.jsx";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <div>Error Page</div>,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+        errorElement: <div>Error Page</div>,
+      },
+
+      {
+        path: "/@peluqueriastylospalmira",
+        element: <EstablishmentProfile />,
+        errorElement: <div>Error Page</div>,
+      },
+    ],
   },
   {
     path: "/dashboard",
