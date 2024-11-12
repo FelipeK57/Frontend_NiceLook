@@ -13,8 +13,7 @@ import {
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 
-function RegisterModal() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+function RegisterModal({ isOpen, onClose }) {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -101,9 +100,6 @@ function RegisterModal() {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
-        Registrarme
-      </Button>
       <Modal
         isOpen={isOpen}
         backdrop="blur"

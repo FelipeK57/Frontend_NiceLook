@@ -14,9 +14,8 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import useAuthStore from "@/stores/useAuthStore";
 
-function LoginModal() {
+function LoginModal({ isOpen, onClose }) {
   const { login, triggerAuthModal } = useAuthStore();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,9 +78,6 @@ function LoginModal() {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
-        Iniciar sesión
-      </Button>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
