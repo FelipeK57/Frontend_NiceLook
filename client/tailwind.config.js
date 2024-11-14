@@ -21,6 +21,9 @@ module.exports = {
       },
     },
     extend: {
+      aspectRatio: {
+        3.91: "3.91 / 1", // Aspect ratio 3.91:1
+      },
       fontFamily: {
         amaranth: ["Amaranth", "sans-serif"],
         onest: ["OnestVariable", "sans-serif"],
