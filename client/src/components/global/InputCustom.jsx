@@ -8,7 +8,11 @@ function InputCustom({
   isInvalid,
   errorMessage,
   placeholder,
+  required,
 }) {
+  if (required) {
+    label = label + "*";
+  }
   return (
     <Input
       className="m-0"
@@ -19,7 +23,7 @@ function InputCustom({
       labelPlacement="outside"
       variant="bordered"
       classNames={{
-        label: "font-semibold text-xl",
+        label: "font-semibold text-base 2xl:text-lg",
         inputWrapper: ["border-2", "border-slate-200", "px-4", "py-5", "m-0"],
       }}
       isInvalid={isInvalid}

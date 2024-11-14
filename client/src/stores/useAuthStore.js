@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 
 const useAuthStore = create((set) => {
+  // Obtener los tokens y decodificar el token de acceso
   const accessToken = Cookies.get(ACCESS_TOKEN);
   let userData = null;
 
@@ -23,24 +24,25 @@ const useAuthStore = create((set) => {
     // Acción para iniciar sesión y guardar los tokens
     login: (userData, access, refresh) => {
       set(
-        userData.establishment ? {
-        user: userData,
-        id_establishment: userData.establishment,
-        accessToken: access,
-        refreshToken: refresh,
-      }
-      :
-      {
-        user: userData,
-        accessToken: access,
-        refreshToken: refresh,
-      }
-    );
+        userData.establishment
+          ? {
+              user: userData,
+              id_establishment: userData.establishment,
+              accessToken: access,
+              refreshToken: refresh,
+            }
+          : {
+              user: userData,
+              accessToken: access,
+              refreshToken: refresh,
+            }
+      );
 
       // Guardar tokens en cookies
       Cookies.set(ACCESS_TOKEN, access, { expires: 7 });
       Cookies.set(REFRESH_TOKEN, refresh, { expires: 7 });
-      userData.establishment && Cookies.set("establishmentId", userData.establishment, { expires: 7 });
+      userData.establishment &&
+        Cookies.set("establishmentId", userData.establishment, { expires: 7 });
     },
 
     // Acción para cerrar sesión
@@ -53,6 +55,15 @@ const useAuthStore = create((set) => {
       Cookies.remove(ACCESS_TOKEN);
       Cookies.remove(REFRESH_TOKEN);
     },
+
+    // Autenticación cliente
+    isAuthenticated: false,
+    showModal: false,
+
+    loginClient: () => set({ isAuthenticated: true, showModal: false }),
+    logoutClient: () => set({ isAuthenticated: false }),
+    triggerAuthModal: () => set({ showModal: true }),
+    closeModal: () => set({ showModal: false }),
   };
 });
 

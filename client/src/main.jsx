@@ -31,6 +31,7 @@ import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistR
 import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
+import TestComponents from "./TestComponents.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -208,6 +209,10 @@ const routes = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/test_components",
+    element: <TestComponents />,
   },
 ]);
 
