@@ -11,40 +11,58 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Menu, UserRound } from "lucide-react";
+import RegisterModal from "@/pages/auth/client/RegisterModal";
+import LoginModal from "@/pages/auth/client/LoginModal";
+import { useState } from "react";
 
 function NavbarMenu() {
-  return (
-    <DropdownMenu>
-      <Button isIconOnly variant="bordered" radius="full">
-        <DropdownMenuTrigger>
-          <Menu />
-        </DropdownMenuTrigger>
-      </Button>
-      <DropdownMenuContent className="absolute -right-5 top-0 w-44">
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => console.log("Regístrate")}
-        >
-          {/* <Pencil /> */}
-          Regístrate
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => console.log("Iniciar sesión")}
-        >
-          {/* <Pencil /> */}
-          Iniciar sesión
-        </DropdownMenuItem>
+  const [isModalRegisterOpen, setIsModalRegisterOpen] = useState(false);
+  const [isModalLoginOpen, setIsModalLoginOpen] = useState(false);
 
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => console.log("Comparte tu empresa")}
-        >
-          {/* <Pencil /> */}
-          Comparte tu empresa
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+  const handleOpenLoginModal = () => setIsModalLoginOpen(true);
+  const handleCloseLoginModal = () => setIsModalLoginOpen(false);
+
+  const handleOpenRegisterModal = () => setIsModalRegisterOpen(true);
+  const handleCloseRegisterModal = () => setIsModalRegisterOpen(false);
+  return (
+    <>
+      <RegisterModal
+        isOpen={isModalRegisterOpen}
+        onClose={handleCloseRegisterModal}
+      />
+      <LoginModal isOpen={isModalLoginOpen} onClose={handleCloseLoginModal} />
+      <DropdownMenu>
+        <Button isIconOnly variant="bordered" radius="full">
+          <DropdownMenuTrigger>
+            <Menu />
+          </DropdownMenuTrigger>
+        </Button>
+        <DropdownMenuContent className="absolute -right-5 top-0 w-44">
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => handleOpenRegisterModal()}
+          >
+            {/* <Pencil /> */}
+            Regístrate
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => handleOpenLoginModal()}
+          >
+            {/* <Pencil /> */}
+            Iniciar sesión
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => console.log("Comparte tu empresa")}
+          >
+            {/* <Pencil /> */}
+            Comparte tu empresa
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
 

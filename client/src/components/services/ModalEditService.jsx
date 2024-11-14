@@ -68,6 +68,46 @@ function ModalEditService({
 
   const handleEditService = async () => {
     try {
+      const newErrors = {
+        name: "",
+        price: "",
+        commission: "",
+        category: "",
+        image: "",
+      };
+
+      if (!name) {
+        newErrors.name = "El nombre es requerido";
+      }
+
+      if (!price) {
+        newErrors.price = "El precio es requerido";
+      }
+
+      if (price <= 0) {
+        newErrors.price = "El precio debe ser mayor a 0";
+      }
+
+      if (!commission) {
+        newErrors.commission = "La comisión es requerida";
+      }
+
+      if (commission <= 0) {
+        newErrors.commission = "La comisión debe ser mayor a 0";
+      }
+
+      if (!category) {
+        newErrors.category = "La categoría es requerida";
+      }
+
+      if (!image) {
+        newErrors.image = "La imagen es requerida";
+      }
+
+      setError(newErrors);
+      if (Object.values(newErrors).some((error) => error !== "")) {
+        return;
+      }
       const formData = new FormData();
       formData.append("service_id", idService);
       formData.append("name", name);
@@ -89,6 +129,13 @@ function ModalEditService({
         }
       );
       onClose();
+      setError({
+        name: "",
+        price: "",
+        commission: "",
+        category: "",
+        image: "",
+      });
       console.log(response.data);
       window.location.reload();
     } catch (error) {

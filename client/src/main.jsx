@@ -30,6 +30,7 @@ import RecordManagement from "./pages/employee/RecordManagement.jsx";
 import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistRoute.jsx";
 import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import TestComponents from "./TestComponents.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -179,6 +180,10 @@ const routes = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/test_components",
+    element: <TestComponents />,
   },
 ]);
 
