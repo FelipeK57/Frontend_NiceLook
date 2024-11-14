@@ -60,8 +60,8 @@ const useAuthStore = create((set) => {
     isAuthenticated: false,
     showModal: false,
 
-    login: () => set({ isAuthenticated: true, showModal: false }),
-    logout: () => set({ isAuthenticated: false }),
+    loginClient: () => set({ isAuthenticated: true, showModal: false }),
+    logoutClient: () => set({ isAuthenticated: false }),
     triggerAuthModal: () => set({ showModal: true }),
     closeModal: () => set({ showModal: false }),
   };
