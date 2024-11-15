@@ -29,11 +29,12 @@ function ServiceCard({ service }) {
     >
       <CardBody className="overflow-visible p-0">
         <div className="aspect-square rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center">
-          {service.service?.image_base64 ? (
+          {service.image_base64 ? (
             <Image
-              src={service.service?.image_base64}
+              src={service.image_base64}
               alt="Imagen de perfil"
               className="object-cover w-full h-auto"
+              removeWrapper
             />
           ) : (
             <ImageIcon className="w-8 md:w-12 h-full text-neutral-400" />
@@ -41,8 +42,8 @@ function ServiceCard({ service }) {
         </div>
       </CardBody>
       <CardFooter className="text-small items-start flex flex-col gap-2 whitespace-nowrap pb-0">
-        <b>{service.service?.name}</b>
-        <p className="text-default-600 text-xs">${service.service?.price}</p>
+        <b>{service.name}</b>
+        <p className="text-default-600 text-xs">${service.price}</p>
         <ButtonCustom variant="bordered" classStyles="self-center">
           Elegir
         </ButtonCustom>
@@ -95,7 +96,8 @@ export default function EmployeeProfile() {
           },
         })
         .then((response) => {
-          setEmployee(response.data.employee);
+          setEmployee(response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -124,9 +126,9 @@ export default function EmployeeProfile() {
           <div className="grid gap-4 grid-cols-[auto,1fr]">
             {/* Imagen del empleado */}
             <div className="w-40 h-40 md:w-60 md:h-60 aspect-square rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center">
-              {employee.user?.image ? (
+              {employee.image ? (
                 <Image
-                  src={employee.user?.image}
+                  src={employee.image}
                   alt="Imagen de perfil"
                   className="object-cover w-full h-auto"
                 />
@@ -141,7 +143,7 @@ export default function EmployeeProfile() {
                 <Skeleton className="flex rounded-full w-2/3 h-5 md:h-6 mb-2" />
               ) : (
                 <h1 className="text-lg md:text-2xl font-bold mb-2">
-                  {employee.user?.first_name} {employee.user?.last_name}
+                  {employee.first_name} {employee.last_name}
                 </h1>
               )}
               <Chip variant="flat" color="success" className="mb-2">
@@ -152,7 +154,9 @@ export default function EmployeeProfile() {
               </h2>
               {/* Calificación */}
               <div className="flex font-bold flex-nowrap">
-                <h1>{employee.rating}/5⭐</h1>
+                <h1>
+                  {employee.rating}/5⭐({employee.reviews})
+                </h1>
               </div>
             </div>
           </div>
@@ -184,8 +188,8 @@ export default function EmployeeProfile() {
                   </div>
                 </Card>
               ))
-            : employee.employee_services?.map((service) => (
-                <ServiceCard key={service.id} service={service} />
+            : employee.services.map((service) => (
+                <ServiceCard key={service.id} service={service.service} />
               ))}
         </section>
       </article>
