@@ -30,6 +30,7 @@ import RecordManagement from "./pages/employee/RecordManagement.jsx";
 import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistRoute.jsx";
 import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
 
 const routes = createBrowserRouter([
@@ -48,6 +49,34 @@ const routes = createBrowserRouter([
         path: "/@peluqueriastylospalmira",
         element: <EstablishmentProfile />,
         errorElement: <div>Error Page</div>,
+        children: [
+          {
+            path: "services",
+            children: [
+              {
+                path: ":employeeId",
+                element: <EmployeeProfile />,
+                errorElement: <div>Error Page</div>,
+              },
+            ],
+          },
+          {
+            path: "store",
+            errorElement: <div>Error Page</div>,
+          },
+          {
+            path: "reviews",
+            errorElement: <div>Error Page</div>,
+          },
+          {
+            path: "employees",
+            errorElement: <div>Error Page</div>,
+          },
+          {
+            path: "about",
+            errorElement: <div>Error Page</div>,
+          },
+        ],
       },
     ],
   },

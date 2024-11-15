@@ -1,20 +1,28 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Link,
+  Outlet,
+  useParams,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
-import { Image, Button, Divider, Tabs, Tab } from "@nextui-org/react";
+import api from "@/api";
+
+import { Image, Button, Divider, Tabs, Tab, Skeleton } from "@nextui-org/react";
 import { Image as ImageIcon, Mail, Phone } from "lucide-react";
 
 import ServicesTab from "./establishment/ServicesTab";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
-    <div className="w-full h-full flex md:rounded-xl overflow-hidden border-b-1 md:border-1">
-      {backgroundImage ? (
+    <div className="w-full h-full aspect-[3.91] flex md:rounded-xl overflow-hidden border-b-1 md:border-1">
+      {backgroundImage | (backgroundImage !== " ") ? (
         <Image
           src={backgroundImage}
           alt="Imagen de fondo"
-          className="object-cover w-full h-auto"
+          className="object-cover w-full h-auto rounded-none"
         />
       ) : (
         <div className="w-full h-full flex items-center justify-center bg-neutral-100">
@@ -25,65 +33,108 @@ export const BackgroundImage = ({ backgroundImage }) => {
   );
 };
 
-export const LogoImage = ({ logoImage }) => {
+export const ProfileImage = ({ logoImage, className }) => {
   return (
-    <div className="absolute left-6 translate-y-32 w-24 h-24 md:left-6 lg:translate-y-48 md:w-40 md:h-40 rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center">
-      {logoImage ? (
+    <div
+      className={`${className} aspect-square rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center`}
+    >
+      {logoImage | (logoImage !== " ") ? (
         <Image
           src={logoImage}
-          alt="Imagen de logo"
-          className="object-cover w-full h-auto"
+          alt="Imagen de perfil"
+          className="object-cover rounded-xl w-full h-auto"
         />
       ) : (
-        <ImageIcon className="w-8 md:w-12 h-auto text-neutral-400" />
+        <ImageIcon className="w-8 md:w-12 h-full text-neutral-400" />
       )}
     </div>
   );
 };
 
 export default function EstablishmentProfile() {
+  const [loading, setLoading] = useState(true);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [logoImage, setLogoImage] = useState(null);
+  const [selectedTab, setSelectedTab] = useState("services");
+  const { employeeId } = useParams();
+  const location = useLocation().pathname;
+  const navigate = useNavigate();
 
-  const [establishment, setEstablishment] = useState({
-    name: "Stylos Peluquería",
-    location: {
-      city: "Palmira",
-      department: "Valle del Cauca",
-    },
-    phone: "+573151234567",
-    email: "",
-    logo: "",
-    background: "",
-  });
+  const [establishment, setEstablishment] = useState({});
+
+  // Esta lista de objetos contiene la información de las pestañas del establecimiento
+  // El componente es el contenido de la pestaña, en el mismo se puede renderizar
+  // un Outlet para rutas anidadas como se muestra con la pestaña de Servicios
+  // El componente anidado debe ubicarse en Main.jsx
 
   const establishmentTabs = [
     {
       key: "services",
       title: "Servicios",
-      content: <ServicesTab />,
+      component: employeeId ? <Outlet /> : <ServicesTab />,
     },
     {
       key: "store",
       title: "Tienda",
-      content: <h1>Tienda</h1>,
+      component: <h1>Tienda</h1>,
     },
     {
       key: "reviews",
       title: "Reseñas",
-      content: <h1>Reseñas</h1>,
+      component: <h1>Reseñas</h1>,
     },
     {
       key: "employees",
       title: "Empleados",
-      content: <h1>Empleados</h1>,
+      component: <h1>Empleados</h1>,
     },
     {
       key: "about",
       title: "Sobre nosotros",
-      content: <h1>Sobre nosotros</h1>,
+      component: <h1>Sobre nosotros</h1>,
     },
   ];
+
+  // Esta función se encarga de renderizar el contenido de la pestaña seleccionada
+  // OJO: Si hay rutas anidadas, implementar lógica de renderizado de outlet con context
+  // en establishmentTabs[] arriba ^
+  // También se debe setear la ruta anidada en Main.jsx
+
+  const renderTabContent = () => {
+    const selectedTabContent = establishmentTabs.find(
+      (tab) => tab.key === selectedTab
+    );
+    return selectedTabContent ? selectedTabContent.component : <ServicesTab />;
+  };
+
+  useEffect(() => {
+    const redirectInitPage = () => {
+      if (!location.includes(selectedTab)) {
+        navigate(`./${selectedTab}`, { replace: true });
+      }
+    };
+    redirectInitPage();
+  }, [location, selectedTab, navigate]);
+
+  useEffect(() => {
+    const fetchEstablishmentData = async () => {
+      await api
+        .get("establisment/info_establishment/")
+        .then((response) => {
+          setEstablishment(response.data);
+          setBackgroundImage(response.data.image_establishment?.image_banner);
+          setLogoImage(response.data.image_establishment?.image_logo);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .then(() => {
+          setLoading(false);
+        });
+    };
+    fetchEstablishmentData();
+  }, []);
 
   return (
     <main className="flex h-full p-0 md-p-4 md:px-16 lg:px-64">
@@ -91,14 +142,24 @@ export default function EstablishmentProfile() {
         {/* Imagenes del establecimiento */}
         <section className="relative flex w-full h-48 md:pt-4 md:h-64 lg:h-80">
           <BackgroundImage backgroundImage={backgroundImage} />
-          <LogoImage logoImage={logoImage} />
+          <ProfileImage
+            logoImage={logoImage}
+            className="absolute w-24 h-24 md:w-40 md:h-40 left-6 md:left-6 translate-y-32 lg:translate-y-48 z-10"
+          />
         </section>
 
         {/* Información del establecimiento */}
         <section className="flex flex-col w-full px-6 pb-2 mt-12 md:mt-16">
           <div className="grid grid-cols-[1fr_30%] items-start">
             {/* Nombre del establecimiento */}
-            <h1 className="text-2xl font-bold">{establishment.name}</h1>
+            <h1 className="text-2xl font-bold">
+              <React.Suspense
+                fallback={<Skeleton className="flex rounded-full text-2xl" />}
+              >
+                {establishment.information_establishment?.stylos_info?.name ||
+                  "Nombre no disponible"}
+              </React.Suspense>
+            </h1>
 
             {/* Calificación */}
             <div className="flex font-bold flex-nowrap justify-end">
@@ -109,20 +170,43 @@ export default function EstablishmentProfile() {
           <div className="grid grid-cols-1 mt-2 md:grid-cols-2 gap-4 items-start">
             <div className="flex flex-col">
               {/* Ubicación */}
-              <p className="text-md font-bold text-default-700">
-                📍 {establishment.location.city},{" "}
-                {establishment.location.department}
-              </p>
-              <Link className="text-md text-neutral-500 underline">
-                Dirección del establecimiento
-              </Link>
+              <React.Suspense
+                fallback={<Skeleton className="text-md flex rounded-full" />}
+              >
+                <p className="text-md font-bold text-default-700">
+                  📍{" "}
+                  {establishment.information_establishment?.stylos_info?.city}
+                </p>
+              </React.Suspense>
+              <React.Suspense
+                fallback={<Skeleton className="text-md flex rounded-full" />}
+              >
+                <Link className="text-md text-neutral-500 underline">
+                  {
+                    establishment.information_establishment?.stylos_info
+                      ?.address
+                  }
+                </Link>
+              </React.Suspense>
             </div>
             <div className="flex flex-col gap-2 md:justify-self-end">
               <p className="text-md font-bold md:text-right">Contacto</p>
               <div className="flex flex-nowrap gap-4">
-                <Button isIconOnly radius="full" variant="bordered">
-                  <Mail size={20} />
-                </Button>
+                {establishment.information_establishment?.stylos_info
+                  ?.contact_methods?.mail && (
+                  <Button
+                    isIconOnly
+                    radius="full"
+                    variant="bordered"
+                    onPress={() =>
+                      window.open(
+                        `mailto:${establishment.information_establishment?.stylos_info?.contact_methods?.mail}`
+                      )
+                    }
+                  >
+                    <Mail size={20} />
+                  </Button>
+                )}
                 <Button isIconOnly radius="full" variant="bordered">
                   <Phone size={20} />
                 </Button>
@@ -139,15 +223,16 @@ export default function EstablishmentProfile() {
             variant="underlined"
             fullWidth
             size="lg"
-            className=" sticky top-[134px] md:top-20 z-50 bg-white border-b-1 shadow-sm"
+            className=" sticky top-16 z-50 bg-white border-b-1 shadow-sm"
+            selectedKey={selectedTab}
+            onSelectionChange={setSelectedTab}
           >
             {establishmentTabs.map((tab) => (
               <Tab key={tab.key} title={tab.title}>
-                {tab.content}
+                {renderTabContent()}
               </Tab>
             ))}
           </Tabs>
-
           <Divider />
         </section>
       </article>
