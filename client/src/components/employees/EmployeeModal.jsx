@@ -7,32 +7,32 @@ import PropTypes from "prop-types";
 import { createEmployee, getCategories, updateEmployee } from "@/api/employee/employee";
 import Cookies from "js-cookie";
 
-const categories = [
-    {
-      id: 1,
-      name: "Barberia",
-    },
-    {
-      id: 2,
-      name: "SPA de uñas",
-    },
-    {
-      id: 3,
-      name: "SPA",
-    },
-    {
-      id: 4,
-      name: "Peluqueria",
-    },
-    {
-      id: 5,
-      name: "Maquillaje",
-    },
-    {
-      id: 6,
-      name: "Tatuajes"
-    }
-  ];
+// const categories = [
+//     {
+//         id: 1,
+//         name: "Barberia",
+//     },
+//     {
+//         id: 2,
+//         name: "SPA de uñas",
+//     },
+//     {
+//         id: 3,
+//         name: "SPA",
+//     },
+//     {
+//         id: 4,
+//         name: "Peluqueria",
+//     },
+//     {
+//         id: 5,
+//         name: "Maquillaje",
+//     },
+//     {
+//         id: 6,
+//         name: "Tatuajes"
+//     }
+// ];
 
 function CreateEmployeeModal(props) {
     CreateEmployeeModal.propTypes = {
@@ -56,27 +56,27 @@ function CreateEmployeeModal(props) {
     const employeeSpecialtyConverted = [];
 
     function onSubmit() {
-        
+
         if (!props.employee) {
             const establishmentId = Cookies.get("establishmentId");
             try {
                 employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
                 console.log(employeeSpecialtyConverted)
                 console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
-                createEmployee(establishmentId,employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
+                createEmployee(establishmentId, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
                     [props.onClose(), props.listRef.current.loadEmployees()];
                 });
             } catch (error) {
                 console.log(error)
             }
         } else {
-            try{
+            try {
                 console.log(employeeSpecialtyConverted)
-                updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeStatus).then(() => {
+                updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeStatus).then(() => {
                     props.onClose();
                     props.reloadList()
                 })
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         }
@@ -266,7 +266,7 @@ function CreateEmployeeModal(props) {
                                 </div>
                                 <div>
                                     <label className="font-bold" htmlFor="email">Correo</label>
-                                    <Input {...props.employee && { readOnly: true }}
+                                    <Input
                                         name="email"
                                         errorMessage="Por favor ingrese un correo valido"
                                         id="email"
