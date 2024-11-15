@@ -1,5 +1,5 @@
 // ServicesTab.js
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useState } from "react";
 import Categories from "@/components/services/Categories";
 import SelectCategorie from "@/components/services/SelectCategorie";
 
@@ -11,15 +11,18 @@ const UserCardList = lazy(() =>
 );
 
 export default function ServicesTab() {
+  // const [services, setServices] = useState([]);
+  const [selectCategory, setSelectCategory] = useState("Todos");
+
   return (
     <>
       <article className="md:flex md:gap-6 px-3 py-4">
         <section className="w-full md:w-1/3">
           <div className="block lg:hidden pb-4">
-            <SelectCategorie />
+            <SelectCategorie setSelectCategory={setSelectCategory} />
           </div>
           <div className="hidden lg:block sticky top-[140px]">
-            <Categories />
+            <Categories setSelectCategory={setSelectCategory} />
           </div>
         </section>
         <section className="w-full grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -47,7 +50,7 @@ export default function ServicesTab() {
               </Card>
             ))}
           >
-            <UserCardList />
+            <UserCardList filterQuery={selectCategory} />
           </Suspense>
         </section>
       </article>
