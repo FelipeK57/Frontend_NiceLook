@@ -38,7 +38,7 @@ function Categories({ setSelectCategory }) {
     },
     {
       id: 1,
-      name: "Barberia",
+      name: "Barbería",
     },
     {
       id: 2,
@@ -50,7 +50,7 @@ function Categories({ setSelectCategory }) {
     },
     {
       id: 4,
-      name: "Peluqueria",
+      name: "Peluquería",
     },
     {
       id: 5,
