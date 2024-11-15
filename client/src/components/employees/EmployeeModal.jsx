@@ -54,36 +54,49 @@ function CreateEmployeeModal(props) {
     const employeeSpecialtyConverted = [];
 
     function onSubmit() {
-        if (validPhone) {
-            setEmployeePhone(undefined)
-        }
-        if (validEmail) {
-            setEmployeeEmail(undefined)
-        }
-        
         setIsChanged(true);
-        if (!props.employee) {
-            const establishmentId = Cookies.get("establishmentId");
-            try {
-                employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
-                console.log(employeeSpecialtyConverted)
-                console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
-                createEmployee(establishmentId, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
-                    [props.onClose(), props.listRef.current.loadEmployees()];
-                });
-            } catch (error) {
-                console.log(error)
+        const promise = new Promise((resolve) => {
+            if (validPhone) {
+                setEmployeePhone(undefined)
             }
-        } else {
-            try {
-                console.log(employeeSpecialtyConverted)
-                updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeStatus).then(() => {
-                    validEmail || validName || validLastName || validPhone || validSpecialty ? null : [props.reloadList(), props.onClose()]
+            if (validEmail) {
+                setEmployeeEmail(undefined)
+            }
+            setTimeout(() => {
+                resolve();
+            }, 0);
+        })
+        const timer = setTimeout(() => {
+            if (!validEmail && !validName && !validLastName && !validPhone) {
+                promise.then(() => {
+                    if (!props.employee) {
+                        const establishmentId = Cookies.get("establishmentId");
+                        try {
+                            employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
+                            console.log(employeeSpecialtyConverted)
+                            console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
+                            createEmployee(establishmentId, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
+                                [props.onClose(), props.listRef.current.loadEmployees()];
+                            });
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    } else {
+                        try {
+                            console.log(employeeSpecialtyConverted)
+                            updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeStatus).then(() => {
+                                validEmail || validName || validLastName || validPhone || validSpecialty ? null : [props.reloadList(), props.onClose()]
+                            })
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
                 })
-            } catch (error) {
-                console.log(error)
+            }else{
+                null
             }
-        }
+        }, 1000);
+        return () => clearTimeout(timer);
     }
 
     useEffect(() => {
@@ -152,11 +165,7 @@ function CreateEmployeeModal(props) {
     const [ischanged, setIsChanged] = useState(false);
 
     useEffect(() => {
-        console.log(employeeFirstName, ischanged)
-        console.log(employeeLastName, ischanged)
-        console.log(employeePhone, ischanged)
-        console.log(employeeEmail, ischanged)
-        console.log(employeeSpecialty, ischanged)
+        console.log("validEmail", validEmail, "validName", validName, "validLastName", validLastName, "validPhone", validPhone, "validSpecialty", validSpecialty)
         if (ischanged) {
             if (employeeFirstName !== "" && employeeFirstName !== undefined) {
                 setValidName(false);
@@ -189,7 +198,7 @@ function CreateEmployeeModal(props) {
             setValidLastName(false);
             setValidPhone(false);
         }
-    }, [employeeFirstName, ischanged, employeeLastName, employeePhone, employeeEmail, employeeSpecialty]);
+    }, [employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialty, ischanged, validEmail, validName, validLastName, validPhone, validSpecialty]);
 
     const handleClose = () => {
         setIsChanged(false);
