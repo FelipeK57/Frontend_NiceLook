@@ -5,24 +5,52 @@ import { Image as Imageicon } from "lucide-react";
 import { Skeleton } from "@nextui-org/react";
 import api from "@/api";
 
-export default function UserCardList() {
+export default function UserCardList({ filterQuery }) {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      try {
-        const response = await api.get("establisment/get_employees/");
-        setUsers(response.data.employeesList || []);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+      await api
+        .get("establisment/get_employees/")
+        .then((response) => {
+          setUsers(response.data.employeesList || []);
+          console.log(response.data.employeesList);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .then(() => {
+          setLoading(false);
+        });
     };
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (filterQuery) {
+      if (filterQuery === "Todos") {
+        setFilteredEmployees(users);
+        return;
+      }
+
+      const filtered = users.filter((employee) => {
+        // Check if employee has employee_services
+        if (!employee.employee_services) return false;
+
+        // Check if any of the employee's services match the filter category
+        return employee.employee_services.some(
+          (employeeService) => employeeService.service.category === filterQuery
+        );
+      });
+
+      setFilteredEmployees(filtered);
+    } else {
+      setFilteredEmployees(users);
+    }
+  }, [filterQuery, users]);
 
   if (loading) {
     return Array.from({ length: 3 }).map((_, index) => (
@@ -45,7 +73,9 @@ export default function UserCardList() {
     ));
   }
 
-  return users.map((user, index) => (
+  const employeesToRender = filteredEmployees.length > 0 ? filteredEmployees : users;
+
+  return employeesToRender.map((user, index) => (
     <Card
       key={index}
       className="h-fit p-4"
@@ -72,7 +102,9 @@ export default function UserCardList() {
         <b>
           {user.user?.first_name} {user.user?.last_name}
         </b>
-        <p className="text-default-500 text-xs">{user?.rating}/5⭐</p>
+        <p className="text-default-500 text-xs">
+          {user?.rating ? user?.rating : "0"}/5⭐
+        </p>
         <Chip className="text-xs mt-2" color="success" variant="flat" size="sm">
           Disponible
         </Chip>
