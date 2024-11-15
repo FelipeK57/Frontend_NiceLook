@@ -54,14 +54,14 @@ function CreateEmployeeModal(props) {
     const employeeSpecialtyConverted = [];
 
     function onSubmit() {
-        setIsChanged(true);
         if (validPhone) {
             setEmployeePhone(undefined)
         }
         if (validEmail) {
             setEmployeeEmail(undefined)
         }
-
+        
+        setIsChanged(true);
         if (!props.employee) {
             const establishmentId = Cookies.get("establishmentId");
             try {
