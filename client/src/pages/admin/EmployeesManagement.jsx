@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react";
+import { Button, Input, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import EmployeesList from "../../components/employees/EmployeesList";
 import { useDisclosure } from "@nextui-org/react";
@@ -37,13 +37,36 @@ function EmployeesManagement() {
             setRefListUpdate(refList);
         }, 200);
         return () => clearTimeout(timer);
-    },[])
+    }, [])
 
     return (
         <main className="flex max-h-screen h-screen bg-[#ffffff]">
             <section className="flex flex-col gap-6 w-full py-8 px-4 md:px-10">
                 <div className="EmplyeesManagementheader flex justify-between pb-2 md:flex-row flex-col md:gap-0 gap-8">
-                    <h1 className="hidden lg:block text-4xl text-zinc-950 font-bold">Gestion de empleados</h1>
+                    <div className="flex gap-4 items-center">
+                        <h1 className="hidden lg:block text-4xl text-zinc-950 font-bold">Gestion de empleados</h1>
+                        <Popover placement="right">
+                            <PopoverTrigger>
+                                <Button
+                                    className="text-xl font-bold rounded-full shadow-sm border-1 border-slate-500 shadow-slate-500"
+                                    isIconOnly
+                                    size="sm"
+                                    variant="bordered">
+                                    ?
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <div className="px-1 py-2">
+                                    <div className="text-small font-bold">Ayuda</div>
+                                    <div className="text-tiny max-w-[350px]">
+                                        <p>
+                                            En este apartado usted podrá visualizar la información de los empleados registrados, editar dicha información o registrar nuevos empleados en su establecimiento.
+                                        </p>
+                                    </div>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+                    </div>
                     <div className="flex lg:hidden gap-4 items-center">
                         <ButtonCustom secondary isIconOnly classStyles="rounded-full 1/2lg:hidden flex" >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -86,7 +109,7 @@ function EmployeesManagement() {
                 <div className="EmployeesManagementBody">
                     <EmployeesList ref={refList} filteredEmployees={filteredEmployees.length !== 0 ? filteredEmployees : null} />
                 </div>
-                    <CreateEmployeeModal listRef={refListUpdate} isOpen={isOpen} onClose={onClose} backdrop={backdrop} />
+                <CreateEmployeeModal listRef={refListUpdate} isOpen={isOpen} onClose={onClose} backdrop={backdrop} />
             </section>
         </main>
     );

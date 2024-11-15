@@ -1,7 +1,6 @@
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Switch } from "@nextui-org/react";
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Switch } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 import EmployeeReviewsList from "./EmployeeReviewsList";
-import { useForm } from 'react-hook-form'
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { createEmployee, getCategories, updateEmployee } from "@/api/employee/employee";
@@ -56,13 +55,13 @@ function CreateEmployeeModal(props) {
 
     function onSubmit() {
         setIsChanged(true);
-        if(validPhone){
+        if (validPhone) {
             setEmployeePhone(undefined)
         }
-        if(validEmail){
+        if (validEmail) {
             setEmployeeEmail(undefined)
         }
-        
+
         if (!props.employee) {
             const establishmentId = Cookies.get("establishmentId");
             try {
@@ -237,8 +236,59 @@ function CreateEmployeeModal(props) {
             <ModalContent>
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
-                        <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar empleado" : "Crear empleado"}</h2>
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar empleado" : "Crear empleado"}</h2>
+                            <Popover placement="right">
+                                <PopoverTrigger>
+                                    <Button
+                                        className="text-xl font-bold rounded-full shadow-sm border-1 border-slate-500 shadow-slate-500"
+                                        isIconOnly
+                                        size="sm"
+                                        variant="bordered">
+                                        ?
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <div className="px-1 py-2">
+                                        <div className="text-small font-bold">Ayuda</div>
+                                        <div className="text-tiny max-w-[350px]">
+                                            <p>
+                                                {props.employee ? "En este formulario usted podra editar la informacion del empleado seleccionado y visualizar las reseñas del mismo" : "En este formulario usted deberá llenar los campos con la información del empleado que desea agregar"}.
+                                                <br />
+                                                <br />
+                                                Los campos son los siguientes:
+                                                <br />
+                                                <br />
+                                                <ul>
+                                                    <li>
+                                                        <b>Nombre:</b> Nombre o nombres del empleado.
+                                                    </li>
+                                                    <li>
+                                                        <b>Apellido:</b> Apellido o apellidos del empleado.
+                                                    </li>
+                                                    <li>
+                                                        <b>Teléfono:</b> Teléfono del empleado (deberá contener 10 dígitos).
+                                                    </li>
+                                                    <li>
+                                                        <b>Correo:</b> Correo del empleado (deberá contener un @ y un . para ser considerado válido).
+                                                    </li>
+                                                    <li>
+                                                        <b>Profesión:</b> Profesión del empleado (deberá seleccionar alguna de las opciones disponibles)
+                                                    </li>
+                                                    {props.employee &&
+                                                        <li>
+                                                            <b>Estado:</b> Estado del empleado (activo o inactivo).
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
                         {props.employee && <h3 className="text-zinc-500 text-base">Puede editar los campos</h3>}
+
                     </ModalHeader>
                     <ModalBody>
                         <form className="flex flex-col gap-6 sm:gap-8">
