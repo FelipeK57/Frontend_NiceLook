@@ -56,7 +56,7 @@ function CreateEmployeeModal(props) {
     const employeeSpecialtyConverted = [];
 
     function onSubmit() {
-
+        setIsChanged(true);
         if (!props.employee) {
             const establishmentId = Cookies.get("establishmentId");
             try {
@@ -77,6 +77,7 @@ function CreateEmployeeModal(props) {
                     props.reloadList()
                 })
             } catch (error) {
+                setIsChanged(true);
                 console.log(error)
             }
         }
@@ -140,6 +141,70 @@ function CreateEmployeeModal(props) {
         return () => clearTimeout(timer);
     }, [categorys])
 
+    const [validName, setValidName] = useState(false);
+    const [validLastName, setValidLastName] = useState(false);
+    const [validPhone, setValidPhone] = useState(false);
+    const [validEmail, setValidEmail] = useState(false);
+    const [validSpecialty, setValidSpecialty] = useState(false);
+    const [ischanged, setIsChanged] = useState(false);
+
+    useEffect(() => {
+        console.log(employeeFirstName, ischanged)
+        if (ischanged) {
+            if (employeeFirstName !== "" && employeeFirstName !== undefined) {
+                setValidName(false);
+            } else {
+                setValidName(true);
+            }
+            if(employeeLastName !== "" && employeeLastName !== undefined){
+                setValidLastName(false);
+            } else {
+                setValidLastName(true);
+            }
+            if(employeePhone !== "" && employeePhone !== undefined && employeePhone.length === 10){
+                setValidPhone(false);
+            } else {
+                setValidPhone(true);
+            }
+            if(employeeEmail !== "" && employeeEmail !== undefined && employeeEmail.includes("@") && employeeEmail.includes(".")){
+                setValidEmail(false);
+            } else {
+                setValidEmail(true);
+            }
+            if(employeeSpecialty !== "" && employeeSpecialty !== undefined){
+                setValidSpecialty(false);
+            } else {
+                setValidSpecialty(true);
+            }
+        } else {
+            setIsChanged(false);
+            setValidName(false);
+            setValidLastName(false);
+            setValidPhone(false);
+        }
+    }, [employeeFirstName, ischanged , employeeLastName, employeePhone, employeeEmail, employeeSpecialty]);
+
+    const handleClose = () => {
+        setIsChanged(false);
+        props.onClose();
+    }
+
+    const handlePhone = (e) => {
+        if(e.target.value.length === 10){
+            setEmployeePhone(e.target.value)
+        } else{
+            setEmployeePhone(undefined)
+        }
+    }
+
+    const handleEmail = (e) => {
+        if(e.target.value.includes("@") && e.target.value.includes(".")){
+            setEmployeeEmail(e.target.value)
+        } else{
+            setEmployeeEmail(undefined)
+        }
+    }
+
     return (
         <Modal {...props} size="2xl"
             classNames={
@@ -195,7 +260,7 @@ function CreateEmployeeModal(props) {
                                         type="text"
                                         placeholder="Nombres"
                                         variant="bordered"
-                                        isInvalid={errors.name}
+                                        isInvalid={validName}
                                         value={employeeFirstName}
                                         onChange={(e) => setEmployeeFirstName(e.target.value)}
                                         classNames={{
@@ -213,7 +278,7 @@ function CreateEmployeeModal(props) {
                                         name="last_name"
                                         errorMessage="Por favor ingrese un apellido"
                                         id="last_name"
-                                        isInvalid={errors.last_name}
+                                        isInvalid={validLastName}
                                         type="text"
                                         placeholder="Apellidos"
                                         variant="bordered"
@@ -243,15 +308,15 @@ function CreateEmployeeModal(props) {
                                     <label className="font-bold" htmlFor="phone">Telefono</label>
                                     <Input
                                         name="phone"
-                                        errorMessage="Por favor ingrese un numero telefonico"
+                                        errorMessage="Por favor ingrese un numero telefonico valido"
                                         id="phone"
                                         type="number"
                                         placeholder="Numero telefonico"
                                         variant="bordered"
-                                        inputMode="none"
-                                        isInvalid={errors.phone}
+                                        inputMode="numeric"
+                                        isInvalid={validPhone}
                                         value={employeePhone}
-                                        onChange={(e) => setEmployeePhone(e.target.value)}
+                                        onChange={(e) => handlePhone(e)}
                                         classNames={{
                                             label: "",
                                             input: [],
@@ -272,10 +337,10 @@ function CreateEmployeeModal(props) {
                                         id="email"
                                         type="email"
                                         placeholder="Correo electronico"
-                                        isInvalid={errors.email}
+                                        isInvalid={validEmail}
                                         variant="bordered"
                                         value={employeeEmail}
-                                        onChange={(e) => setEmployeeEmail(e.target.value)}
+                                        onChange={(e) => handleEmail(e)}
                                         classNames={{
                                             label: "",
                                             input: [],
@@ -303,7 +368,7 @@ function CreateEmployeeModal(props) {
                                         defaultSelectedKeys={`${employeeSpecialty}`}
                                         onChange={setEmployeeSpecialty}
                                         isRequired
-                                        isInvalid={errors.employeeSpecialty ? true : false}
+                                        isInvalid={validSpecialty}
                                         scrollShadowProps={{
                                             isEnabled: true
                                         }}
@@ -327,7 +392,7 @@ function CreateEmployeeModal(props) {
                             </div>
                             {props.employee ? (<EmployeeReviewsList />) : null}
                             <ModalFooter className={props.employee ? " !py-2 sm:py-4" : "py-4"}>
-                                <Button color="danger" variant="light" onPress={onClose}>
+                                <Button color="danger" variant="light" onPress={handleClose}>
                                     Cancelar
                                 </Button>
                                 <ButtonCustom primary name="Guardar" classStyles={"px-[5%]"} onPress={onSubmit} />
