@@ -6,8 +6,7 @@ const CartItem = ({ index }) => {
         <tr className="border-b">
             <td className="p-2 text-left">{index}</td>
             <td className="p-2 text-left">
-                {/* Imagen de ejemplo ajustada */}
-                <img src={imagen} alt="Producto" className="w-14 h-14 object-cover mx-auto border rounded-lg mb-4" />
+                <img src={imagen} alt="Producto" className="w-16 h-16 object-cover mx-auto border rounded-lg mb-4" />
             </td>
             <td className="p-2 text-left">Shampoo Savital control AntiCaspa prom. 2x1 550ml</td>
             <td className="p-2 text-left">12.000</td>

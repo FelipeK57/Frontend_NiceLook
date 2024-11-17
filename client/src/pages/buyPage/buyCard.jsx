@@ -1,16 +1,18 @@
 import Product from "../../components/ui/Product";
 import InputCart from "../../components/ui/InputCart";
 import { Button } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
 export default function BuyCard() {
     // Array de ejemplo para simular múltiples productos
-    const products = Array(9).fill(0); // Puedes reemplazar esto con datos reales de productos
+    const products = Array(9).fill(0);
+    const navigate = useNavigate(); // Puedes reemplazar esto con datos reales de productos
 
     return (
         <div>
             <div className="flex justify-between">
                 <InputCart className="ml-[18.5vw]" />
-                <Button isIconOnly radius="full" variant="bordered">
+                <Button isIconOnly radius="full" variant="bordered" onPress={() => {navigate("/shoppingCart")}}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

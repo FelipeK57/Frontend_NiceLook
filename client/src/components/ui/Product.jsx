@@ -1,8 +1,9 @@
 import ReviewComponent from "../../components/global/ReviewComponent";
 import ButtonCustom from "../../components/global/ButtonCustom";
-import { Tooltip } from "@nextui-org/react";
+import { Badge, Tooltip } from "@nextui-org/react";
 const Product = () => {
     return (
+        <Badge content="99+" shape="circle" color="warning" className="shadow-md shadow-slate-400 border-white">
         <div className="border rounded-lg shadow-lg p-4 w-80">
             {/* Imagen del producto */}
             <div className="flex justify-center border rounded-lg mb-4">
@@ -45,6 +46,7 @@ const Product = () => {
                 />
             </div>
         </div>
+        </Badge>
     );
 };
 

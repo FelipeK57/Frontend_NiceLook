@@ -31,6 +31,7 @@ import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistR
 import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import TestComponents from "./TestComponents.jsx";
+import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -49,6 +50,11 @@ const routes = createBrowserRouter([
         element: <EstablishmentProfile />,
         errorElement: <div>Error Page</div>,
       },
+      {
+      path:"/shoppingCart",
+      element: <ShoppingCart />,
+      errorElement: <div>Error Page</div>,
+    },
     ],
   },
   {

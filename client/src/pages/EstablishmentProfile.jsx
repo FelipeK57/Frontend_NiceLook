@@ -7,7 +7,6 @@ import { Image as ImageIcon, Mail, Phone } from "lucide-react";
 
 import ServicesTab from "./establishment/ServicesTab";
 import BuyCard from "./buyPage/buyCard";
-import ShoppingCart from "./buyPage/ShopingCart";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
@@ -73,7 +72,7 @@ export default function EstablishmentProfile() {
     {
       key: "reviews",
       title: "Reseñas",
-      content: <ShoppingCart />
+      content: <h1>Reseñas</h1>,
     },
     {
       key: "employees",
