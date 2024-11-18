@@ -14,6 +14,7 @@ import { Image, Button, Divider, Tabs, Tab, Skeleton } from "@nextui-org/react";
 import { Image as ImageIcon, Mail, Phone } from "lucide-react";
 
 import ServicesTab from "./establishment/ServicesTab";
+import ProfileReviews from "@/components/establishment/review/ProfileReviews";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
@@ -81,7 +82,7 @@ export default function EstablishmentProfile() {
     {
       key: "reviews",
       title: "Reseñas",
-      component: <h1>Reseñas</h1>,
+      component: <ProfileReviews />,
     },
     {
       key: "employees",
