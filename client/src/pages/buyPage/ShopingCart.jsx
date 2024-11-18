@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CartItem from '../../components/ui/CartItem';
+import CartItem from "../../components/ui/CartItem";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import { Button } from "@nextui-org/react";
-import { getCartDetails } from "../../Api/product/product"; 
+import { getCartDetails, completePurchase } from "../../Api/product/product";
 
 const ShoppingCart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -13,40 +13,77 @@ const ShoppingCart = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchCartDetails = async () => {
-            const items = await getCartDetails();
-            console.log("Productos obtenidos de getCartDetails:", items);
-            setCartItems(items);
-            calculateTotals(items);
-        };
+    const establishmentId = 1; // ID del establecimiento
+    const clientId = 1; // ID del cliente
 
-        fetchCartDetails();
+    const updateCart = async () => {
+        const items = await getCartDetails();
+        setCartItems(items);
+        calculateTotals(items);
+    };
+
+    useEffect(() => {
+        updateCart(); // Inicializa el carrito
     }, []);
 
     const calculateTotals = (items) => {
-        const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-        const discount = items.reduce((acc, item) => acc + (item.discount || 0) * item.quantity, 0); // Si `discount` no existe, usa 0.
+        const subtotal = items.reduce(
+            (acc, item) => acc + item.price * item.quantity,
+            0
+        );
+        const discount = items.reduce(
+            (acc, item) => acc + (item.discount || 0) * item.quantity,
+            0
+        );
         setSubtotal(subtotal);
         setDiscount(discount);
         setTotal(subtotal - discount);
+    };
 
-        console.log("Subtotal calculado:", subtotal);
-        console.log("Descuento calculado:", discount);
-        console.log("Total calculado:", subtotal - discount);
+    const handleCompletePurchase = async () => {
+        if (cartItems.length === 0) {
+            alert("El carrito está vacío. Agrega productos antes de generar el pedido.");
+            return;
+        }
+
+        try {
+            const response = await completePurchase(); // Llama a la API
+            alert(response.mensaje); // Muestra el mensaje de éxito
+            await updateCart(); // Actualiza el carrito (vacía el carrito tras completar la compra)
+            navigate("/"); // Redirige al inicio o a otra página después de la compra
+        } catch (error) {
+            console.error("Error al completar la compra:", error);
+            alert("Hubo un problema al generar el pedido. Inténtalo nuevamente.");
+        }
     };
 
     return (
-        <div className='p-14'>
-            <Button isIconOnly radius="full" variant="bordered" onPress={() => navigate(-1)}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        <div className="p-14">
+            <Button
+                isIconOnly
+                radius="full"
+                variant="bordered"
+                onPress={() => navigate(-1)}
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                    />
                 </svg>
             </Button>
             <h3 className="text-5xl text-[#252527] font-bold ml-8 mt-5 p-4">
                 Tu Carrito
             </h3>
-            <div className='flex justify-between mt-6 p-14'>
+            <div className="flex justify-between mt-6 p-14">
                 <div className="bg-white border shadow-md rounded-lg p-4 w-[70vw] h-[50vh] overflow-auto">
                     <table className="w-full text-left">
                         <thead>
@@ -62,7 +99,14 @@ const ShoppingCart = () => {
                         </thead>
                         <tbody>
                             {cartItems.map((product, index) => (
-                                <CartItem key={index} index={index + 1} product={product} />
+                                <CartItem
+                                    key={product.id} // Usa un identificador único como clave
+                                    index={index + 1}
+                                    product={product}
+                                    establishmentId={establishmentId}
+                                    clientId={clientId}
+                                    updateCart={updateCart}
+                                />
                             ))}
                         </tbody>
                     </table>
@@ -73,24 +117,41 @@ const ShoppingCart = () => {
                     </div>
                     <div className="mb-6">
                         <div className="flex flex-col">
-                            <span className='mb-4 text-lg font-semibold text-gray-950'>Subtotal:</span>
-                            <span className='text-2xl font-semibold text-gray-700 place-self-center'>${subtotal.toFixed(2)}</span>
+                            <span className="mb-4 text-lg font-semibold text-gray-950">
+                                Subtotal:
+                            </span>
+                            <span className="text-2xl font-semibold text-gray-700 place-self-center">
+                                ${subtotal.toFixed(2)}
+                            </span>
                         </div>
                     </div>
                     <div className="mb-6">
                         <div className="flex flex-col">
-                            <span className='mb-4 text-lg font-semibold text-gray-950'>Descuento:</span>
-                            <span className='text-2xl font-semibold text-gray-700 place-self-center'>${discount.toFixed(2)}</span>
+                            <span className="mb-4 text-lg font-semibold text-gray-950">
+                                Descuento:
+                            </span>
+                            <span className="text-2xl font-semibold text-gray-700 place-self-center">
+                                ${discount.toFixed(2)}
+                            </span>
                         </div>
                     </div>
                     <div className="mb-6">
                         <div className="flex flex-col">
-                            <span className='mb-6 text-lg font-semibold text-gray-950'>Total a pagar:</span>
-                            <span className='text-2xl font-semibold text-gray-700 place-self-center mb-6'>${total.toFixed(2)}</span>
+                            <span className="mb-6 text-lg font-semibold text-gray-950">
+                                Total a pagar:
+                            </span>
+                            <span className="text-2xl font-semibold text-gray-700 place-self-center mb-6">
+                                ${total.toFixed(2)}
+                            </span>
                         </div>
                     </div>
                     <div className="text-center">
-                        <ButtonCustom name="Generar pedido" classStyles={"w-26 text-base"} primary />
+                        <ButtonCustom
+                            name="Generar pedido"
+                            classStyles={"w-26 text-base"}
+                            primary
+                            onPress={handleCompletePurchase} // Asocia la funcionalidad
+                        />
                     </div>
                 </div>
             </div>

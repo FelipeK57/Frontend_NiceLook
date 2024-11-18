@@ -54,3 +54,35 @@ export const searchProductsByName = async (name, establisment_id) => {
         return [];
     }
 };
+
+export const removeProductFromCart = async (code) => {
+    try {
+        const response = await ProductApi.delete(`/delete_product_of_payment/`, {
+            data: { code }, // Enviar el cuerpo como data
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error removing product from cart:", error);
+        throw error;
+    }
+};
+
+export const deleteProduct = async (code) => {
+    try {
+        const response = await ProductApi.delete(`/delete_product/${code}/`);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting product:", error.response || error.message);
+        throw error;
+    }
+};
+
+export const completePurchase = async () => {
+    try {
+        const response = await ProductApi.post(`/complete_payment/`);
+        return response.data; // Devuelve el mensaje de éxito
+    } catch (error) {
+        console.error("Error completing purchase:", error.response || error.message);
+        throw error; // Lanza el error para manejarlo en el frontend
+    }
+};
