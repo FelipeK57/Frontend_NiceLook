@@ -1,18 +1,86 @@
+import { useEffect, useState } from "react";
 import Product from "../../components/ui/Product";
 import InputCart from "../../components/ui/InputCart";
 import { Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
+import { getProductsByEstablishment, searchProductsByName, addProductToCart } from "../../Api/product/product";
 
 export default function BuyCard() {
-    // Array de ejemplo para simular múltiples productos
-    const products = Array(9).fill(0);
-    const navigate = useNavigate(); // Puedes reemplazar esto con datos reales de productos
+    const [products, setProducts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const navigate = useNavigate();
+    const establishmentId = 1;
+    const clientId = 1; // ID del establecimiento, puede ser dinámico en una implementación completa
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
+    const fetchProducts = async () => {
+        const fetchedProducts = await getProductsByEstablishment(establishmentId);
+        setProducts(fetchedProducts.sort((a, b) => a.name.localeCompare(b.name)));
+    };
+
+
+    const [searchTimeout, setSearchTimeout] = useState(null);
+
+
+
+    const handleSearch = async (e) => {
+        const searchTerm = e.target.value;
+        setSearchTerm(searchTerm);
+
+        // Limpiar el timeout anterior para evitar llamadas excesivas
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        setSearchTimeout(setTimeout(async () => {
+            console.log('Buscando productos...');
+            if (searchTerm) {
+                try {
+                    const response = await searchProductsByName(searchTerm, establishmentId);
+                    console.log('Resultado de la búsqueda:', response);
+                    if (response?.products) {
+                        setProducts(response.products.sort((a, b) => a.name.localeCompare(b.name)));
+                        console.log('Productos actualizados:', response.products);
+                    } else {
+                        setProducts([]);
+                        console.log('No se encontraron productos');
+                    }
+                } catch (error) {
+                    console.error("Error searching products:", error);
+                    setProducts([]);
+                }
+            } else {
+                fetchProducts(); // Recargar los productos originales si no hay término de búsqueda
+                console.log('Recargando productos originales');
+            }
+        }, 500)); // 500ms de retardo
+    };
+
+    const handleAddToCart = async (productCode) => {
+        const date = new Date().toISOString().split("T")[0]; // Fecha en formato YYYY-MM-DD
+
+        const response = await addProductToCart(establishmentId, clientId, productCode, date);
+        if (response.mensaje) {
+            alert("Producto añadido al carrito con éxito");
+            fetchProducts();
+        } else {
+            alert(response.error || "Hubo un problema al añadir el producto al carrito");
+        }
+
+    };
 
     return (
         <div>
             <div className="flex justify-between">
-                <InputCart className="ml-[18.5vw]" />
-                <Button isIconOnly radius="full" variant="bordered" onPress={() => {navigate("/shoppingCart")}}>
+                <InputCart
+                    className="ml-[18.5vw]"
+                    onChange={handleSearch}
+                    value={searchTerm}
+                />
+                <Button isIconOnly radius="full" variant="bordered" onPress={() => navigate("/shoppingCart")}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -30,10 +98,9 @@ export default function BuyCard() {
                 </Button>
             </div>
 
-            {/* Contenedor de productos en una cuadrícula de 3 columnas */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mt-6">
-                {products.map((_, index) => (
-                    <Product key={index} />
+                {products.map((product) => (
+                    <Product key={product.id} product={product} onAddToCart={() => handleAddToCart(product.code)} />
                 ))}
             </div>
         </div>
