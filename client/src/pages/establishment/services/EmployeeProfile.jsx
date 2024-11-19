@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import api from "@/api";
+
 import {
   Chip,
   Card,
@@ -16,7 +18,7 @@ import {
 import { ChevronLeft, Image as ImageIcon, Search } from "lucide-react";
 
 import ButtonCustom from "@/components/global/ButtonCustom";
-import api from "@/api";
+import ScheduleDisplay from "@/components/employees/ScheduleDisplay";
 
 function ServiceCard({ service }) {
   return (
@@ -149,9 +151,10 @@ export default function EmployeeProfile() {
               <Chip variant="flat" color="success" className="mb-2">
                 Disponible
               </Chip>
-              <h2 className="title-lg text-neutral-600">
+              {/* <h2 className="title-lg text-neutral-600">
                 Horario: 10 am - 5 pm
-              </h2>
+              </h2> */}
+              <ScheduleDisplay timeData={employee.time} />
               {/* Calificación */}
               <div className="flex font-bold flex-nowrap">
                 <h1>
