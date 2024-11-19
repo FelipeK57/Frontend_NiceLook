@@ -1,5 +1,9 @@
 /* eslint-disable react/prop-types */
+import LoginModal from "@/pages/auth/client/LoginModal";
 import LogoNiceLook from "./LogoNiceLook";
+import RegisterModal from "@/pages/auth/client/RegisterModal";
+import ButtonCustom from "../global/ButtonCustom";
+import { useState } from "react";
 // import { Input, Button } from "@nextui-org/react";
 // import SearchIcon from "@/components/icons/SearchIcon";
 
@@ -66,6 +70,14 @@ import LogoNiceLook from "./LogoNiceLook";
 // };
 
 export default function Navbar() {
+  const [isModalRegisterOpen, setIsModalRegisterOpen] = useState(false);
+  const [isModalLoginOpen, setIsModalLoginOpen] = useState(false);
+
+  const handleOpenLoginModal = () => setIsModalLoginOpen(true);
+  const handleCloseLoginModal = () => setIsModalLoginOpen(false);
+
+  const handleOpenRegisterModal = () => setIsModalRegisterOpen(true);
+  const handleCloseRegisterModal = () => setIsModalRegisterOpen(false);
   return (
     <header className="sticky top-0 z-50 h-16 gap-4 items-center px-4 md:px-16 lg:px-64 grid grid-cols-2 justify-center bg-white border-b-2">
       <LogoNiceLook className="text-3xl md:text-4xl" />
@@ -79,6 +91,12 @@ export default function Navbar() {
         </Button>
       </div> */}
       {/* <SearchBar className="md:hidden col-span-2" /> */}
+      <div className="flex flex-row justify-end gap-4">
+        <RegisterModal isOpen={isModalRegisterOpen} onClose={handleCloseRegisterModal} />
+        <ButtonCustom action={handleOpenRegisterModal} primary name={"Registrate"} />
+        <LoginModal isOpen={isModalLoginOpen} onClose={handleCloseLoginModal} />
+        <ButtonCustom action={handleOpenLoginModal} primary name={"Iniciar sesión"} />
+      </div>
     </header>
   );
 }

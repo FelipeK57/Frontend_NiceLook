@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import useAuthStore from "@/stores/useAuthStore";
 import {
   Chip,
   Card,
@@ -17,6 +17,7 @@ import { ChevronLeft, Image as ImageIcon, Search } from "lucide-react";
 
 import ButtonCustom from "@/components/global/ButtonCustom";
 import api from "@/api";
+import AuthModal from "@/components/auth/AuthModal";
 
 function ServiceCard({ service }) {
   return (
@@ -52,14 +53,28 @@ function ServiceCard({ service }) {
   );
 }
 
+import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
+
 function ScheduleAppointment() {
+  const { isAuthenticated, triggerAuthModal } = useAuthStore();
+
+  const handleProtectedAction = () => {
+    if (isAuthenticated === false) {
+      triggerAuthModal();
+    } else {
+      console.log("Protected action executed");
+    }
+  };
   return (
-    <Card variant="bordered" className="w-full lg:w-64 h-fit rounded-xl">
+    <Card variant="bordered" className="w-full lg:w-72 h-fit rounded-xl">
       <CardBody className=" flex flex-col gap-2 p-4">
         <p>Selecciona un día:</p>
-        <DatePicker />
+        <DatePicker
+          minValue={today(getLocalTimeZone())}
+          defaultValue={today(getLocalTimeZone()).subtract({ days: 0 })}
+        />
         <p>Selecciona un horario:</p>
-        <TimeInput />
+        <TimeInput description="Formato 24 horas (00:00-23:59)" />
         <p>Busca o elige el servicio:</p>
         <Input
           placeholder="Buscar servicio"
@@ -67,13 +82,19 @@ function ScheduleAppointment() {
             label: "",
             input: [],
             innerWrapper: "",
-            inputWrapper: ["border-2", "border-slate-200", "px-6", "py-5"],
+            inputWrapper: ["border-2", "border-slate-200", "px-4", "py-5"],
           }}
           variant="bordered"
           endContent={<Search />}
+          description="Busca el servicio por nombre"
         />
         <p>Precio: $0</p>
-        <ButtonCustom variant="bordered" classStyles="self-center">
+        <AuthModal />
+        <ButtonCustom
+          action={handleProtectedAction}
+          variant="bordered"
+          classStyles="self-center"
+        >
           Agendar cita
         </ButtonCustom>
       </CardBody>
