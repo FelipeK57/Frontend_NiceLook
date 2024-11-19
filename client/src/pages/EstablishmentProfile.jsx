@@ -11,7 +11,10 @@ import {
 import api from "@/api";
 
 import { Image, Button, Divider, Tabs, Tab, Skeleton } from "@nextui-org/react";
-import { Image as ImageIcon, Mail, Phone } from "lucide-react";
+import { Image as ImageIcon, Mail, ExternalLink } from "lucide-react";
+import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import FacebookIcon from "@/components/icons/FacebookIcon";
+import InstagramIcon from "@/components/icons/IntagramIcon";
 
 import ServicesTab from "./establishment/ServicesTab";
 
@@ -51,7 +54,58 @@ export const ProfileImage = ({ logoImage, className }) => {
   );
 };
 
+const SocialButton = ({ platform, link, icon }) => {
+  if (!link) return null; // Si no hay link, no renderiza el botón
+
+  const handleClick = () => {
+    window.open(link, "_blank"); // Abre en una nueva pestaña
+  };
+
+  return (
+    <Button
+      isIconOnly
+      radius="full"
+      variant="bordered"
+      onClick={handleClick}
+      aria-label={platform}
+    >
+      {icon}
+    </Button>
+  );
+};
+
+const SocialLinks = ({ contactMethods }) => {
+  return (
+    <div style={{ display: "flex", gap: "10px" }}>
+      <SocialButton
+        platform="whatsapp"
+        link={`https://wa.me/+57${contactMethods.whatsapp}`}
+        icon={<WhatsappIcon size={"size-5"} />}
+      />
+      <SocialButton
+        platform="email"
+        link={`mailto:${contactMethods.mail}`}
+        icon={<Mail size={20} />}
+      />
+      <SocialButton
+        platform="facebook"
+        link={`https://www.facebook.com/${contactMethods.facebook}`}
+        icon={<FacebookIcon size={"size-5"} />}
+      />
+      <SocialButton
+        platform="instagram"
+        link={`https://www.instagram.com/${contactMethods.instagram?.replace(
+          "@",
+          ""
+        )}`}
+        icon={<InstagramIcon size={"size-5"} />}
+      />
+    </div>
+  );
+};
+
 export default function EstablishmentProfile() {
+  const [loading, setLoading] = useState(true);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [logoImage, setLogoImage] = useState(null);
   const [selectedTab, setSelectedTab] = useState("services");
@@ -141,6 +195,9 @@ export default function EstablishmentProfile() {
         })
         .catch((error) => {
           console.error(error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     };
     fetchEstablishmentData();
@@ -162,82 +219,74 @@ export default function EstablishmentProfile() {
         <section className="flex flex-col w-full px-6 pb-2 mt-12 md:mt-16">
           <div className="grid grid-cols-[1fr_30%] items-start">
             {/* Nombre del establecimiento */}
-            <h1 className="text-2xl font-bold">
-              <React.Suspense
-                fallback={
-                  <Skeleton className="flex rounded-full text-2xl md:text-3xl" />
-                }
-              >
+            {!loading ? (
+              <h1 className="text-2xl font-bold">
                 {establishment.information_establishment?.stylos_info?.name}
-              </React.Suspense>
-            </h1>
+              </h1>
+            ) : (
+              <Skeleton className="flex rounded-full w-64 h-8" />
+            )}
 
             {/* Calificación */}
             <div className="flex font-bold flex-nowrap justify-end">
-              <h1
-                onClick={() => setSelectedTab("reviews")}
-                className="hover:underline"
-              >
-                {establishment.information_establishment?.rating
-                  ? `${establishment.information_establishment?.rating}/5⭐ 
+              {!loading ? (
+                <h1
+                  onClick={() => setSelectedTab("reviews")}
+                  className="hover:underline"
+                >
+                  {establishment.information_establishment?.rating
+                    ? `${establishment.information_establishment?.rating}/5⭐ 
                   (${establishment.information_establishment?.reviews})`
-                  : "Sin calificación"}
-              </h1>
+                    : "Sin calificación"}
+                </h1>
+              ) : (
+                <Skeleton className="flex rounded-full w-32 h-6" />
+              )}
             </div>
           </div>
 
           <div className="grid grid-cols-1 mt-2 md:grid-cols-2 gap-4 items-start">
             <div className="flex flex-col">
               {/* Ubicación */}
-              <React.Suspense
-                fallback={<Skeleton className="text-md flex rounded-full" />}
-              >
-                <p className="text-md font-bold text-default-700">
+              {!loading ? (
+                <a
+                  target="_blank"
+                  href={`https://google.com/maps/place/${establishment.information_establishment?.stylos_info?.city}`}
+                  className="text-md font-bold text-default-700 hover:underline"
+                >
                   📍{" "}
-                  {establishment.information_establishment?.stylos_info?.city}
-                </p>
-              </React.Suspense>
-              <React.Suspense
-                fallback={<Skeleton className="text-md flex rounded-full" />}
-              >
+                  {establishment.information_establishment?.stylos_info?.city}{" "}
+                  <ExternalLink size={12} className="inline" />
+                </a>
+              ) : (
+                <Skeleton className="w-32 h-6 flex rounded-full mb-2" />
+              )}
+              {!loading ? (
                 <Link className="text-md text-neutral-500 underline">
                   {
                     establishment.information_establishment?.stylos_info
                       ?.address
                   }
                 </Link>
-              </React.Suspense>
+              ) : (
+                <Skeleton className="w-52 h-5 flex rounded-full" />
+              )}
             </div>
             <div className="flex flex-col gap-2 md:justify-self-end">
               <p className="text-md font-bold md:text-right">Contacto</p>
               <div className="flex flex-nowrap gap-4 w-fit md:self-end">
-                {establishment.information_establishment?.stylos_info
-                  ?.contact_methods?.mail && (
-                  <Button
-                    isIconOnly
-                    radius="full"
-                    variant="bordered"
-                    onPress={() =>
-                      window.open(
-                        `mailto:${establishment.information_establishment?.stylos_info?.contact_methods?.mail}`
-                      )
-                    }
-                  >
-                    <Mail size={20} />
-                  </Button>
-                )}
-                {establishment.information_establishment?.stylos_info
-                  ?.contact_methods?.phone && (
-                  <Button isIconOnly radius="full" variant="bordered">
-                    <Phone
-                      size={20}
-                      onPress={() =>
-                        window.open(
-                          `wa.me/+57${establishment.information_establishment?.stylos_info?.contact_methods?.phone}`
-                        )
+                {!loading ? (
+                  establishment.information_establishment?.stylos_info
+                    ?.contact_methods && (
+                    <SocialLinks
+                      contactMethods={
+                        establishment.information_establishment?.stylos_info
+                          ?.contact_methods
                       }
                     />
-                  </Button>
+                  )
+                ) : (
+                  <Skeleton className="flex rounded-full w-48 h-10" />
                 )}
               </div>
             </div>
