@@ -3,7 +3,10 @@ import LoginModal from "@/pages/auth/client/LoginModal";
 import LogoNiceLook from "./LogoNiceLook";
 import RegisterModal from "@/pages/auth/client/RegisterModal";
 import ButtonCustom from "../global/ButtonCustom";
+import { Button } from "@nextui-org/react";
 import { useState } from "react";
+import Cookies from "js-cookie";
+import useAuthStore from "@/stores/useAuthStore";
 // import { Input, Button } from "@nextui-org/react";
 // import SearchIcon from "@/components/icons/SearchIcon";
 
@@ -70,6 +73,7 @@ import { useState } from "react";
 // };
 
 export default function Navbar() {
+  const { logoutClient } = useAuthStore();
   const [isModalRegisterOpen, setIsModalRegisterOpen] = useState(false);
   const [isModalLoginOpen, setIsModalLoginOpen] = useState(false);
 
@@ -91,12 +95,42 @@ export default function Navbar() {
         </Button>
       </div> */}
       {/* <SearchBar className="md:hidden col-span-2" /> */}
-      <div className="flex flex-row justify-end gap-4">
-        <RegisterModal isOpen={isModalRegisterOpen} onClose={handleCloseRegisterModal} />
-        <ButtonCustom action={handleOpenRegisterModal} primary name={"Registrate"} />
-        <LoginModal isOpen={isModalLoginOpen} onClose={handleCloseLoginModal} />
-        <ButtonCustom action={handleOpenLoginModal} primary name={"Iniciar sesión"} />
-      </div>
+      {!Cookies.get("isAuthenticated") ? (
+        <div className="flex flex-row justify-end gap-4">
+          <RegisterModal
+            isOpen={isModalRegisterOpen}
+            onClose={handleCloseRegisterModal}
+          />
+          <ButtonCustom
+            action={handleOpenRegisterModal}
+            primary
+            name={"Registrate"}
+          />
+          <LoginModal
+            isOpen={isModalLoginOpen}
+            onClose={handleCloseLoginModal}
+          />
+          <ButtonCustom
+            action={handleOpenLoginModal}
+            primary
+            name={"Iniciar sesión"}
+          />
+        </div>
+      ) : (
+        <div className="flex justify-end">
+          <Button
+            onClick={() => {
+              logoutClient();
+              window.location.reload();
+            }}
+            className="w-1/4"
+            color="danger"
+            variant="light"
+          >
+            Cerrar sesión
+          </Button>
+        </div>
+      )}
     </header>
   );
 }

@@ -54,12 +54,13 @@ function ServiceCard({ service }) {
 }
 
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
+import Cookies from "js-cookie";
 
 function ScheduleAppointment() {
-  const { isAuthenticated, triggerAuthModal } = useAuthStore();
+  const { triggerAuthModal } = useAuthStore();
 
   const handleProtectedAction = () => {
-    if (isAuthenticated === false) {
+    if (!Cookies.get("isAuthenticated")) {
       triggerAuthModal();
     } else {
       console.log("Protected action executed");
