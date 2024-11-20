@@ -21,7 +21,7 @@ export default function UserCardList({ filterQuery }) {
           setUsers(employeesList);
           // Inicialmente mostrar todos los usuarios
           setFilteredEmployees(employeesList);
-          console.log(response.data.employeesList);
+          // console.log(response.data.employeesList);
         })
         .catch((error) => {
           console.error(error);
