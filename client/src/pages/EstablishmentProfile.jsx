@@ -191,7 +191,7 @@ export default function EstablishmentProfile() {
           setEstablishment(response.data);
           setBackgroundImage(response.data.image_establishment?.image_banner);
           setLogoImage(response.data.image_establishment?.image_logo);
-          console.log(response.data);
+          // console.log(response.data);
         })
         .catch((error) => {
           console.error(error);
