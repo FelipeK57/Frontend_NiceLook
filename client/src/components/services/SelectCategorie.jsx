@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 const categories = [
   {
+    id: 0,
+    name: "Todos",
+  },
+  {
     id: 1,
     name: "Barbería",
   },
