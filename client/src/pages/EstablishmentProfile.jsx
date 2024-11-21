@@ -75,6 +75,8 @@ const SocialButton = ({ platform, link, icon }) => {
 };
 
 const SocialLinks = ({ contactMethods }) => {
+  if (!contactMethods) return <span>Sin métodos de contacto</span>;
+
   return (
     <div style={{ display: "flex", gap: "10px" }}>
       <SocialButton
@@ -207,11 +209,11 @@ export default function EstablishmentProfile() {
     <main className="flex h-full p-0 md-p-4 md:px-16 lg:px-64">
       <article className="flex flex-nowrap flex-col w-full">
         {/* Imagenes del establecimiento */}
-        <section className="relative flex w-full h-48 md:pt-4 md:h-64 lg:h-80">
+        <section className="relative flex w-full h-48 md:pt-4 md:h-64 lg:h-80 2xl:h-[420px]">
           <BackgroundImage backgroundImage={backgroundImage} />
           <ProfileImage
             logoImage={logoImage}
-            className="absolute w-24 h-24 md:w-40 md:h-40 left-6 md:left-6 translate-y-32 lg:translate-y-48 z-10"
+            className="absolute w-24 h-24 md:w-40 md:h-40 left-6 md:left-6 translate-y-32 lg:translate-y-48 2xl:translate-y-72 z-10"
           />
         </section>
 
@@ -230,15 +232,17 @@ export default function EstablishmentProfile() {
             {/* Calificación */}
             <div className="flex font-bold flex-nowrap justify-end">
               {!loading ? (
-                <h1
-                  onClick={() => setSelectedTab("reviews")}
-                  className="hover:underline"
-                >
-                  {establishment.information_establishment?.rating
-                    ? `${establishment.information_establishment?.rating}/5⭐ 
-                  (${establishment.information_establishment?.reviews})`
-                    : "Sin calificación"}
-                </h1>
+                establishment.information_establishment?.rating ? (
+                  <h1
+                    onClick={() => setSelectedTab("reviews")}
+                    className="hover:underline cursor-pointer"
+                  >
+                    {establishment.information_establishment?.rating}/5⭐ (
+                    {establishment.information_establishment?.reviews})
+                  </h1>
+                ) : (
+                  <h1>Sin calificación</h1>
+                )
               ) : (
                 <Skeleton className="flex rounded-full w-32 h-6" />
               )}
