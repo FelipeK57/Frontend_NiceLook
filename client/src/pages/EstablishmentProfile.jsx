@@ -14,6 +14,7 @@ import { Image, Button, Divider, Tabs, Tab, Skeleton } from "@nextui-org/react";
 import { Image as ImageIcon, Mail, Phone } from "lucide-react";
 
 import ServicesTab from "./establishment/ServicesTab";
+import Cookies from "js-cookie";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
@@ -138,6 +139,7 @@ export default function EstablishmentProfile() {
           setBackgroundImage(response.data.image_establishment?.image_banner);
           setLogoImage(response.data.image_establishment?.image_logo);
           console.log(response.data);
+          Cookies.set("establishmentId", response.data.information_establishment.stylos_info.id);
         })
         .catch((error) => {
           console.error(error);

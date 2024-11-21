@@ -13,57 +13,68 @@ import {
   Input,
   Skeleton,
 } from "@nextui-org/react";
-import { ChevronLeft, Image as ImageIcon, Search } from "lucide-react";
-
+import { ChevronLeft, Hotel, Image as ImageIcon, Search } from "lucide-react";
+import ServiceCard from "@/components/services/ServiceCard";
 import ButtonCustom from "@/components/global/ButtonCustom";
 import api from "@/api";
 import AuthModal from "@/components/auth/AuthModal";
 
-function ServiceCard({ service }) {
-  return (
-    <Card
-      // key={index}
-      className="h-fit w-full max-w-64 p-4"
-      shadow="sm"
-      //   isPressable
-      //   onPress={() => navigate(`./services/${service.id}`, { relative: true })}
-    >
-      <CardBody className="overflow-visible p-0">
-        <div className="aspect-square rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center">
-          {service.image_base64 ? (
-            <Image
-              src={service.image_base64}
-              alt="Imagen de perfil"
-              className="object-cover w-full h-auto"
-              removeWrapper
-            />
-          ) : (
-            <ImageIcon className="w-8 md:w-12 h-full text-neutral-400" />
-          )}
-        </div>
-      </CardBody>
-      <CardFooter className="text-small items-start flex flex-col gap-2 whitespace-nowrap pb-0">
-        <b>{service.name}</b>
-        <p className="text-default-600 text-xs">${service.price}</p>
-        <ButtonCustom variant="bordered" classStyles="self-center">
-          Elegir
-        </ButtonCustom>
-      </CardFooter>
-    </Card>
-  );
-}
-
-import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
+import {
+  getLocalTimeZone,
+  parseDate,
+  today,
+  Time,
+} from "@internationalized/date";
 import Cookies from "js-cookie";
+import axios from "axios";
 
-function ScheduleAppointment() {
+function ScheduleAppointment({ services, servicesSelected }) {
+  const { employeeId } = useParams();
   const { triggerAuthModal } = useAuthStore();
+  const fecha = new Date();
+  let year = fecha.getFullYear().toString();
+  let month = (fecha.getMonth() + 1).toString();
+  let day = fecha.getDate().toString();
+
+  const [date, setDate] = useState(
+    parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
+  );
+  const [time, setTime] = useState(
+    new Time(fecha.getHours(), fecha.getMinutes())
+  );
+  const createAppointment = async () => {
+    const day = date.toDate().getDate();
+    const month = date.toDate().getMonth() + 1;
+    const year = date.toDate().getFullYear();
+    const hora = `${String(time.hour).padStart(2, "0")}:${String(
+      time.minute
+    ).padStart(2, "0")}`;
+    console.log(servicesSelected, day, month, year, hora);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/create_appointment/",
+        {
+          cliente_id: Cookies.get("client_id"),
+          employee_id: employeeId,
+          services: servicesSelected,
+          day: day,
+          month: month,
+          year: year,
+          time: hora,
+          //establishment: 2,
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
 
   const handleProtectedAction = () => {
     if (!Cookies.get("isAuthenticated")) {
       triggerAuthModal();
     } else {
-      console.log("Protected action executed");
+      createAppointment();
     }
   };
   return (
@@ -71,13 +82,21 @@ function ScheduleAppointment() {
       <CardBody className=" flex flex-col gap-2 p-4">
         <p>Selecciona un día:</p>
         <DatePicker
+          value={date}
+          onChange={setDate}
           minValue={today(getLocalTimeZone())}
           defaultValue={today(getLocalTimeZone()).subtract({ days: 0 })}
         />
-        <p>Selecciona un horario:</p>
-        <TimeInput description="Formato 24 horas (00:00-23:59)" />
-        <p>Busca o elige el servicio:</p>
-        <Input
+        <p>Selecciona una hora:</p>
+        <TimeInput
+          value={time}
+          onChange={setTime}
+          description="Formato 24 horas (00:00-23:59)"
+        />
+        <p>Servicios escogidos:</p>
+        {/* <Input
+          value={service}
+          onChange={(e) => setService(e.target.value)}
           placeholder="Buscar servicio"
           classNames={{
             label: "",
@@ -88,8 +107,16 @@ function ScheduleAppointment() {
           variant="bordered"
           endContent={<Search />}
           description="Busca el servicio por nombre"
-        />
-        <p>Precio: $0</p>
+        /> */}
+        {services.length === 0 ? (
+          <p className="text-sm">No has seleccionado ningún servicio</p>
+        ) : (
+          services.map((service) => (
+            <p key={service.id} className="text-sm">
+              {service.name}
+            </p>
+          ))
+        )}
         <AuthModal />
         <ButtonCustom
           action={handleProtectedAction}
@@ -108,6 +135,15 @@ export default function EmployeeProfile() {
   const [employee, setEmployee] = useState({});
   const [loading, setLoading] = useState(true);
   const { employeeId } = useParams();
+  const [servicesSelected, setServicesSelected] = useState([]);
+  const [service, setService] = useState([]);
+
+  const handleSelectService = (service) => {
+    if (!servicesSelected.includes(service.id)) {
+      setServicesSelected((prev) => [...prev, service.id]);
+      setService((prev) => [...prev, service]);
+    }
+  };
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -184,7 +220,10 @@ export default function EmployeeProfile() {
           </div>
         </section>
         <section className="w-full ">
-          <ScheduleAppointment />
+          <ScheduleAppointment
+            services={service}
+            servicesSelected={servicesSelected}
+          />
         </section>
       </article>
       <article className="flex flex-col gap-4 p-4">
@@ -211,7 +250,11 @@ export default function EmployeeProfile() {
                 </Card>
               ))
             : employee.services.map((service) => (
-                <ServiceCard key={service.id} service={service.service} />
+                <ServiceCard
+                  key={service.id}
+                  service={service.service}
+                  onSelect={handleSelectService}
+                />
               ))}
         </section>
       </article>
