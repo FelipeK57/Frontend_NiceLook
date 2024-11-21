@@ -206,7 +206,7 @@ export default function EstablishmentProfile() {
   }, []);
 
   return (
-    <main className="flex h-full p-0 md-p-4 md:px-16 lg:px-64">
+    <main className="mx-auto flex h-full w-full md:w-4/5 max-w-[1280px]">
       <article className="flex flex-nowrap flex-col w-full">
         {/* Imagenes del establecimiento */}
         <section className="relative flex w-full h-48 md:pt-4 md:h-64 lg:h-80 2xl:h-[420px]">
