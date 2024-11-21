@@ -32,6 +32,7 @@ import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
+import ClientHistorial from "./components/client/clientHistorial.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -44,7 +45,11 @@ const routes = createBrowserRouter([
         element: <HomePage />,
         errorElement: <div>Error Page</div>,
       },
-
+      {
+        path: "/historialTest",
+        element: <ClientHistorial />,
+        errorElement: <div>Error Page</div>,
+      },
       {
         path: "/@peluqueriastylospalmira",
         element: <EstablishmentProfile />,
