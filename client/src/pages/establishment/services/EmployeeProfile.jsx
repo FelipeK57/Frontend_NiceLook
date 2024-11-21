@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthStore from "@/stores/useAuthStore";
+import SuccessModal from "@/components/ui/SuccessModal";
 import {
   Chip,
   Card,
@@ -12,6 +13,7 @@ import {
   TimeInput,
   Input,
   Skeleton,
+  Button,
 } from "@nextui-org/react";
 import { ChevronLeft, Hotel, Image as ImageIcon, Search } from "lucide-react";
 import ServiceCard from "@/components/services/ServiceCard";
@@ -28,7 +30,7 @@ import {
 import Cookies from "js-cookie";
 import axios from "axios";
 
-function ScheduleAppointment({ services, servicesSelected }) {
+function ScheduleAppointment({ services, servicesSelected, removeService }) {
   const { employeeId } = useParams();
   const { triggerAuthModal } = useAuthStore();
   const fecha = new Date();
@@ -42,6 +44,12 @@ function ScheduleAppointment({ services, servicesSelected }) {
   const [time, setTime] = useState(
     new Time(fecha.getHours(), fecha.getMinutes())
   );
+
+  const [isModalSuccessOpen, setIsModalSuccessOpen] = useState(false);
+
+  const handleCloseSuccessModal = () => setIsModalSuccessOpen(false);
+  const handleOpenSuccessModal = () => setIsModalSuccessOpen(true);
+
   const createAppointment = async () => {
     const day = date.toDate().getDate();
     const month = date.toDate().getMonth() + 1;
@@ -65,6 +73,7 @@ function ScheduleAppointment({ services, servicesSelected }) {
         }
       );
       console.log(response.data);
+      handleOpenSuccessModal();
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -89,6 +98,7 @@ function ScheduleAppointment({ services, servicesSelected }) {
         />
         <p>Selecciona una hora:</p>
         <TimeInput
+          minValue={new Time(fecha.getHours(), fecha.getMinutes())}
           value={time}
           onChange={setTime}
           description="Formato 24 horas (00:00-23:59)"
@@ -112,15 +122,46 @@ function ScheduleAppointment({ services, servicesSelected }) {
           <p className="text-sm">No has seleccionado ningún servicio</p>
         ) : (
           services.map((service) => (
-            <p key={service.id} className="text-sm">
-              {service.name}
-            </p>
+            <div className="flex flex-row justify-between items-center">
+              <p key={service.id} className="text-sm">
+                {service.name}
+              </p>
+              <Button
+                onClick={() => removeService(service)}
+                isIconOnly
+                variant="light"
+                size="sm"
+                color="danger"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              </Button>
+            </div>
           ))
         )}
+        {/* Modal de autenticación en caso de que no esté autenticado */}
         <AuthModal />
+        {/* Modal de reserva exitosa*/}
+        <SuccessModal
+          isOpen={isModalSuccessOpen}
+          onClose={handleCloseSuccessModal}
+        />
+        {/* Botón de agendar cita */}
         <ButtonCustom
           action={handleProtectedAction}
-          variant="bordered"
+          primary
           classStyles="self-center"
         >
           Agendar cita
@@ -143,6 +184,11 @@ export default function EmployeeProfile() {
       setServicesSelected((prev) => [...prev, service.id]);
       setService((prev) => [...prev, service]);
     }
+  };
+
+  const handleRemoveService = (service) => {
+    setServicesSelected((prev) => prev.filter((id) => id !== service.id));
+    setService((prev) => prev.filter((item) => item.id !== service.id));
   };
 
   useEffect(() => {
@@ -221,6 +267,7 @@ export default function EmployeeProfile() {
         </section>
         <section className="w-full ">
           <ScheduleAppointment
+            removeService={handleRemoveService}
             services={service}
             servicesSelected={servicesSelected}
           />
