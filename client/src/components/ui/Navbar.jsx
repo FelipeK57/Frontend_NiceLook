@@ -67,8 +67,10 @@ import LogoNiceLook from "./LogoNiceLook";
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 h-16 gap-4 items-center px-4 md:px-16 lg:px-64 grid grid-cols-2 justify-center bg-white border-b-2">
-      <LogoNiceLook className="text-3xl md:text-4xl" />
+    <header className="sticky top-0 z-50 h-16 items-center bg-white border-b-2 flex justify-center">
+      <div className="px-4 sm:px-0 w-full md:w-4/5 max-w-[1280px] grid gap-4 grid-cols-2 items-center h-full">
+        <LogoNiceLook className="text-3xl md:text-4xl" />
+      </div>
 
       {/* <SearchBar className="hidden md:block" /> */}
 
