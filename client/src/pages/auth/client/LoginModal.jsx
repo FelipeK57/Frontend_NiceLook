@@ -102,7 +102,7 @@ function LoginModal({ isOpen, onClose }) {
         isOpen={isOpen}
         onClose={onClose}
         backdrop="blur"
-        placement="top"
+        placement="center"
         size="md"
       >
         <ModalContent>

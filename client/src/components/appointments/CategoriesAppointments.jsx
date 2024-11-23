@@ -7,7 +7,7 @@ const categories = [
   },
   {
     id: 1,
-    name: "Barberia",
+    name: "Barbería",
   },
   {
     id: 2,

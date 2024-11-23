@@ -29,8 +29,15 @@ import {
 } from "@internationalized/date";
 import Cookies from "js-cookie";
 import axios from "axios";
+import EmployeeAvailability from "@/components/sales/EmployeeAvailability";
 
-function ScheduleAppointment({ services, servicesSelected, removeService }) {
+function ScheduleAppointment({
+  services,
+  servicesSelected,
+  removeService,
+  priceTotal,
+  employee,
+}) {
   const { employeeId } = useParams();
   const { triggerAuthModal } = useAuthStore();
   const fecha = new Date();
@@ -59,6 +66,10 @@ function ScheduleAppointment({ services, servicesSelected, removeService }) {
     ).padStart(2, "0")}`;
     console.log(servicesSelected, day, month, year, hora);
     try {
+      if (servicesSelected.length === 0) {
+        alert("Debes seleccionar al menos un servicio");
+        return;
+      }
       const response = await axios.post(
         "http://localhost:8000/api/create_appointment/",
         {
@@ -86,24 +97,35 @@ function ScheduleAppointment({ services, servicesSelected, removeService }) {
       createAppointment();
     }
   };
+
+  const minValueTime = () => {
+    if (date.toDate().getDate() === fecha.getDate()) {
+      return new Time(fecha.getHours(), fecha.getMinutes());
+    } else {
+      return new Time(0, 0);
+    }
+  };
+
   return (
     <Card variant="bordered" className="w-full lg:w-72 h-fit rounded-xl">
       <CardBody className=" flex flex-col gap-2 p-4">
-        <p>Selecciona un día:</p>
+        <p className="font-semibold text-sm">Selecciona un día:</p>
         <DatePicker
           value={date}
           onChange={setDate}
           minValue={today(getLocalTimeZone())}
           defaultValue={today(getLocalTimeZone()).subtract({ days: 0 })}
         />
-        <p>Selecciona una hora:</p>
+        <p className="font-semibold text-sm">Disponibilidad del artista</p>
+        <EmployeeAvailability date={date} employee={employee} />
+        <p className="font-semibold text-sm">Selecciona una hora:</p>
         <TimeInput
-          minValue={new Time(fecha.getHours(), fecha.getMinutes())}
+          minValue={minValueTime()}
           value={time}
           onChange={setTime}
           description="Formato 24 horas (00:00-23:59)"
         />
-        <p>Servicios escogidos:</p>
+        <p className="font-semibold text-sm">Servicios seleccionados:</p>
         {/* <Input
           value={service}
           onChange={(e) => setService(e.target.value)}
@@ -119,7 +141,9 @@ function ScheduleAppointment({ services, servicesSelected, removeService }) {
           description="Busca el servicio por nombre"
         /> */}
         {services.length === 0 ? (
-          <p className="text-sm">No has seleccionado ningún servicio</p>
+          <p className="text-sm text-slate-700">
+            No has seleccionado ningún servicio
+          </p>
         ) : (
           services.map((service) => (
             <div className="flex flex-row justify-between items-center">
@@ -158,6 +182,9 @@ function ScheduleAppointment({ services, servicesSelected, removeService }) {
           isOpen={isModalSuccessOpen}
           onClose={handleCloseSuccessModal}
         />
+        <p className="text-sm mb-2 font-semibold">
+          Precio total: ${priceTotal}
+        </p>
         {/* Botón de agendar cita */}
         <ButtonCustom
           action={handleProtectedAction}
@@ -178,17 +205,20 @@ export default function EmployeeProfile() {
   const { employeeId } = useParams();
   const [servicesSelected, setServicesSelected] = useState([]);
   const [service, setService] = useState([]);
+  const [priceTotal, setPriceTotal] = useState(0);
 
   const handleSelectService = (service) => {
     if (!servicesSelected.includes(service.id)) {
       setServicesSelected((prev) => [...prev, service.id]);
       setService((prev) => [...prev, service]);
+      setPriceTotal((prev) => prev + service.price);
     }
   };
 
   const handleRemoveService = (service) => {
     setServicesSelected((prev) => prev.filter((id) => id !== service.id));
     setService((prev) => prev.filter((item) => item.id !== service.id));
+    setPriceTotal((prev) => prev - service.price);
   };
 
   useEffect(() => {
@@ -270,6 +300,8 @@ export default function EmployeeProfile() {
             removeService={handleRemoveService}
             services={service}
             servicesSelected={servicesSelected}
+            priceTotal={priceTotal}
+            employee={employee}
           />
         </section>
       </article>
@@ -298,6 +330,7 @@ export default function EmployeeProfile() {
               ))
             : employee.services.map((service) => (
                 <ServiceCard
+                  duration={service.duration}
                   key={service.id}
                   service={service.service}
                   onSelect={handleSelectService}

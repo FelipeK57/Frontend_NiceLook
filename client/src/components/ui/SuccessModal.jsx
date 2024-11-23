@@ -14,7 +14,7 @@ function SuccessModal({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={onClose}
       backdrop="blur"
-      placement="cemter"
+      placement="center"
       size="sm"
       className="p-4"
     >

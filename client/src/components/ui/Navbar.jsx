@@ -123,7 +123,7 @@ export default function Navbar() {
               logoutClient();
               window.location.reload();
             }}
-            className="w-1/4"
+            className="w-auto"
             color="danger"
             variant="light"
           >

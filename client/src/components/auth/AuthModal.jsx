@@ -26,7 +26,7 @@ function AuthModal() {
   if (!showModal) return null;
 
   return (
-    <Modal placement="top" backdrop="blur" isOpen={showModal} onClose={closeModal}>
+    <Modal size="sm" placement="center" backdrop="transparent" isOpen={showModal} onClose={closeModal}>
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
           Autenticación Requerida
