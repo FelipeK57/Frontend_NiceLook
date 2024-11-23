@@ -11,6 +11,7 @@ import FacebookIcon from "@/components/icons/FacebookIcon";
 import InstagramIcon from "@/components/icons/IntagramIcon";
 
 import ServicesTab from "./establishment/ServicesTab";
+import Cookies from "js-cookie";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
@@ -187,7 +188,7 @@ export default function EstablishmentProfile() {
           setEstablishment(response.data);
           setBackgroundImage(response.data.image_establishment?.image_banner);
           setLogoImage(response.data.image_establishment?.image_logo);
-          // console.log(response.data);
+          Cookies.set("establishmentId", response.data.information_establishment.stylos_info.id);
         })
         .catch((error) => {
           console.error(error);

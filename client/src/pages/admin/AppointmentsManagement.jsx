@@ -130,7 +130,7 @@ function AppointmentsManagement() {
           Calendario de citas
         </h1>
         <DatePicker
-          value={date}
+          value={date} 
           onChange={setDate}
           label="Fecha"
           className="max-w-[280px] font-semibold"
