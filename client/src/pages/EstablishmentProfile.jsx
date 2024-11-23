@@ -1,17 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import {
-  Link,
-  Outlet,
-  useParams,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Outlet, useParams, useLocation, useNavigate } from "react-router-dom";
 
 import api from "@/api";
 
 import { Image, Button, Divider, Tabs, Tab, Skeleton } from "@nextui-org/react";
-import { Image as ImageIcon, Mail, ExternalLink } from "lucide-react";
+import { Image as ImageIcon, Mail } from "lucide-react";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
 import InstagramIcon from "@/components/icons/IntagramIcon";
