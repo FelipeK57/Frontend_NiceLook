@@ -87,7 +87,7 @@ export default function UserCardList({ filterQuery }) {
         radius="lg"
       >
         <CardBody className="flex items-center justify-center">
-          <p className="text-center text-default-500">
+          <p className="text-center text-default-500 select-none">
             No se encontraron empleados
           </p>
         </CardBody>
