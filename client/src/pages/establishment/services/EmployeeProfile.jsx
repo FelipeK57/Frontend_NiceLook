@@ -30,6 +30,7 @@ import {
 import Cookies from "js-cookie";
 import axios from "axios";
 import EmployeeAvailability from "@/components/sales/EmployeeAvailability";
+import { set } from "react-hook-form";
 
 function ScheduleAppointment({
   services,
@@ -206,6 +207,8 @@ export default function EmployeeProfile() {
   const [servicesSelected, setServicesSelected] = useState([]);
   const [service, setService] = useState([]);
   const [priceTotal, setPriceTotal] = useState(0);
+  const [times, setTimes] = useState([]);
+  const [workingDays, setWorkingDays] = useState([]);
 
   const handleSelectService = (service) => {
     if (!servicesSelected.includes(service.id)) {
@@ -231,7 +234,10 @@ export default function EmployeeProfile() {
         })
         .then((response) => {
           setEmployee(response.data);
-          console.log(response.data);
+          setTimes(response.data.time);
+          setWorkingDays(response.data.time.working_days);
+          console.log(response.data.time);
+          console.log(response.data.time.working_days);
         })
         .catch((error) => {
           console.error(error);
@@ -243,6 +249,20 @@ export default function EmployeeProfile() {
 
     fetchUserInfo();
   }, [employeeId]);
+
+  const formattedDays = (days) => {
+    const dayMap = {
+      LUN: "Lunes",
+      MAR: "Martes",
+      MIE: "Miércoles",
+      JUE: "Jueves",
+      VIE: "Viernes",
+      SAB: "Sábado",
+      DOM: "Domingo",
+    };
+    const workDays = days.map((day) => dayMap[day] || day);
+    return workDays.join(", ");
+  };
 
   return (
     <>
@@ -283,9 +303,36 @@ export default function EmployeeProfile() {
               <Chip variant="flat" color="success" className="mb-2">
                 Disponible
               </Chip>
-              <h2 className="title-lg text-neutral-600">
-                Horario: 10 am - 5 pm
-              </h2>
+              <div className="flex flex-col text-neutral-600">
+                <p>
+                  Dias de trabajo:{" "}
+                  {loading ? (
+                    <Skeleton className="flex rounded-full w-2/3 h-5 md:h-6 mb-2" />
+                  ) : (
+                    formattedDays(workingDays)
+                  )}
+                </p>
+                <p>
+                  Jornada 1:{" "}
+                  {loading ? (
+                    <Skeleton />
+                  ) : (
+                    times.time_start_day_one.slice(0, 5) +
+                    " - " +
+                    times.time_end_day_one.slice(0, 5)
+                  )}
+                </p>
+                <p>
+                  Jornada 2:{" "}
+                  {loading ? (
+                    <Skeleton />
+                  ) : (
+                    times.time_start_day_two.slice(0, 5) +
+                    " - " +
+                    times.time_end_day_two.slice(0, 5)
+                  )}
+                </p>
+              </div>
               {/* Calificación */}
               <div className="flex font-bold flex-nowrap">
                 <h1>
