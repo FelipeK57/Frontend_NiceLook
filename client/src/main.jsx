@@ -10,6 +10,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import NotFound from "@/pages/NotFound.jsx";
 
 import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
@@ -30,6 +31,7 @@ import RecordManagement from "./pages/employee/RecordManagement.jsx";
 import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistRoute.jsx";
 import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
 import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
 
@@ -37,18 +39,46 @@ const routes = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
         element: <HomePage />,
-        errorElement: <div>Error Page</div>,
+        errorElement: <NotFound />,
       },
 
       {
         path: "/@peluqueriastylospalmira",
         element: <EstablishmentProfile />,
-        errorElement: <div>Error Page</div>,
+        errorElement: <NotFound />,
+        children: [
+          {
+            path: "services",
+            children: [
+              {
+                path: ":employeeId",
+                element: <EmployeeProfile />,
+                errorElement: <NotFound />,
+              },
+            ],
+          },
+          {
+            path: "store",
+            errorElement: <NotFound />,
+          },
+          {
+            path: "reviews",
+            errorElement: <NotFound />,
+          },
+          {
+            path: "employees",
+            errorElement: <NotFound />,
+          },
+          {
+            path: "about",
+            errorElement: <NotFound />,
+          },
+        ],
       },
       {
       path:"/shoppingCart",
@@ -60,28 +90,28 @@ const routes = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/services",
     element: <ServicesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/employees",
     element: <EmployeesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
 
   {
     path: "/EditProfilePage",
     element: <EditProfilePage />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/services",
     element: <ServicesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/admin",

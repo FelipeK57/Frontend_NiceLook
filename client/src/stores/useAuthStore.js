@@ -57,11 +57,18 @@ const useAuthStore = create((set) => {
     },
 
     // Autenticación cliente
-    isAuthenticated: false,
     showModal: false,
-
-    login: () => set({ isAuthenticated: true, showModal: false }),
-    logout: () => set({ isAuthenticated: false }),
+    loginClient: () => {
+      Cookies.set("isAuthenticated", true, { expires: 7 });
+      set({ showModal: false });
+    },
+    logoutClient: () => {
+      Cookies.remove("isAuthenticated");
+      Cookies.remove("client_id");
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      set({ showModal: false });
+    },
     triggerAuthModal: () => set({ showModal: true }),
     closeModal: () => set({ showModal: false }),
   };

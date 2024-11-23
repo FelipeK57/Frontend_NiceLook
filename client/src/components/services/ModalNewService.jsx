@@ -185,7 +185,7 @@ function ModalNewService({ isOpen, onClose }) {
             {<p className="text-[#f31260] text-[12px]">{error.image}</p>}
           </div>
           {previewImage && (
-            <div>
+            <div className="hidden md:block">
               <label className={"font-semibold text-medium lg:text-xl"}>
                 Vista previa
               </label>
