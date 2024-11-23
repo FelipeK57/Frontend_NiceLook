@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import LoginModal from "@/pages/auth/client/LoginModal";
 import LogoNiceLook from "./LogoNiceLook";
 import RegisterModal from "@/pages/auth/client/RegisterModal";
@@ -83,8 +82,10 @@ export default function Navbar() {
   const handleOpenRegisterModal = () => setIsModalRegisterOpen(true);
   const handleCloseRegisterModal = () => setIsModalRegisterOpen(false);
   return (
-    <header className="sticky top-0 z-50 h-16 gap-4 items-center px-4 md:px-16 lg:px-64 grid grid-cols-2 justify-center bg-white border-b-2">
-      <LogoNiceLook className="text-3xl md:text-4xl" />
+    <header className="sticky top-0 z-50 h-16 items-center bg-white border-b-2 flex justify-center">
+      <div className="px-4 sm:px-0 w-full md:w-4/5 max-w-[1280px] grid gap-4 grid-cols-2 items-center h-full">
+        <LogoNiceLook className="text-3xl md:text-4xl" />
+      </div>
 
       {/* <SearchBar className="hidden md:block" /> */}
 

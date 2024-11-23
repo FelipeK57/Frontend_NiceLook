@@ -19,7 +19,10 @@ export default function ServicesTab() {
       <article className="md:flex md:gap-6 px-3 py-4">
         <section className="w-full md:w-1/3">
           <div className="block lg:hidden pb-4">
-            <SelectCategorie setSelectCategory={setSelectCategory} />
+            <SelectCategorie
+              setCategory={setSelectCategory}
+              category={selectCategory}
+            />
           </div>
           <div className="hidden lg:block sticky top-[140px]">
             <Categories setSelectCategory={setSelectCategory} />

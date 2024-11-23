@@ -10,6 +10,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import NotFound from "@/pages/NotFound.jsx";
 
 import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
@@ -37,18 +38,18 @@ const routes = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
         element: <HomePage />,
-        errorElement: <div>Error Page</div>,
+        errorElement: <NotFound />,
       },
 
       {
         path: "/@peluqueriastylospalmira",
         element: <EstablishmentProfile />,
-        errorElement: <div>Error Page</div>,
+        errorElement: <NotFound />,
         children: [
           {
             path: "services",
@@ -56,25 +57,25 @@ const routes = createBrowserRouter([
               {
                 path: ":employeeId",
                 element: <EmployeeProfile />,
-                errorElement: <div>Error Page</div>,
+                errorElement: <NotFound />,
               },
             ],
           },
           {
             path: "store",
-            errorElement: <div>Error Page</div>,
+            errorElement: <NotFound />,
           },
           {
             path: "reviews",
-            errorElement: <div>Error Page</div>,
+            errorElement: <NotFound />,
           },
           {
             path: "employees",
-            errorElement: <div>Error Page</div>,
+            errorElement: <NotFound />,
           },
           {
             path: "about",
-            errorElement: <div>Error Page</div>,
+            errorElement: <NotFound />,
           },
         ],
       },
@@ -83,28 +84,28 @@ const routes = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/services",
     element: <ServicesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/employees",
     element: <EmployeesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
 
   {
     path: "/EditProfilePage",
     element: <EditProfilePage />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/services",
     element: <ServicesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/admin",

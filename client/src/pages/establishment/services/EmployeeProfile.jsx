@@ -1,6 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import api from "@/api";
+
 import useAuthStore from "@/stores/useAuthStore";
 import SuccessModal from "@/components/ui/SuccessModal";
 import {
@@ -18,6 +21,7 @@ import {
 import { ChevronLeft, Hotel, Image as ImageIcon, Search } from "lucide-react";
 import ServiceCard from "@/components/services/ServiceCard";
 import ButtonCustom from "@/components/global/ButtonCustom";
+import ScheduleDisplay from "@/components/employees/ScheduleDisplay";
 import api from "@/api";
 import AuthModal from "@/components/auth/AuthModal";
 
@@ -236,8 +240,6 @@ export default function EmployeeProfile() {
           setEmployee(response.data);
           setTimes(response.data.time);
           setWorkingDays(response.data.time.working_days);
-          console.log(response.data.time);
-          console.log(response.data.time.working_days);
         })
         .catch((error) => {
           console.error(error);
@@ -300,9 +302,10 @@ export default function EmployeeProfile() {
                   {employee.first_name} {employee.last_name}
                 </h1>
               )}
-              <Chip variant="flat" color="success" className="mb-2">
+              <Chip variant="flat" color="success" className="mb-2 select-none">
                 Disponible
               </Chip>
+              <ScheduleDisplay timeData={employee.time} />
               <div className="flex flex-col text-neutral-600">
                 <p>
                   Dias de trabajo:{" "}
@@ -335,8 +338,10 @@ export default function EmployeeProfile() {
               </div>
               {/* Calificación */}
               <div className="flex font-bold flex-nowrap">
-                <h1>
-                  {employee.rating}/5⭐({employee.reviews})
+                <h1 className="select-none">
+                  {employee.rating
+                    ? `${employee.rating}/5⭐ (${employee.reviews})`
+                    : "Sin calificación"}
                 </h1>
               </div>
             </div>
@@ -353,18 +358,37 @@ export default function EmployeeProfile() {
         </section>
       </article>
       <article className="flex flex-col gap-4 p-4">
-        <h1 className="text-xl font-bold">Servicios</h1>
+        <h1 className="text-xl font-bold select-none">Servicios</h1>
         <section className="grid gap-4 justify-items-center grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
-          {loading
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <Card
-                  key={index}
-                  className="w-64 h-fit space-y-5 p-4"
-                  radius="lg"
-                >
-                  <Skeleton className="rounded-lg aspect-square">
-                    <div className="h-24 rounded-lg bg-secondary"></div>
+          {loading ? (
+            Array.from({ length: 4 }).map((_, index) => (
+              <Card
+                key={index}
+                className="w-64 h-fit space-y-5 p-4"
+                radius="lg"
+              >
+                <Skeleton className="rounded-lg aspect-square">
+                  <div className="h-24 rounded-lg bg-secondary"></div>
+                </Skeleton>
+                <div className="space-y-3">
+                  <Skeleton className="w-3/5 rounded-lg">
+                    <div className="h-5 w-full rounded-lg bg-secondary"></div>
                   </Skeleton>
+                  <Skeleton className="w-4/5 rounded-lg">
+                    <div className="h-3 w-full rounded-lg bg-secondary-300"></div>
+                  </Skeleton>
+                </div>
+              </Card>
+            ))
+          ) : employee.services ? (
+            employee.services.map((service) => (
+              <ServiceCard key={service.id} service={service.service} />
+            ))
+          ) : (
+            <div className="flex items-center justify-center w-full h-32">
+              <p className="select-none">No hay servicios disponibles</p>
+            </div>
+          )}
                   <div className="space-y-3">
                     <Skeleton className="w-3/5 rounded-lg">
                       <div className="h-5 w-full rounded-lg bg-secondary"></div>

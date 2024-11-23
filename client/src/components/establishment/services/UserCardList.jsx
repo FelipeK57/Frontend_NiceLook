@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody, CardFooter, Image, Chip } from "@nextui-org/react";
@@ -16,8 +17,12 @@ export default function UserCardList({ filterQuery }) {
       await api
         .get("establisment/get_employees/")
         .then((response) => {
-          setUsers(response.data.employeesList || []);
-          console.log(response.data.employeesList);
+          const employeesList = response.data.employeesList || [];
+
+          setUsers(employeesList);
+          // Inicialmente mostrar todos los usuarios
+          setFilteredEmployees(employeesList);
+          // console.log(response.data.employeesList);
         })
         .catch((error) => {
           console.error(error);
@@ -29,27 +34,29 @@ export default function UserCardList({ filterQuery }) {
     fetchUsers();
   }, []);
 
+  // Filter effect
   useEffect(() => {
-    if (filterQuery) {
-      if (filterQuery === "Todos") {
-        setFilteredEmployees(users);
-        return;
-      }
+    if (!users.length) return;
 
-      const filtered = users.filter((employee) => {
-        // Check if employee has employee_services
-        if (!employee.employee_services) return false;
-
-        // Check if any of the employee's services match the filter category
-        return employee.employee_services.some(
-          (employeeService) => employeeService.service.category === filterQuery
-        );
-      });
-
-      setFilteredEmployees(filtered);
-    } else {
+    if (!filterQuery || filterQuery === "Todos") {
       setFilteredEmployees(users);
+      return;
     }
+
+    const filtered = users.filter((employee) => {
+      // Verificar si el empleado tiene servicios
+      if (!employee.employee_services?.length) return false;
+
+      // Verificar si algún servicio coincide con la categoría
+      return employee.employee_services.some(
+        (service) => service.service?.category === filterQuery
+      );
+    });
+
+    // Debug
+    // console.log("Filtering by:", filterQuery);
+    // console.log("Filtered employees:", filtered);
+    setFilteredEmployees(filtered);
   }, [filterQuery, users]);
 
   if (loading) {
@@ -73,9 +80,22 @@ export default function UserCardList({ filterQuery }) {
     ));
   }
 
-  const employeesToRender = filteredEmployees.length > 0 ? filteredEmployees : users;
+  if (filteredEmployees.length === 0) {
+    return (
+      <Card
+        className="w-full h-full space-y-5 p-4 col-span-2 md:col-span-3"
+        radius="lg"
+      >
+        <CardBody className="flex items-center justify-center">
+          <p className="text-center text-default-500 select-none">
+            No se encontraron empleados
+          </p>
+        </CardBody>
+      </Card>
+    );
+  }
 
-  return employeesToRender.map((user, index) => (
+  return filteredEmployees.map((user, index) => (
     <Card
       key={index}
       className="h-fit p-4"
@@ -103,7 +123,9 @@ export default function UserCardList({ filterQuery }) {
           {user.user?.first_name} {user.user?.last_name}
         </b>
         <p className="text-default-500 text-xs">
-          {user?.rating ? user?.rating : "0"}/5⭐
+          {user?.rating
+            ? `${user?.rating}/5⭐(${user?.reviews})`
+            : "Sin calificación"}
         </p>
         <Chip className="text-xs mt-2" color="success" variant="flat" size="sm">
           Disponible
