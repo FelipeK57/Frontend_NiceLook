@@ -127,6 +127,7 @@ function EmployeeLogin() {
             auth_code: authCode,
           }
         );
+        console.log("Recibiendo datos")
         console.log("Tokens y datos recibidos:", response.data);
         const access = response.data.access_token;
         const refresh = response.data.refresh_token;
@@ -134,8 +135,16 @@ function EmployeeLogin() {
         console.log(decoded);
   
         login(decoded, access, refresh);
-  
-        navigate("/recepcionist/dashboard/finance");
+        
+        console.log(response.data);
+        const isArtist = response.data.isArtist
+        // console.log(isArtist);
+        if(isArtist === true){
+          navigate("/employee/dashboard/services");
+        }else{
+          navigate("/recepcionist/dashboard/finance");
+          // console.log(response.data);
+        }
       } catch (error) {
         console.error("Error al obtener los tokens:", error);
       }
@@ -222,7 +231,7 @@ function EmployeeLogin() {
                 <span className="text-tulip-tree-400">.</span>
               </h1>
             </div>
-            <div className="h-full items-center sm:p-10 p-2 lg:border-l-2 border-slate-700">
+            <div className="h-full items-center sm:p-10 p-2 lg:border-l-2 border-slate-700 ">
               <div className="flex flex-col w-full self-start gap-4 items-center sm:items-start">
                 <h2 className="lg:text-4xl sm:text-3xl text-2xl text-center sm:text-start font-bold">
                   {isRegister ? "Recuperar contraseña" : "Inicia sesion"}
@@ -247,30 +256,6 @@ function EmployeeLogin() {
                 )}
               </div>
               <div className="w-full flex flex-col justify-evenly sm:h-[85%] h-[75%]">
-                <div
-                  className={`w-full flex justify-center border-b-2 border-slate-400`}
-                >
-                  <Button
-                    onPress={() => handleLoginAs("employee")}
-                    className={`sm:text-xl 2xl:w-1/3 w-1/2 rounded-r-none rounded-b-none ${
-                      loginAs === "employee"
-                        ? "bg-tulip-tree-400"
-                        : "bg-slate-400"
-                    }`}
-                  >
-                    Empleado
-                  </Button>
-                  <Button
-                    onPress={() => handleLoginAs("receptionist")}
-                    className={`sm:text-xl 2xl:w-1/3 w-2/4 rounded-l-none rounded-b-none ${
-                      loginAs === "receptionist"
-                        ? "bg-tulip-tree-400 "
-                        : "bg-slate-400"
-                    }`}
-                  >
-                    Recepcionista
-                  </Button>
-                </div>
                 <EmployeeLoginForm
                   isVisible={isVisible}
                   setIsVisible={setIsVisible}
