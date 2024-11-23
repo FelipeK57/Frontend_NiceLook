@@ -222,7 +222,7 @@ export default function EstablishmentProfile() {
           <div className="grid grid-cols-[1fr_30%] items-start">
             {/* Nombre del establecimiento */}
             {!loading ? (
-              <h1 className="text-2xl font-bold">
+              <h1 className="text-2xl font-bold select-none">
                 {establishment.information_establishment?.stylos_info?.name}
               </h1>
             ) : (
@@ -235,7 +235,7 @@ export default function EstablishmentProfile() {
                 establishment.information_establishment?.rating ? (
                   <h1
                     onClick={() => setSelectedTab("reviews")}
-                    className="hover:underline cursor-pointer"
+                    className="hover:underline cursor-pointer select-none"
                   >
                     {establishment.information_establishment?.rating}/5⭐ (
                     {establishment.information_establishment?.reviews})
@@ -250,34 +250,27 @@ export default function EstablishmentProfile() {
           </div>
 
           <div className="grid grid-cols-1 mt-2 md:grid-cols-2 gap-4 items-start">
-            <div className="flex flex-col">
+            <div className="flex flex-col select-none">
               {/* Ubicación */}
               {!loading ? (
-                <a
-                  target="_blank"
-                  href={`https://google.com/maps/place/${establishment.information_establishment?.stylos_info?.city}`}
-                  className="text-md font-bold text-default-700 hover:underline"
-                >
+                <p>
                   📍{" "}
                   {establishment.information_establishment?.stylos_info?.city}{" "}
-                  <ExternalLink size={12} className="inline" />
-                </a>
+                  {/* <ExternalLink size={12} className="inline" /> */}
+                </p>
               ) : (
                 <Skeleton className="w-32 h-6 flex rounded-full mb-2" />
               )}
               {!loading ? (
-                <Link className="text-md text-neutral-500 underline">
-                  {
-                    establishment.information_establishment?.stylos_info
-                      ?.address
-                  }
-                </Link>
+                establishment.information_establishment?.stylos_info?.address
               ) : (
                 <Skeleton className="w-52 h-5 flex rounded-full" />
               )}
             </div>
             <div className="flex flex-col gap-2 md:justify-self-end">
-              <p className="text-md font-bold md:text-right">Contacto</p>
+              <p className="text-md font-bold md:text-right select-none">
+                Contacto
+              </p>
               <div className="flex flex-nowrap gap-4 w-fit md:self-end">
                 {!loading ? (
                   establishment.information_establishment?.stylos_info
@@ -303,7 +296,7 @@ export default function EstablishmentProfile() {
             variant="underlined"
             fullWidth
             size="lg"
-            className="sticky top-16 z-50 bg-white border-b-1 shadow-sm"
+            className="sticky top-16 z-50 bg-white border-b-1 shadow-sm select-none"
             selectedKey={selectedTab}
             onSelectionChange={handleTabSelectionChange}
           >
