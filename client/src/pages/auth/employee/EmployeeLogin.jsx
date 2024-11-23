@@ -231,7 +231,7 @@ function EmployeeLogin() {
                 <span className="text-tulip-tree-400">.</span>
               </h1>
             </div>
-            <div className="h-full items-center sm:p-10 p-2 lg:border-l-2 border-slate-700 ">
+            <div className="h-full items-center sm:p-10 p-2  2xl:mx-24 xl:mx-12 sm:mx-8 xs:mx-0 ">
               <div className="flex flex-col w-full self-start gap-4 items-center sm:items-start">
                 <h2 className="lg:text-4xl sm:text-3xl text-2xl text-center sm:text-start font-bold">
                   {isRegister ? "Recuperar contraseña" : "Inicia sesion"}
@@ -267,7 +267,7 @@ function EmployeeLogin() {
                   setCodeValid={setCodeValid}
                 />
 
-                {!isRegister && (
+                {/* {!isRegister && (
                   <Button
                     variant="gost"
                     lassName="w-fit text-xl text-blue-400 self-center"
@@ -275,7 +275,7 @@ function EmployeeLogin() {
                   >
                     Olvidaste tu contrasena?
                   </Button>
-                )}
+                )} */}
               </div>
             </div>
           </div>

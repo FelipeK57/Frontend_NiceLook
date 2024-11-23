@@ -40,10 +40,10 @@ function EmployeeLoginForm(props) {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8 }}
                     exit={{ opacity: 0 }}
-                    className="hola h-[45%] flex flex-col"
+                    className="hola h-[70%] flex flex-col"
                 >
                     <form
-                        className="flex flex-col justify-center items-center gap-4 mt-4 2xl:mx-24 xl:mx-12 sm:mx-8 xs:mx-0 h-full">
+                        className="flex flex-col justify-center items-center gap-4">
                         <Input
                             size="sm"
                             className="w-full"
