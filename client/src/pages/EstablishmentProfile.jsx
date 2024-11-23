@@ -128,7 +128,7 @@ export default function EstablishmentProfile() {
       {
         key: "store",
         title: "Tienda",
-        content: <BuyCard />
+        component: <BuyCard />,
       },
       {
         key: "reviews",

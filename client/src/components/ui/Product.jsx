@@ -18,7 +18,7 @@ const Product = ({ product, onAddToCart }) => {
                 {/* Imagen del producto */}
                 <div className="flex justify-center border rounded-lg mb-4">
                     <img
-                        src={product.image || imagen}
+                        src={product.image || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqtpQRJa3PSAEeJkCPnu-Ii5l1mW2dH20X6Q&s"}
                         alt={product.name}
                         className="w-full h-auto border rounded-lg object-cover"
                     />
