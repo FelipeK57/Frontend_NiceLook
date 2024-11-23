@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import LogoNiceLook from "./LogoNiceLook";
 // import { Input, Button } from "@nextui-org/react";
 // import SearchIcon from "@/components/icons/SearchIcon";
