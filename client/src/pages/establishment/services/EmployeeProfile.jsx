@@ -148,7 +148,7 @@ export default function EmployeeProfile() {
                   {employee.first_name} {employee.last_name}
                 </h1>
               )}
-              <Chip variant="flat" color="success" className="mb-2">
+              <Chip variant="flat" color="success" className="mb-2 select-none">
                 Disponible
               </Chip>
               {/* <h2 className="title-lg text-neutral-600">
@@ -157,7 +157,7 @@ export default function EmployeeProfile() {
               <ScheduleDisplay timeData={employee.time} />
               {/* Calificación */}
               <div className="flex font-bold flex-nowrap">
-                <h1>
+                <h1 className="select-none">
                   {employee.rating
                     ? `${employee.rating}/5⭐ (${employee.reviews})`
                     : "Sin calificación"}
@@ -166,12 +166,12 @@ export default function EmployeeProfile() {
             </div>
           </div>
         </section>
-        <section className="w-full ">
+        <section className="w-full">
           <ScheduleAppointment />
         </section>
       </article>
       <article className="flex flex-col gap-4 p-4">
-        <h1 className="text-xl font-bold">Servicios</h1>
+        <h1 className="text-xl font-bold select-none">Servicios</h1>
         <section className="grid gap-4 justify-items-center grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
           {loading ? (
             Array.from({ length: 4 }).map((_, index) => (
@@ -199,7 +199,7 @@ export default function EmployeeProfile() {
             ))
           ) : (
             <div className="flex items-center justify-center w-full h-32">
-              <p>No hay servicios disponibles</p>
+              <p className="select-none">No hay servicios disponibles</p>
             </div>
           )}
         </section>
