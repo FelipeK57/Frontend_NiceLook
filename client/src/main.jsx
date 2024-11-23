@@ -33,6 +33,7 @@ import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
+import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -79,6 +80,11 @@ const routes = createBrowserRouter([
           },
         ],
       },
+      {
+      path:"/shoppingCart",
+      element: <ShoppingCart />,
+      errorElement: <div>Error Page</div>,
+    },
     ],
   },
   {

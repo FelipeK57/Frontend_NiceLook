@@ -11,6 +11,7 @@ import FacebookIcon from "@/components/icons/FacebookIcon";
 import InstagramIcon from "@/components/icons/IntagramIcon";
 
 import ServicesTab from "./establishment/ServicesTab";
+import BuyCard from "./buyPage/buyCard";
 import Cookies from "js-cookie";
 
 export const BackgroundImage = ({ backgroundImage }) => {
@@ -111,7 +112,7 @@ export default function EstablishmentProfile() {
   const navigate = useNavigate();
 
   const [establishment, setEstablishment] = useState({});
-
+  
   // Esta lista de objetos contiene la información de las pestañas del establecimiento.
   // component es el contenido de la pestaña, en el mismo se puede renderizar
   // un Outlet para rutas anidadas como se muestra con la pestaña de Servicios.
@@ -127,7 +128,7 @@ export default function EstablishmentProfile() {
       {
         key: "store",
         title: "Tienda",
-        component: <h1>Tienda</h1>,
+        content: <BuyCard />
       },
       {
         key: "reviews",
