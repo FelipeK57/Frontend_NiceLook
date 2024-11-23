@@ -4,7 +4,7 @@ import { useState } from "react";
 const categories = [
   {
     id: 1,
-    name: "Barberia",
+    name: "Barbería",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const categories = [
   },
   {
     id: 4,
-    name: "Peluqueria",
+    name: "Peluquería",
   },
   {
     id: 5,

@@ -233,7 +233,7 @@ function ModalEditService({
               color="success"
             />
           </div>
-          <div>
+          <div className="hidden md:block">
             <label className={"font-semibold text-medium lg:text-xl"}>
               Vista previa
             </label>

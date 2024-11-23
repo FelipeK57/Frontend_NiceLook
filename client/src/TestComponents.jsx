@@ -1,11 +1,12 @@
 import { Button } from "@nextui-org/react";
 import useAuthStore from "./stores/useAuthStore";
 import AuthModal from "./components/auth/AuthModal";
+import Cookies from "js-cookie";
 function TestComponents() {
   const { isAuthenticated, triggerAuthModal } = useAuthStore();
 
   const handleProtectedAction = () => {
-    if (!isAuthenticated) {
+    if (!Cookies.get("isAuthenticated")) {
       triggerAuthModal();
     } else {
       console.log("Protected action executed");
