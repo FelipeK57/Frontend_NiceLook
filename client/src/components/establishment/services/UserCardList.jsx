@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody, CardFooter, Image, Chip } from "@nextui-org/react";
@@ -77,6 +78,21 @@ export default function UserCardList({ filterQuery }) {
         </div>
       </Card>
     ));
+  }
+
+  if (filteredEmployees.length === 0) {
+    return (
+      <Card
+        className="w-full h-full space-y-5 p-4 col-span-2 md:col-span-3"
+        radius="lg"
+      >
+        <CardBody className="flex items-center justify-center">
+          <p className="text-center text-default-500">
+            No se encontraron empleados
+          </p>
+        </CardBody>
+      </Card>
+    );
   }
 
   return filteredEmployees.map((user, index) => (
