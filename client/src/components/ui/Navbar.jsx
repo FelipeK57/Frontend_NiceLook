@@ -87,14 +87,6 @@ export default function Navbar() {
         <LogoNiceLook className="text-3xl md:text-4xl" />
 
         {/* <SearchBar className="hidden md:block" /> */}
-
-        {/* <div className="flex items-center justify-end gap-4">
-        <NavbarMenu />
-        <Button isIconOnly radius="full" variant="bordered">
-          <UserRound />
-        </Button>
-      </div> */}
-        {/* <SearchBar className="md:hidden col-span-2" /> */}
         {!Cookies.get("isAuthenticated") ? (
           <div className="flex flex-row justify-end gap-4">
             <RegisterModal
