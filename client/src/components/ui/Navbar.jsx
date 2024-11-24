@@ -6,53 +6,6 @@ import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import useAuthStore from "@/stores/useAuthStore";
-// import { Input, Button } from "@nextui-org/react";
-// import SearchIcon from "@/components/icons/SearchIcon";
-
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-
-// import { Menu, UserRound } from "lucide-react";
-
-// function NavbarMenu() {
-//   return (
-//     <DropdownMenu>
-//       <Button isIconOnly variant="bordered" radius="full">
-//         <DropdownMenuTrigger>
-//           <Menu />
-//         </DropdownMenuTrigger>
-//       </Button>
-//       <DropdownMenuContent className="absolute -right-5 top-0 w-44">
-//         <DropdownMenuItem
-//           className="cursor-pointer"
-//           onClick={() => console.log("Regístrate")}
-//         >
-//           {/* <Pencil /> */}
-//           Regístrate
-//         </DropdownMenuItem>
-//         <DropdownMenuItem
-//           className="cursor-pointer"
-//           onClick={() => console.log("Iniciar sesión")}
-//         >
-//           {/* <Pencil /> */}
-//           Iniciar sesión
-//         </DropdownMenuItem>
-
-//         <DropdownMenuItem
-//           className="cursor-pointer"
-//           onClick={() => console.log("Comparte tu empresa")}
-//         >
-//           {/* <Pencil /> */}
-//           Comparte tu empresa
-//         </DropdownMenuItem>
-//       </DropdownMenuContent>
-//     </DropdownMenu>
-//   );
-// }
 
 // const SearchBar = ({ className }) => {
 //   return (
@@ -87,14 +40,6 @@ export default function Navbar() {
         <LogoNiceLook className="text-3xl md:text-4xl" />
 
         {/* <SearchBar className="hidden md:block" /> */}
-
-        {/* <div className="flex items-center justify-end gap-4">
-        <NavbarMenu />
-        <Button isIconOnly radius="full" variant="bordered">
-          <UserRound />
-        </Button>
-      </div> */}
-        {/* <SearchBar className="md:hidden col-span-2" /> */}
         {!Cookies.get("isAuthenticated") ? (
           <div className="flex flex-row justify-end gap-4">
             <RegisterModal
