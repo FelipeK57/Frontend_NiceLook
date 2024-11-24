@@ -85,53 +85,53 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 h-16 items-center bg-white border-b-2 flex justify-center">
       <div className="px-4 sm:px-0 w-full md:w-4/5 max-w-[1280px] grid gap-4 grid-cols-2 items-center h-full">
         <LogoNiceLook className="text-3xl md:text-4xl" />
-      </div>
 
-      {/* <SearchBar className="hidden md:block" /> */}
+        {/* <SearchBar className="hidden md:block" /> */}
 
-      {/* <div className="flex items-center justify-end gap-4">
+        {/* <div className="flex items-center justify-end gap-4">
         <NavbarMenu />
         <Button isIconOnly radius="full" variant="bordered">
           <UserRound />
         </Button>
       </div> */}
-      {/* <SearchBar className="md:hidden col-span-2" /> */}
-      {!Cookies.get("isAuthenticated") ? (
-        <div className="flex flex-row justify-end gap-4">
-          <RegisterModal
-            isOpen={isModalRegisterOpen}
-            onClose={handleCloseRegisterModal}
-          />
-          <ButtonCustom
-            action={handleOpenRegisterModal}
-            primary
-            name={"Registrate"}
-          />
-          <LoginModal
-            isOpen={isModalLoginOpen}
-            onClose={handleCloseLoginModal}
-          />
-          <ButtonCustom
-            action={handleOpenLoginModal}
-            primary
-            name={"Iniciar sesión"}
-          />
-        </div>
-      ) : (
-        <div className="flex justify-end">
-          <Button
-            onClick={() => {
-              logoutClient();
-              window.location.reload();
-            }}
-            className="w-auto"
-            color="danger"
-            variant="light"
-          >
-            Cerrar sesión
-          </Button>
-        </div>
-      )}
+        {/* <SearchBar className="md:hidden col-span-2" /> */}
+        {!Cookies.get("isAuthenticated") ? (
+          <div className="flex flex-row justify-end gap-4">
+            <RegisterModal
+              isOpen={isModalRegisterOpen}
+              onClose={handleCloseRegisterModal}
+            />
+            <ButtonCustom
+              action={handleOpenRegisterModal}
+              primary
+              name={"Registrate"}
+            />
+            <LoginModal
+              isOpen={isModalLoginOpen}
+              onClose={handleCloseLoginModal}
+            />
+            <ButtonCustom
+              action={handleOpenLoginModal}
+              primary
+              name={"Iniciar sesión"}
+            />
+          </div>
+        ) : (
+          <div className="flex justify-end">
+            <Button
+              onClick={() => {
+                logoutClient();
+                window.location.reload();
+              }}
+              className="w-auto"
+              color="danger"
+              variant="light"
+            >
+              Cerrar sesión
+            </Button>
+          </div>
+        )}
+      </div>
     </header>
   );
 }
