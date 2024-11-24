@@ -136,12 +136,15 @@ function EmployeeLogin() {
   
         login(decoded, access, refresh);
         
+        Cookies.set("establishmentId", response.data.establishment_id, { expires: 7 });
         console.log(response.data);
         const isArtist = response.data.isArtist
         // console.log(isArtist);
         if(isArtist === true){
+          Cookies.set("id_employee", response.data.id_employee, { expires: 7 });
           navigate("/employee/dashboard/services");
         }else{
+          Cookies.set("id_receptionist", response.data.id_receptionist, { expires: 7 });
           navigate("/recepcionist/dashboard/finance");
           // console.log(response.data);
         }
