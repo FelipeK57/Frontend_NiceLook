@@ -75,29 +75,37 @@ const SocialLinks = ({ contactMethods }) => {
 
   return (
     <div style={{ display: "flex", gap: "10px" }}>
-      <SocialButton
-        platform="whatsapp"
-        link={`https://wa.me/+57${contactMethods.whatsapp}`}
-        icon={<WhatsappIcon size={"size-5"} />}
-      />
-      <SocialButton
-        platform="email"
-        link={`mailto:${contactMethods.mail}`}
-        icon={<Mail size={20} />}
-      />
-      <SocialButton
-        platform="facebook"
-        link={`https://www.facebook.com/${contactMethods.facebook}`}
-        icon={<FacebookIcon size={"size-5"} />}
-      />
-      <SocialButton
-        platform="instagram"
-        link={`https://www.instagram.com/${contactMethods.instagram?.replace(
-          "@",
-          ""
-        )}`}
-        icon={<InstagramIcon size={"size-5"} />}
-      />
+      {contactMethods.whatsapp && (
+        <SocialButton
+          platform="whatsapp"
+          link={`https://wa.me/+57${contactMethods.whatsapp}`}
+          icon={<WhatsappIcon size={"size-5"} />}
+        />
+      )}
+      {contactMethods.mail && (
+        <SocialButton
+          platform="email"
+          link={`mailto:${contactMethods.mail}`}
+          icon={<Mail size={20} />}
+        />
+      )}
+      {contactMethods.facebook && (
+        <SocialButton
+          platform="facebook"
+          link={`https://www.facebook.com/${contactMethods.facebook}`}
+          icon={<FacebookIcon size={"size-5"} />}
+        />
+      )}
+      {contactMethods.instagram && (
+        <SocialButton
+          platform="instagram"
+          link={`https://www.instagram.com/${contactMethods.instagram?.replace(
+            "@",
+            ""
+          )}`}
+          icon={<InstagramIcon size={"size-5"} />}
+        />
+      )}
     </div>
   );
 };
@@ -112,7 +120,7 @@ export default function EstablishmentProfile() {
   const navigate = useNavigate();
 
   const [establishment, setEstablishment] = useState({});
-  
+
   // Esta lista de objetos contiene la información de las pestañas del establecimiento.
   // component es el contenido de la pestaña, en el mismo se puede renderizar
   // un Outlet para rutas anidadas como se muestra con la pestaña de Servicios.
@@ -189,7 +197,10 @@ export default function EstablishmentProfile() {
           setEstablishment(response.data);
           setBackgroundImage(response.data.image_establishment?.image_banner);
           setLogoImage(response.data.image_establishment?.image_logo);
-          Cookies.set("establishmentId", response.data.information_establishment.stylos_info.id);
+          Cookies.set(
+            "establishmentId",
+            response.data.information_establishment.stylos_info.id
+          );
         })
         .catch((error) => {
           console.error(error);
