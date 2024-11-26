@@ -142,6 +142,7 @@ function ModalNewService({ isOpen, onClose }) {
             placeholder={"Ejemplo: 15000"}
           />
           <SelectCategorie
+            notAll
             setCategory={handleSelectCategory}
             invalid={!!error.category}
             message={error.category}

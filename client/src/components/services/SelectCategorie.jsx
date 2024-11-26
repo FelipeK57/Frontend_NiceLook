@@ -1,6 +1,6 @@
 import { Select, SelectItem } from "@nextui-org/react";
-import PropTypes from "prop-types";
-import { useState } from "react";
+import PropTypes, { func } from "prop-types";
+import { useEffect, useState } from "react";
 const categories = [
   {
     id: 0,
@@ -48,11 +48,24 @@ const categories = [
  * It applies custom styles through the `className` and `classNames` props.
  * The `categories` array is mapped to generate the list of selectable items.
  */
-function SelectCategorie({ category, setCategory, message, invalid }) {
+function SelectCategorie({ category, setCategory, message, invalid, notAll }) {
+  const [categories2, setCategories2] = useState(categories);
   const selectCategory = (name) => {
     setCategory(name);
     console.log(name);
   };
+
+  useEffect(() => {
+    const filterCategories = () => {
+      if (notAll) {
+        setCategories2(categories.slice(1));
+      } else {
+        setCategories2(categories);
+      }
+    };
+    filterCategories();
+  }, []);
+
   return (
     <Select
       labelPlacement="outside"
@@ -68,7 +81,7 @@ function SelectCategorie({ category, setCategory, message, invalid }) {
       errorMessage={message}
       className="m-0"
     >
-      {categories.map((category) => (
+      {categories2.map((category) => (
         <SelectItem
           onClick={() => selectCategory(category.name)}
           key={category.name}

@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import DropdownSidebar from "./DropdownSidebar";
 
 const adminNavLinks = [
   {
@@ -288,35 +289,26 @@ function Sidebar() {
   const url = useLocation().pathname;
 
   return (
-    <aside className="bg-slate-50 w-full grid py-2 2xl:py-6 grid-rows-[auto_1fr_auto] justify-center gap-4 2xl:gap-10 border-r-2 border-slate-200">
-      <button className="md:hidden">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-          />
-        </svg>
-      </button>
-      {/* <h1 className="hidden lg:block font-amaranth font-bold text-5xl text-center">
-        NiceLook.
-      </h1> */}
-      <div className="flex 2xl:gap-5 gap-3 flex-col items-center">
+    <aside className="bg-slate-50 w-full grid py-2 2xl:py-6 md:grid-rows-[auto_1fr_auto] justify-start md:justify-center gap-4 2xl:gap-10 border-r-2 border-slate-200">
+      {url.includes("admin") ? (
+        <DropdownSidebar links={adminNavLinks} handleLogout={handleLogout} />
+      ) : url.includes("recepcionist") ? (
+        <DropdownSidebar
+          links={recepcionistNavLinks}
+          handleLogout={handleLogout}
+        />
+      ) : (
+        <DropdownSidebar links={employeeNavLinks} handleLogout={handleLogout} />
+      )}
+      <div className="hidden md:flex 2xl:gap-5 gap-3 flex-col items-center">
         <LogoNiceLook className="text-4xl" />
         <img src={logo} className="size-16 2xl:size-32 rounded-full"></img>
         <p>
           {userInfo.first_name} {userInfo.last_name}
         </p>
-        <ButtonCustom secondary name="Configuración" />
+        {/* <ButtonCustom secondary name="Configuración" /> */}
       </div>
-      <nav className="flex flex-col gap-2 2xl:gap-6">
+      <nav className="hidden md:flex flex-col gap-2 2xl:gap-6">
         {url.includes("admin")
           ? adminNavLinks.map((link) => (
               <LinkSidebar
@@ -344,7 +336,7 @@ function Sidebar() {
               />
             ))}
       </nav>
-      <div className="flex items-center justify-center">
+      <div className="hidden md:flex items-center justify-center">
         <Button onClick={handleLogout} color="danger" variant="light">
           Cerrar Sesión
         </Button>
