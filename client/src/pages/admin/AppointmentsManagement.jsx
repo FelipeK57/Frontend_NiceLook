@@ -11,7 +11,7 @@ function AppointmentsManagement() {
   let year = fecha.getFullYear().toString();
   let month = (fecha.getMonth() + 1).toString();
   let day = fecha.getDate().toString();
-  
+
   const [date, setDate] = useState(
     parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
   );
@@ -51,7 +51,7 @@ function AppointmentsManagement() {
         fecha: cita.date, // Fecha de la cita
         emailClient: cita.client.user.email, // Correo electrónico del cliente
         phoneClient: cita.client.phone, // Teléfono del cliente
-        commission: cita.commission
+        commission: cita.commission,
       };
 
       // Añadir la cita al grupo correspondiente
@@ -103,6 +103,12 @@ function AppointmentsManagement() {
     };
 
     fetchData();
+
+    window.addEventListener("reloadAppointments", fetchData);
+
+    return () => {
+      window.removeEventListener("reloadAppointments", fetchData);
+    };
   }, [date]);
 
   useEffect(() => {
@@ -130,7 +136,7 @@ function AppointmentsManagement() {
           Calendario de citas
         </h1>
         <DatePicker
-          value={date} 
+          value={date}
           onChange={setDate}
           label="Fecha"
           className="max-w-[280px] font-semibold"
