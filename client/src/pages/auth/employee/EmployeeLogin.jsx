@@ -142,7 +142,7 @@ function EmployeeLogin() {
         // console.log(isArtist);
         if(isArtist === true){
           Cookies.set("id_employee", response.data.id_employee, { expires: 7 });
-          navigate("/employee/dashboard/services");
+          navigate("/employee/dashboard/schedule");
         }else{
           Cookies.set("id_receptionist", response.data.id_receptionist, { expires: 7 });
           navigate("/recepcionist/dashboard/finance");

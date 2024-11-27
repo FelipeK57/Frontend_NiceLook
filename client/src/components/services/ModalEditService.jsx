@@ -179,6 +179,7 @@ function ModalEditService({
             placeholder={"Ejemplo: 15000"}
           />
           <SelectCategorie
+            notAll
             category={category}
             setCategory={handleSelectCategory}
             invalid={!!error.category}

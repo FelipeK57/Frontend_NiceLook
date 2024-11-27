@@ -133,6 +133,7 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
                             <span className="font-bold text-xl mt-4">Dos jornadas</span>
                             <Switch
                                 checked={isTwoShifts}
+                                color='success'
                                 onChange={(e) => {
                                     setIsTwoShifts(e.target.checked);
                                     localStorage.setItem('isTwoShifts', JSON.stringify(e.target.checked));
