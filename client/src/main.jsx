@@ -34,6 +34,7 @@ import HomePage from "./pages/HomePage.jsx";
 import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
 import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
+import AppointmentsHistory from "./pages/employee/AppointmentsHistory.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -188,7 +189,7 @@ const routes = createBrowserRouter([
           {
             id: "employee-record",
             path: "record",
-            element: <RecordManagement />,
+            element: <AppointmentsHistory />,
           },
         ],
       },

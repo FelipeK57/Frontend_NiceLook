@@ -119,7 +119,7 @@ const adminNavLinks = [
     path: "products",
   },
   {
-    name: "Empleados",
+    name: "Profesionales",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -210,27 +210,7 @@ const employeeNavLinks = [
     path: "services",
   },
   {
-    name: "Gestionar Horario",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-        />
-      </svg>
-    ),
-    path: "schedule",
-  },
-  {
-    name: "Calendario de citas",
+    name: "Mi agenda",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -244,6 +224,26 @@ const employeeNavLinks = [
           strokeLinecap="round"
           strokeLinejoin="round"
           d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
+        />
+      </svg>
+    ),
+    path: "schedule",
+  },
+  {
+    name: "Historial de citas",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="size-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122"
         />
       </svg>
     ),
@@ -289,7 +289,7 @@ function Sidebar() {
   const url = useLocation().pathname;
 
   return (
-    <aside className="bg-slate-50 w-full grid py-2 2xl:py-6 md:grid-rows-[auto_1fr_auto] justify-start md:justify-center gap-4 2xl:gap-10 border-r-2 border-slate-200">
+    <aside className="w-full grid py-2 2xl:py-6 md:grid-rows-[auto_1fr_auto] justify-start md:justify-center gap-4 2xl:gap-10 border-r-2 border-slate-200">
       {url.includes("admin") ? (
         <DropdownSidebar links={adminNavLinks} handleLogout={handleLogout} />
       ) : url.includes("recepcionist") ? (

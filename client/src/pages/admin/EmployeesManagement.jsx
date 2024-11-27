@@ -43,7 +43,7 @@ function EmployeesManagement() {
         <main className="flex max-h-screen h-screen bg-[#ffffff]">
             <section className="flex flex-col gap-6 w-full py-8 px-4 md:px-10">
                 <div className="EmplyeesManagementheader flex justify-between pb-2 md:flex-row flex-col md:gap-0 gap-8">
-                    <h1 className="hidden lg:block text-4xl text-zinc-950 font-bold">Gestion de empleados</h1>
+                    <h1 className="hidden lg:block text-4xl text-zinc-950 font-bold">Gestión de profesionales</h1>
                     <div className="flex lg:hidden gap-4 items-center">
                         <ButtonCustom secondary isIconOnly classStyles="rounded-full 1/2lg:hidden flex" >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
