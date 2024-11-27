@@ -218,15 +218,16 @@ function ModalDetailsAppointment({
                       Hora: {time}
                     </p>
                   </div>
-                  {!isEmployee && (
-                    <Button
-                      variant="bordered"
-                      onPress={() => setEditMode(!editMode)}
-                    >
-                      <Pencil />
-                      Reagendar
-                    </Button>
-                  )}
+                  {!isEmployee &&
+                    (state != "Completada" || state != "Cancelada") && (
+                      <Button
+                        variant="bordered"
+                        onPress={() => setEditMode(!editMode)}
+                      >
+                        <Pencil />
+                        Reagendar
+                      </Button>
+                    )}
                 </>
               )}
             </section>
