@@ -272,6 +272,7 @@ export default function EmployeeProfile() {
         })
         .then((response) => {
           setEmployee(response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);

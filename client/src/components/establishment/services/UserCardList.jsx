@@ -23,6 +23,7 @@ export default function UserCardList({ filterQuery }) {
           // Inicialmente mostrar todos los usuarios
           setFilteredEmployees(employeesList);
           // console.log(response.data.employeesList);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -104,13 +105,13 @@ export default function UserCardList({ filterQuery }) {
       onPress={() => navigate(`./services/${user.id}`, { relative: true })}
     >
       <CardBody className="overflow-visible p-0">
-        {user.user?.image ? (
+        {user.image ? (
           <Image
             shadow="sm"
             radius="lg"
             width="100%"
             className="w-full object-cover aspect-square"
-            src={user.user?.image}
+            src={user.image}
           />
         ) : (
           <div className="w-full aspect-square flex items-center justify-center rounded-xl shadow-sm bg-neutral-100">
