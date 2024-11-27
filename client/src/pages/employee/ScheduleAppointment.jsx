@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import ScheduleModal from "@/components/appointmentsEmployee/ScheduleModal";
 import ButtonCustom from "@/components/global/ButtonCustom";
 import { useDisclosure } from "@nextui-org/react";
+import { createEmployeeSchedule} from "@/Api/employee/employee";
 
 function ScheduleAppointment() {
   const fecha = new Date();
@@ -51,6 +52,21 @@ function ScheduleAppointment() {
     fetchAppointments();
   }, [date]);
 
+  const handleSaveSchedule = async (scheduleData) => {
+    try {
+      const response = await createEmployeeSchedule(employeeId, scheduleData);
+      if (response.status === 201) {
+        console.log("Horario guardado exitosamente:", response.data);
+        onOpenChange(false);
+      }
+    } catch (error) {
+      console.error(
+        "Error al guardar el horario:",
+        error.response?.data || error.message
+      );
+    }
+  };
+
   const [employeeId, setEmployeeId] = useState(Cookies.get("id_employee"));
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
@@ -70,12 +86,13 @@ function ScheduleAppointment() {
       <main className="flex flex-col gap-4 pb-2">
         <ButtonCustom
           name="Gestionar Horario"
-          classStyles={"sm:mt-0 mt-2"}
+          classStyles={"sm:mt-0 mt-2 sm:max-w-[280px] text-lg"}
           primary
           onPress={onOpen}
         />
         <ScheduleModal
           isOpen={isOpen}
+          onSave={handleSaveSchedule}
           onOpenChange={onOpenChange}
           employeeId={employeeId}
         />
@@ -89,9 +106,6 @@ function ScheduleAppointment() {
         </div>
         <AppointmentsHistoryList history={appointments} />
       </main>
-      <footer className="hidden md:block">
-        <p className="font-semibold text-xl">Ganancias del dia: ${earnings}</p>
-      </footer>
     </main>
   );
 }

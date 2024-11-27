@@ -35,6 +35,7 @@ function AppointmentsHistory() {
             },
           }
         );
+        console.log(response.data);
         if (response.data.appointments.length > 0) {
           setAppointments(response.data.appointments);
           setEearnings(response.data.earnings);
