@@ -44,9 +44,17 @@ function ItemHistory({
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-2">
           <p className="font-normal text-base text-slate-700">
-            {serviceName.map((service) => (
-              <span key={service.id}>{service.name}</span>
-            ))}
+            {serviceName.length > 0 && (
+              <span>
+                Servicio:{" "}
+                {serviceName.map((service, index) => (
+                  <span key={service.id}>
+                    {service.name}
+                    {index < serviceName.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </span>
+            )}
           </p>
           <p className="ont-normal text-base text-slate-700">
             Cliente: {clientName}

@@ -5,7 +5,7 @@ import {
   DropdownItem,
   Button,
 } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function DropdownSidebar({ links, handleLogout }) {
   return (
@@ -35,13 +35,13 @@ function DropdownSidebar({ links, handleLogout }) {
       <DropdownMenu aria-label="Static Actions">
         {links.map((link) => {
           return (
-            <DropdownItem key={link.id}>
-              <Link to={link.path}>{link.name}</Link>
+            <DropdownItem onClick={useNavigate(`/${link.path}`)} key={link.id}>
+              <Link className="font-semibold text-lg" to={link.path}>{link.name}</Link>
             </DropdownItem>
           );
         })}
         <DropdownItem onClick={handleLogout}>
-          <p className="text-[#f31260]">Cerrar sesión</p>
+          <p className="text-[#f31260] text-lg font-semibold">Cerrar sesión</p>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

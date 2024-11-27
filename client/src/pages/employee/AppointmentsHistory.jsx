@@ -23,7 +23,6 @@ function AppointmentsHistory() {
       const day = date.toDate().getDate();
       const month = date.toDate().getMonth() + 1;
       const year = date.toDate().getFullYear();
-      console.log(day, month, year);
       try {
         const response = await axios.get(
           `http://localhost:8000/employee/history_appointments/${Cookies.get(
@@ -67,11 +66,11 @@ function AppointmentsHistory() {
         <p className="md:hidden font-semibold text-xl">
           Ganancias del dia: ${earnings}
         </p>
-        <div className="flex flex-row gap-4 justify-between bg-sky-600 p-2 rounded-3xl">
-          <div className="flex items-center justify-center px-4 py-2 bg-slate-50 rounded-3xl">
+        <div className="flex flex-row gap-4 justify-between bg-slate-300 p-2 rounded-3xl">
+          <div className="flex items-center justify-center px-4 py-2 bg-[#ffffff] rounded-3xl">
             <p className="font-bold text-xl">Citas del dia</p>
           </div>
-          <div className="flex items-center justify-center py-2 px-4 bg-slate-50 rounded-3xl">
+          <div className="flex items-center justify-center py-2 px-4 bg-[#ffffff] rounded-3xl">
             <p className="font-bold text-xl">{appointments.length}</p>
           </div>
         </div>
