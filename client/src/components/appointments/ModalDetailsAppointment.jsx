@@ -278,16 +278,17 @@ function ModalDetailsAppointment({
               >
                 Reagendar
               </Button> */}
-              {state !== "Completada" && (
-                <ButtonCustom
-                  action={handleFinishAppointment}
-                  primary
-                  isLoading={loading}
-                >
-                  <Check />
-                  Marcar completada
-                </ButtonCustom>
-              )}
+              {state !== "Completada" ||
+                (state !== "Cancelada" && (
+                  <ButtonCustom
+                    action={handleFinishAppointment}
+                    primary
+                    isLoading={loading}
+                  >
+                    <Check />
+                    Marcar completada
+                  </ButtonCustom>
+                ))}
             </>
           )}
         </ModalFooter>
