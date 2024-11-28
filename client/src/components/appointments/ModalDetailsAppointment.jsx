@@ -79,6 +79,7 @@ function ModalDetailsAppointment({
   const [editMode, setEditMode] = useState(false);
   const [editedDate, setEditedDate] = useState(date);
   const [loading, setLoading] = useState(false);
+  const [canceling, setCanceling] = useState(false);
 
   const formatAppointmentData = (dateTimeObject, appointmentId) => {
     if (!dateTimeObject || !appointmentId) return null;
@@ -146,6 +147,27 @@ function ModalDetailsAppointment({
       })
       .finally(() => {
         setLoading(false);
+        onClose();
+      });
+  };
+
+  const handleCancelAppointment = async (e) => {
+    e.preventDefault();
+    setCanceling(true);
+    api
+      .patch(`api/appointment_change_state/`, {
+        state: "Cancelada",
+        id_appointment: id,
+      })
+      .then((response) => {
+        console.log("response", response);
+        window.dispatchEvent(new Event("reloadAppointments"));
+      })
+      .catch((error) => {
+        console.error("error", error);
+      })
+      .finally(() => {
+        setCanceling(false);
         onClose();
       });
   };
@@ -271,13 +293,6 @@ function ModalDetailsAppointment({
           {/* Modal Footer Buttons */}
           {!isEmployee && (
             <>
-              {/* <Button
-                color="default"
-                variant="bordered"
-                // onPress={handleOpenRescheduleAppointment}
-              >
-                Reagendar
-              </Button> */}
               {state !== "Completada" ||
                 (state !== "Cancelada" && (
                   <ButtonCustom
@@ -291,6 +306,13 @@ function ModalDetailsAppointment({
                 ))}
             </>
           )}
+          <ButtonCustom
+            action={handleCancelAppointment}
+            secondary
+            isLoading={canceling}
+          >
+            Cancelar cita
+          </ButtonCustom>
         </ModalFooter>
       </ModalContent>
     </Modal>
