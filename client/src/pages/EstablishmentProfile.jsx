@@ -1,20 +1,19 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import {
-  Link,
-  Outlet,
-  useParams,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Outlet, useParams, useLocation, useNavigate } from "react-router-dom";
 
 import api from "@/api";
 
 import { Image, Button, Divider, Tabs, Tab, Skeleton } from "@nextui-org/react";
-import { Image as ImageIcon, Mail, Phone } from "lucide-react";
+import { Image as ImageIcon, Mail } from "lucide-react";
+import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import FacebookIcon from "@/components/icons/FacebookIcon";
+import InstagramIcon from "@/components/icons/IntagramIcon";
 
 import ServicesTab from "./establishment/ServicesTab";
 import ProfileReviews from "@/components/establishment/review/ProfileReviews";
+import BuyCard from "./buyPage/buyCard";
+import Cookies from "js-cookie";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
@@ -52,6 +51,58 @@ export const ProfileImage = ({ logoImage, className }) => {
   );
 };
 
+const SocialButton = ({ platform, link, icon }) => {
+  if (!link) return null; // Si no hay link, no renderiza el botón
+
+  const handleClick = () => {
+    window.open(link, "_blank"); // Abre en una nueva pestaña
+  };
+
+  return (
+    <Button
+      isIconOnly
+      radius="full"
+      variant="bordered"
+      onClick={handleClick}
+      aria-label={platform}
+    >
+      {icon}
+    </Button>
+  );
+};
+
+const SocialLinks = ({ contactMethods }) => {
+  if (!contactMethods) return <span>Sin métodos de contacto</span>;
+
+  return (
+    <div style={{ display: "flex", gap: "10px" }}>
+      <SocialButton
+        platform="whatsapp"
+        link={`https://wa.me/+57${contactMethods.whatsapp}`}
+        icon={<WhatsappIcon size={"size-5"} />}
+      />
+      <SocialButton
+        platform="email"
+        link={`mailto:${contactMethods.mail}`}
+        icon={<Mail size={20} />}
+      />
+      <SocialButton
+        platform="facebook"
+        link={`https://www.facebook.com/${contactMethods.facebook}`}
+        icon={<FacebookIcon size={"size-5"} />}
+      />
+      <SocialButton
+        platform="instagram"
+        link={`https://www.instagram.com/${contactMethods.instagram?.replace(
+          "@",
+          ""
+        )}`}
+        icon={<InstagramIcon size={"size-5"} />}
+      />
+    </div>
+  );
+};
+
 export default function EstablishmentProfile() {
   const [loading, setLoading] = useState(true);
   const [backgroundImage, setBackgroundImage] = useState(null);
@@ -62,44 +113,46 @@ export default function EstablishmentProfile() {
   const navigate = useNavigate();
 
   const [establishment, setEstablishment] = useState({});
+  
+  // Esta lista de objetos contiene la información de las pestañas del establecimiento.
+  // component es el contenido de la pestaña, en el mismo se puede renderizar
+  // un Outlet para rutas anidadas como se muestra con la pestaña de Servicios.
+  // El nuevo componente anidado debe ubicarse en Main.jsx.
 
-  // Esta lista de objetos contiene la información de las pestañas del establecimiento
-  // El componente es el contenido de la pestaña, en el mismo se puede renderizar
-  // un Outlet para rutas anidadas como se muestra con la pestaña de Servicios
-  // El componente anidado debe ubicarse en Main.jsx
-
-  const establishmentTabs = [
-    {
-      key: "services",
-      title: "Servicios",
-      component: employeeId ? <Outlet /> : <ServicesTab />,
-    },
-    {
-      key: "store",
-      title: "Tienda",
-      component: <h1>Tienda</h1>,
-    },
-    {
-      key: "reviews",
-      title: "Reseñas",
-      component: <ProfileReviews />,
-    },
-    {
-      key: "employees",
-      title: "Empleados",
-      component: <h1>Empleados</h1>,
-    },
-    {
-      key: "about",
-      title: "Sobre nosotros",
-      component: <h1>Sobre nosotros</h1>,
-    },
-  ];
-
-  // Esta función se encarga de renderizar el contenido de la pestaña seleccionada
+  const establishmentTabs = React.useMemo(
+    () => [
+      {
+        key: "services",
+        title: "Servicios",
+        component: employeeId ? <Outlet /> : <ServicesTab />,
+      },
+      {
+        key: "store",
+        title: "Tienda",
+        component: <BuyCard />,
+      },
+      {
+        key: "reviews",
+        title: "Reseñas",
+        component: <ProfileReviews />,
+      },
+      {
+        key: "employees",
+        title: "Empleados",
+        component: <h1>Empleados</h1>,
+      },
+      {
+        key: "about",
+        title: "Sobre nosotros",
+        component: <h1>Sobre nosotros</h1>,
+      },
+    ],
+    [employeeId]
+  );
+  
+  // Esta función se encarga de renderizar el contenido de la pestaña seleccionada.
   // OJO: Si hay rutas anidadas, implementar lógica de renderizado de outlet con context
-  // en establishmentTabs[] arriba ^
-  // También se debe setear la ruta anidada en Main.jsx
+  // en establishmentTabs[] arriba ^.
 
   const renderTabContent = () => {
     const selectedTabContent = establishmentTabs.find(
@@ -109,13 +162,25 @@ export default function EstablishmentProfile() {
   };
 
   useEffect(() => {
-    const redirectInitPage = () => {
-      if (!location.includes(selectedTab)) {
+    const redirectToInitPage = () => {
+      // Verifica si la URL actual incluye alguna de las pestañas disponibles
+      const isTabInLocation = establishmentTabs.some((tab) =>
+        location.includes(tab.key)
+      );
+
+      // Si no incluye ninguna pestaña, redirige a la pestaña "services"
+      if (!isTabInLocation) {
         navigate(`./${selectedTab}`, { replace: true });
       }
     };
-    redirectInitPage();
-  }, [location, selectedTab, navigate]);
+
+    redirectToInitPage();
+  }, [location, selectedTab, navigate, establishmentTabs]);
+
+  const handleTabSelectionChange = (key) => {
+    setSelectedTab(key);
+    navigate(`./${key}`, { replace: true });
+  };
 
   useEffect(() => {
     const fetchEstablishmentData = async () => {
@@ -125,12 +190,12 @@ export default function EstablishmentProfile() {
           setEstablishment(response.data);
           setBackgroundImage(response.data.image_establishment?.image_banner);
           setLogoImage(response.data.image_establishment?.image_logo);
-          console.log(response.data);
+          Cookies.set("establishmentId", response.data.information_establishment.stylos_info.id);
         })
         .catch((error) => {
           console.error(error);
         })
-        .then(() => {
+        .finally(() => {
           setLoading(false);
         });
     };
@@ -138,14 +203,14 @@ export default function EstablishmentProfile() {
   }, []);
 
   return (
-    <main className="flex h-full p-0 md-p-4 md:px-16 lg:px-64">
+    <main className="mx-auto flex h-full w-full md:w-4/5 max-w-[1280px]">
       <article className="flex flex-nowrap flex-col w-full">
         {/* Imagenes del establecimiento */}
-        <section className="relative flex w-full h-48 md:pt-4 md:h-64 lg:h-80">
+        <section className="relative flex w-full h-48 md:pt-4 md:h-64 lg:h-80 2xl:h-[420px]">
           <BackgroundImage backgroundImage={backgroundImage} />
           <ProfileImage
             logoImage={logoImage}
-            className="absolute w-24 h-24 md:w-40 md:h-40 left-6 md:left-6 translate-y-32 lg:translate-y-48 z-10"
+            className="absolute w-24 h-24 md:w-40 md:h-40 left-6 md:left-6 translate-y-32 lg:translate-y-48 2xl:translate-y-72 z-10"
           />
         </section>
 
@@ -153,70 +218,74 @@ export default function EstablishmentProfile() {
         <section className="flex flex-col w-full px-6 pb-2 mt-12 md:mt-16">
           <div className="grid grid-cols-[1fr_30%] items-start">
             {/* Nombre del establecimiento */}
-            <h1 className="text-2xl font-bold">
-              <React.Suspense
-                fallback={<Skeleton className="flex rounded-full text-2xl" />}
-              >
-                {establishment.information_establishment?.stylos_info?.name ||
-                  "Nombre no disponible"}
-              </React.Suspense>
-            </h1>
+            {!loading ? (
+              <h1 className="text-2xl font-bold select-none">
+                {establishment.information_establishment?.stylos_info?.name}
+              </h1>
+            ) : (
+              <Skeleton className="flex rounded-full w-64 h-8" />
+            )}
 
             {/* Calificación */}
             <div className="flex font-bold flex-nowrap justify-end">
-              <h1>4.5/5⭐ (112)</h1>
+              {!loading ? (
+                establishment.information_establishment?.rating ? (
+                  <h1
+                    onClick={() => setSelectedTab("reviews")}
+                    className="hover:underline cursor-pointer select-none"
+                  >
+                    {establishment.information_establishment?.rating}/5⭐ (
+                    {establishment.information_establishment?.reviews})
+                  </h1>
+                ) : (
+                  <h1>Sin calificación</h1>
+                )
+              ) : (
+                <Skeleton className="flex rounded-full w-32 h-6" />
+              )}
             </div>
           </div>
 
           <div className="grid grid-cols-1 mt-2 md:grid-cols-2 gap-4 items-start">
-            <div className="flex flex-col">
+            <div className="flex flex-col select-none">
               {/* Ubicación */}
-              <React.Suspense
-                fallback={<Skeleton className="text-md flex rounded-full" />}
-              >
-                <p className="text-md font-bold text-default-700">
+              {!loading ? (
+                <p>
                   📍{" "}
-                  {establishment.information_establishment?.stylos_info?.city}
+                  {establishment.information_establishment?.stylos_info?.city}{" "}
+                  {/* <ExternalLink size={12} className="inline" /> */}
                 </p>
-              </React.Suspense>
-              <React.Suspense
-                fallback={<Skeleton className="text-md flex rounded-full" />}
-              >
-                <Link className="text-md text-neutral-500 underline">
-                  {
-                    establishment.information_establishment?.stylos_info
-                      ?.address
-                  }
-                </Link>
-              </React.Suspense>
+              ) : (
+                <Skeleton className="w-32 h-6 flex rounded-full mb-2" />
+              )}
+              {!loading ? (
+                establishment.information_establishment?.stylos_info?.address
+              ) : (
+                <Skeleton className="w-52 h-5 flex rounded-full" />
+              )}
             </div>
             <div className="flex flex-col gap-2 md:justify-self-end">
-              <p className="text-md font-bold md:text-right">Contacto</p>
-              <div className="flex flex-nowrap gap-4">
-                {establishment.information_establishment?.stylos_info
-                  ?.contact_methods?.mail && (
-                  <Button
-                    isIconOnly
-                    radius="full"
-                    variant="bordered"
-                    onPress={() =>
-                      window.open(
-                        `mailto:${establishment.information_establishment?.stylos_info?.contact_methods?.mail}`
-                      )
-                    }
-                  >
-                    <Mail size={20} />
-                  </Button>
+              <p className="text-md font-bold md:text-right select-none">
+                Contacto
+              </p>
+              <div className="flex flex-nowrap gap-4 w-fit md:self-end">
+                {!loading ? (
+                  establishment.information_establishment?.stylos_info
+                    ?.contact_methods && (
+                    <SocialLinks
+                      contactMethods={
+                        establishment.information_establishment?.stylos_info
+                          ?.contact_methods
+                      }
+                    />
+                  )
+                ) : (
+                  <Skeleton className="flex rounded-full w-48 h-10" />
                 )}
-                <Button isIconOnly radius="full" variant="bordered">
-                  <Phone size={20} />
-                </Button>
               </div>
             </div>
           </div>
         </section>
-
-        {/* <Divider /> */}
 
         {/* Tabs */}
         <section className="flex flex-col w-full">
@@ -224,9 +293,9 @@ export default function EstablishmentProfile() {
             variant="underlined"
             fullWidth
             size="lg"
-            className=" sticky top-16 z-50 bg-white border-b-1 shadow-sm"
+            className="sticky top-16 z-50 bg-white border-b-1 shadow-sm select-none"
             selectedKey={selectedTab}
-            onSelectionChange={setSelectedTab}
+            onSelectionChange={handleTabSelectionChange}
           >
             {establishmentTabs.map((tab) => (
               <Tab key={tab.key} title={tab.title}>

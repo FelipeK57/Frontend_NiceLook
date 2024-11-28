@@ -10,6 +10,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import NotFound from "@/pages/NotFound.jsx";
 
 import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
 import ServicesManagement from "./pages/admin/ServicesManagement.jsx";
@@ -33,17 +34,20 @@ import HomePage from "./pages/HomePage.jsx";
 import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
 import ClientHistorial from "./components/client/clientHistorial.jsx";
+import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
+import AppointmentsHistory from "./pages/employee/AppointmentsHistory.jsx";
+import ScheduleAppointment from "./pages/employee/ScheduleAppointment.jsx";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
         element: <HomePage />,
-        errorElement: <div>Error Page</div>,
+        errorElement: <NotFound />,
       },
       {
         path: "/historialTest",
@@ -53,7 +57,7 @@ const routes = createBrowserRouter([
       {
         path: "/@peluqueriastylospalmira",
         element: <EstablishmentProfile />,
-        errorElement: <div>Error Page</div>,
+        errorElement: <NotFound />,
         children: [
           {
             path: "services",
@@ -61,55 +65,60 @@ const routes = createBrowserRouter([
               {
                 path: ":employeeId",
                 element: <EmployeeProfile />,
-                errorElement: <div>Error Page</div>,
+                errorElement: <NotFound />,
               },
             ],
           },
           {
             path: "store",
-            errorElement: <div>Error Page</div>,
+            errorElement: <NotFound />,
           },
           {
             path: "reviews",
-            errorElement: <div>Error Page</div>,
+            errorElement: <NotFound />,
           },
           {
             path: "employees",
-            errorElement: <div>Error Page</div>,
+            errorElement: <NotFound />,
           },
           {
             path: "about",
-            errorElement: <div>Error Page</div>,
+            errorElement: <NotFound />,
           },
         ],
       },
+      {
+      path:"/shoppingCart",
+      element: <ShoppingCart />,
+      errorElement: <div>Error Page</div>,
+    },
     ],
   },
   {
     path: "/dashboard",
     element: <Dashboard />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/services",
     element: <ServicesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/employees",
     element: <EmployeesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
 
   {
     path: "/EditProfilePage",
     element: <EditProfilePage />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/services",
     element: <ServicesManagement />,
-    errorElement: <div>Error Page</div>,
+    errorElement: <NotFound />,
   },
   {
     path: "/admin",
@@ -181,12 +190,12 @@ const routes = createBrowserRouter([
           {
             id: "employee-schedule",
             path: "schedule",
-            element: <ScheduleManagement />,
+            element: <ScheduleAppointment />,
           },
           {
             id: "employee-record",
             path: "record",
-            element: <RecordManagement />,
+            element: <AppointmentsHistory />,
           },
         ],
       },

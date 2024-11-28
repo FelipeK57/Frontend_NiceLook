@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody, CardFooter, Image, Chip } from "@nextui-org/react";
@@ -5,24 +6,58 @@ import { Image as Imageicon } from "lucide-react";
 import { Skeleton } from "@nextui-org/react";
 import api from "@/api";
 
-export default function UserCardList() {
+export default function UserCardList({ filterQuery }) {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      try {
-        const response = await api.get("establisment/get_employees/");
-        setUsers(response.data.employeesList || []);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+      await api
+        .get("establisment/get_employees/")
+        .then((response) => {
+          const employeesList = response.data.employeesList || [];
+
+          setUsers(employeesList);
+          // Inicialmente mostrar todos los usuarios
+          setFilteredEmployees(employeesList);
+          // console.log(response.data.employeesList);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .then(() => {
+          setLoading(false);
+        });
     };
     fetchUsers();
   }, []);
+
+  // Filter effect
+  useEffect(() => {
+    if (!users.length) return;
+
+    if (!filterQuery || filterQuery === "Todos") {
+      setFilteredEmployees(users);
+      return;
+    }
+
+    const filtered = users.filter((employee) => {
+      // Verificar si el empleado tiene servicios
+      if (!employee.employee_services?.length) return false;
+
+      // Verificar si algún servicio coincide con la categoría
+      return employee.employee_services.some(
+        (service) => service.service?.category === filterQuery
+      );
+    });
+
+    // Debug
+    // console.log("Filtering by:", filterQuery);
+    // console.log("Filtered employees:", filtered);
+    setFilteredEmployees(filtered);
+  }, [filterQuery, users]);
 
   if (loading) {
     return Array.from({ length: 3 }).map((_, index) => (
@@ -45,7 +80,22 @@ export default function UserCardList() {
     ));
   }
 
-  return users.map((user, index) => (
+  if (filteredEmployees.length === 0) {
+    return (
+      <Card
+        className="w-full h-full space-y-5 p-4 col-span-2 md:col-span-3"
+        radius="lg"
+      >
+        <CardBody className="flex items-center justify-center">
+          <p className="text-center text-default-500 select-none">
+            No se encontraron empleados
+          </p>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  return filteredEmployees.map((user, index) => (
     <Card
       key={index}
       className="h-fit p-4"
@@ -72,7 +122,11 @@ export default function UserCardList() {
         <b>
           {user.user?.first_name} {user.user?.last_name}
         </b>
-        <p className="text-default-500 text-xs">{user?.rating}/5⭐</p>
+        <p className="text-default-500 text-xs">
+          {user?.rating
+            ? `${user?.rating}/5⭐(${user?.reviews})`
+            : "Sin calificación"}
+        </p>
         <Chip className="text-xs mt-2" color="success" variant="flat" size="sm">
           Disponible
         </Chip>

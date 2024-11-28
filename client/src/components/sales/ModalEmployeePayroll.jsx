@@ -25,27 +25,35 @@ function ModalEmployeePayroll({ isOpen, onClose, day, month, year }) {
       setError("El codigo es requerido");
       return;
     }
-    setLoading(true);
-    const response = await axios.get(
-      `http://localhost:8000/receptionist/sales/`,
-      {
-        params: {
-          code_employee: code,
-          day: day,
-          month: month,
-          year: year,
-          id_establisment: establismentId,
-        },
-      }
-    );
-    console.log(response.data);
-    setPayroll(response.data.total);
-    setEmployee(
-      response.data.employee.user.first_name +
-        " " +
-        response.data.employee.user.last_name
-    );
-    setLoading(false);
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:8000/receptionist/sales/`,
+        {
+          params: {
+            code_employee: code,
+            day: day,
+            month: month,
+            year: year,
+            id_establisment: establismentId,
+          },
+        }
+      );
+      console.log(response.data);
+      setPayroll(response.data.total);
+      setEmployee(
+        response.data.employee.user.first_name +
+          " " +
+          response.data.employee.user.last_name
+      );
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setError("No se encontro el profesional");
+      setEmployee("");
+      setPayroll(0);
+      setLoading(false);
+    }
   };
 
   const handleCloseModal = () => {
@@ -90,7 +98,9 @@ function ModalEmployeePayroll({ isOpen, onClose, day, month, year }) {
             />
           </div>
           <div>
-            <p className="text-md font-semibold">Profesional: {employee}</p>
+            {employee !== "" && (
+              <p className="text-md font-semibold">Profesional: {employee}</p>
+            )}
             <p className="text-md font-semibold">Pago: ${payroll}</p>
           </div>
         </ModalBody>

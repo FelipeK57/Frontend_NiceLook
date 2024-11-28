@@ -141,7 +141,8 @@ export default function AdminLogin() {
             </header>
             <GoogleLogin
               onSuccess={(response) => {
-                authGoogle(response.credential);
+                authGoogle(response.credential)
+                // console.log(response);
               }}
               // onError={() => {
               //   console.log("Fallo en el inicio de sesión");

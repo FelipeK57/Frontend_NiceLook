@@ -12,8 +12,12 @@ import {
 } from "@nextui-org/react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
+import useAuthStore from "@/stores/useAuthStore";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 function RegisterModal({ isOpen, onClose }) {
+  const { loginClient } = useAuthStore();
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,6 +30,25 @@ function RegisterModal({ isOpen, onClose }) {
     email: "",
     password: "",
   });
+
+  const authGoogle = async (token) => {
+    try {
+      if (!token) {
+        console.error("No se recibio el token de google");
+        return;
+      }
+      const response = await axios.post("http://localhost:8000/client/login/", {
+        token,
+      });
+      console.log("Respuesta del servidor", response);
+      Cookies.set("client_id", response.data.client_id);
+      loginClient();
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al autenticar con google", error);
+    }
+  };
 
   const handleRegister = () => {
     const newErrors = {
@@ -104,7 +127,7 @@ function RegisterModal({ isOpen, onClose }) {
         isOpen={isOpen}
         backdrop="blur"
         onClose={onClose}
-        placement="top"
+        placement="center"
         size="md"
       >
         <ModalContent>
@@ -114,7 +137,11 @@ function RegisterModal({ isOpen, onClose }) {
             </h1>
           </ModalHeader>
           <ModalBody className="flex flex-col justify-center items-center gap-4">
-            <GoogleLogin />
+            <GoogleLogin
+              onSuccess={(response) => {
+                authGoogle(response.credential);
+              }}
+            />
             <div className="w-full flex flex-row items-center gap-2">
               <hr className="border-1 w-full border-slate-200" />
               <p className="text-center text-sm font-light min-w-max text-slate-400">

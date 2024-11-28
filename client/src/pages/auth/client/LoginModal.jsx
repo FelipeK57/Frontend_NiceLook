@@ -13,9 +13,11 @@ import {
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import useAuthStore from "@/stores/useAuthStore";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 function LoginModal({ isOpen, onClose }) {
-  const { login, triggerAuthModal } = useAuthStore();
+  const { loginClient } = useAuthStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +26,26 @@ function LoginModal({ isOpen, onClose }) {
     password: "",
   });
 
-  const handleLogin = () => {
+  const authGoogle = async (token) => {
+    try {
+      if (!token) {
+        console.error("No se recibio el token de google");
+        return;
+      }
+      const response = await axios.post("http://localhost:8000/client/login/", {
+        token,
+      });
+      console.log("Respuesta del servidor", response);
+      Cookies.set("client_id", response.data.client_id)
+      loginClient();
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al autenticar con google", error);
+    }
+  };
+
+  const handleLogin = (token) => {
     try {
       const newErrors = {
         email: "",
@@ -54,7 +75,6 @@ function LoginModal({ isOpen, onClose }) {
       }
 
       console.log(email, password);
-      login();
       setEmail("");
       setPassword("");
       setError({
@@ -82,7 +102,7 @@ function LoginModal({ isOpen, onClose }) {
         isOpen={isOpen}
         onClose={onClose}
         backdrop="blur"
-        placement="top"
+        placement="center"
         size="md"
       >
         <ModalContent>
@@ -92,7 +112,11 @@ function LoginModal({ isOpen, onClose }) {
             </h1>
           </ModalHeader>
           <ModalBody className="flex flex-col w-full justify-center items-center gap-4">
-            <GoogleLogin />
+            <GoogleLogin
+              onSuccess={(response) => {
+                authGoogle(response.credential);
+              }}
+            />
             <div className="w-full flex flex-row items-center gap-2">
               <hr className="border-1 w-full border-slate-200" />
               <p className="text-center text-sm font-light min-w-max text-slate-400">

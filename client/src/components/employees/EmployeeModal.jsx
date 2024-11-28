@@ -9,30 +9,34 @@ import Cookies from "js-cookie";
 
 const categories = [
     {
-      id: 1,
-      name: "Barberia",
+        id: 1,
+        name: "Recepcionista"
     },
     {
-      id: 2,
-      name: "SPA de uñas",
+        id: 2,
+        name: "Barberia",
     },
     {
-      id: 3,
-      name: "SPA",
+        id: 3,
+        name: "SPA de uñas",
     },
     {
-      id: 4,
-      name: "Peluqueria",
+        id: 4,
+        name: "SPA",
     },
     {
-      id: 5,
-      name: "Maquillaje",
+        id: 5,
+        name: "Peluqueria",
     },
     {
-      id: 6,
-      name: "Tatuajes"
-    }
-  ];
+        id: 6,
+        name: "Maquillaje",
+    },
+    {
+        id: 7,
+        name: "Tatuajes"
+    },
+];
 
 function CreateEmployeeModal(props) {
     CreateEmployeeModal.propTypes = {
@@ -56,34 +60,35 @@ function CreateEmployeeModal(props) {
     const employeeSpecialtyConverted = [];
 
     function onSubmit() {
-        
+
         if (!props.employee) {
             const establishmentId = Cookies.get("establishmentId");
             try {
-                employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
-                console.log(employeeSpecialtyConverted)
+                // employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
+                // console.log(employeeSpecialtyConverted)
                 console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
-                createEmployee(establishmentId,employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
+                createEmployee(establishmentId, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialty).then(() => {
                     [props.onClose(), props.listRef.current.loadEmployees()];
                 });
             } catch (error) {
                 console.log(error)
             }
         } else {
-            try{
+            try {
                 console.log(employeeSpecialtyConverted)
                 updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeStatus).then(() => {
                     props.onClose();
                     props.reloadList()
                 })
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         }
     }
 
+    const [employeeSpecialtyID, setEmployeeSpecialtyID] = useState();
+    console.log(employeeSpecialtyID)
     useEffect(() => {
-
         const loadEmployee = async () => {
             if (props.employee) {
                 setEmployeeFirstName(props.user.first_name);
@@ -94,6 +99,7 @@ function CreateEmployeeModal(props) {
                 const idSpecialty = props.employee.especialty[0];
                 setEmployeeSpecialty(idSpecialty);
                 setEmployeeCode(props.employee.id);
+                setEmployeeSpecialtyID(idSpecialty);
             }
         }
 
@@ -140,6 +146,8 @@ function CreateEmployeeModal(props) {
         return () => clearTimeout(timer);
     }, [categorys])
 
+    console.log(employeeSpecialty)
+
     return (
         <Modal {...props} size="2xl"
             classNames={
@@ -180,7 +188,7 @@ function CreateEmployeeModal(props) {
             <ModalContent>
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
-                        <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar empleado" : "Crear empleado"}</h2>
+                        <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar profesional" : "Crear profesional"}</h2>
                         {props.employee && <h3 className="text-zinc-500 text-base">Puede editar los campos</h3>}
                     </ModalHeader>
                     <ModalBody>
@@ -300,8 +308,8 @@ function CreateEmployeeModal(props) {
                                         variant="bordered"
                                         className="w-full"
                                         datatype="string"
-                                        defaultSelectedKeys={`${employeeSpecialty}`}
-                                        onChange={setEmployeeSpecialty}
+                                        defaultSelectedKeys={employeeSpecialtyID?.name}
+                                        onChange={(e) => setEmployeeSpecialty(e.target.value)}
                                         isRequired
                                         isInvalid={errors.employeeSpecialty ? true : false}
                                         scrollShadowProps={{
@@ -309,9 +317,11 @@ function CreateEmployeeModal(props) {
                                         }}
                                     >
                                         {/* Aqui va la lista de elementos con selectItem de nextui */}
-                                        {categorys.map((category) => (
-                                            <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
-                                        ))}
+                                        {categories.map((category) => {
+                                            return (
+                                                <SelectItem key={category.name}>{category.name}</SelectItem>
+                                            )
+                                        })}
                                     </Select>
                                 </div>
                                 <div className={`flex-col gap-2 ${props.employee ? "flex" : "hidden"}`}>

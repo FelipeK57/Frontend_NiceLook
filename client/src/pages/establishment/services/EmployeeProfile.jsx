@@ -2,6 +2,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import api from "@/api";
+
+import useAuthStore from "@/stores/useAuthStore";
+import SuccessModal from "@/components/ui/SuccessModal";
 import {
   Chip,
   Card,
@@ -12,67 +16,222 @@ import {
   TimeInput,
   Input,
   Skeleton,
+  Button,
 } from "@nextui-org/react";
-import { ChevronLeft, Image as ImageIcon, Search } from "lucide-react";
-
+import { ChevronLeft, Hotel, Image as ImageIcon, Search } from "lucide-react";
+import ServiceCard from "@/components/services/ServiceCard";
 import ButtonCustom from "@/components/global/ButtonCustom";
-import api from "@/api";
+import ScheduleDisplay from "@/components/employees/ScheduleDisplay";
+import AuthModal from "@/components/auth/AuthModal";
 
-function ServiceCard({ service }) {
-  return (
-    <Card
-      // key={index}
-      className="h-fit w-full max-w-64 p-4"
-      shadow="sm"
-      //   isPressable
-      //   onPress={() => navigate(`./services/${service.id}`, { relative: true })}
-    >
-      <CardBody className="overflow-visible p-0">
-        <div className="aspect-square rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center">
-          {service.service?.image_base64 ? (
-            <Image
-              src={service.service?.image_base64}
-              alt="Imagen de perfil"
-              className="object-cover w-full h-auto"
-            />
-          ) : (
-            <ImageIcon className="w-8 md:w-12 h-full text-neutral-400" />
-          )}
-        </div>
-      </CardBody>
-      <CardFooter className="text-small items-start flex flex-col gap-2 whitespace-nowrap pb-0">
-        <b>{service.service?.name}</b>
-        <p className="text-default-600 text-xs">${service.service?.price}</p>
-        <ButtonCustom variant="bordered" classStyles="self-center">
-          Elegir
-        </ButtonCustom>
-      </CardFooter>
-    </Card>
+import {
+  getLocalTimeZone,
+  parseDate,
+  today,
+  Time,
+} from "@internationalized/date";
+import Cookies from "js-cookie";
+import axios from "axios";
+import EmployeeAvailability from "@/components/sales/EmployeeAvailability";
+import ErrorModal from "@/components/ui/ErrorModal";
+
+function ScheduleAppointment({
+  services,
+  servicesSelected,
+  removeService,
+  priceTotal,
+  employee,
+}) {
+  const { employeeId } = useParams();
+  const { triggerAuthModal } = useAuthStore();
+  const fecha = new Date();
+  let year = fecha.getFullYear().toString();
+  let month = (fecha.getMonth() + 1).toString();
+  let day = fecha.getDate().toString();
+  const [error, setError] = useState("");
+
+  const [date, setDate] = useState(
+    parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
   );
-}
+  const [time, setTime] = useState(
+    new Time(fecha.getHours(), fecha.getMinutes())
+  );
 
-function ScheduleAppointment() {
+  const [isModalSuccessOpen, setIsModalSuccessOpen] = useState(false);
+
+  const handleCloseSuccessModal = () => setIsModalSuccessOpen(false);
+  const handleOpenSuccessModal = () => setIsModalSuccessOpen(true);
+
+  const [isModalErrorOpen, setIsModalErrorOpen] = useState(false);
+
+  const handleCloseErrorModal = () => setIsModalErrorOpen(false);
+  const handleOpenErrorModal = () => setIsModalErrorOpen(true);
+
+  const [loading, setLoading] = useState(false);
+
+  const createAppointment = async () => {
+    const day = date.toDate().getDate();
+    const month = date.toDate().getMonth() + 1;
+    const year = date.toDate().getFullYear();
+    const hora = `${String(time.hour).padStart(2, "0")}:${String(
+      time.minute
+    ).padStart(2, "0")}`;
+    console.log(servicesSelected, day, month, year, hora);
+    try {
+      if (servicesSelected.length === 0) {
+        alert("Debes seleccionar al menos un servicio");
+        return;
+      }
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:8000/api/create_appointment/",
+        {
+          cliente_id: Cookies.get("client_id"),
+          employee_id: employeeId,
+          services: servicesSelected,
+          day: day,
+          month: month,
+          year: year,
+          time: hora,
+          //establishment: 2,
+        }
+      );
+      console.log(response.data);
+      setLoading(false);
+      handleOpenSuccessModal();
+    } catch (error) {
+      setLoading(false);
+      handleOpenErrorModal();
+      handleOpenErrorModal();
+      if (error.response) {
+        // Error con respuesta del servidor
+        setError(
+          error.response.data.error ||
+            "Ocurrió un error desconocido en el servidor."
+        );
+        console.error("Server error:", error.response);
+      } else if (error.request) {
+        // Error relacionado con la red o la solicitud
+        setError(
+          "No se pudo conectar con el servidor. Por favor, verifica tu conexión."
+        );
+        console.error("Network error:", error.request);
+      } else {
+        // Otro tipo de error
+        setError("Ocurrió un error inesperado.");
+        console.error("Unexpected error:", error.message);
+      }
+    }
+  };
+
+  const handleProtectedAction = () => {
+    if (!Cookies.get("isAuthenticated")) {
+      triggerAuthModal();
+    } else {
+      createAppointment();
+    }
+  };
+
+  const minValueTime = () => {
+    if (date.toDate().getDate() === fecha.getDate()) {
+      return new Time(fecha.getHours(), fecha.getMinutes());
+    } else {
+      return new Time(0, 0);
+    }
+  };
+
   return (
-    <Card variant="bordered" className="w-full lg:w-64 h-fit rounded-xl">
+    <Card variant="bordered" className="w-full lg:w-72 h-fit rounded-xl">
       <CardBody className=" flex flex-col gap-2 p-4">
-        <p>Selecciona un día:</p>
-        <DatePicker />
-        <p>Selecciona un horario:</p>
-        <TimeInput />
-        <p>Busca o elige el servicio:</p>
-        <Input
+        <p className="font-semibold text-sm">Selecciona un día:</p>
+        <DatePicker
+          value={date}
+          onChange={setDate}
+          minValue={today(getLocalTimeZone())}
+          defaultValue={today(getLocalTimeZone()).subtract({ days: 0 })}
+        />
+        <p className="font-semibold text-sm">Disponibilidad del artista</p>
+        <EmployeeAvailability date={date} employee={employee} />
+        <p className="font-semibold text-sm">Selecciona una hora:</p>
+        <TimeInput
+          minValue={minValueTime()}
+          value={time}
+          onChange={setTime}
+          description="Formato 24 horas (00:00-23:59)"
+        />
+        <p className="font-semibold text-sm">Servicios seleccionados:</p>
+        {/* <Input
+          value={service}
+          onChange={(e) => setService(e.target.value)}
           placeholder="Buscar servicio"
           classNames={{
             label: "",
             input: [],
             innerWrapper: "",
-            inputWrapper: ["border-2", "border-slate-200", "px-6", "py-5"],
+            inputWrapper: ["border-2", "border-slate-200", "px-4", "py-5"],
           }}
           variant="bordered"
           endContent={<Search />}
+          description="Busca el servicio por nombre"
+        /> */}
+        {services.length === 0 ? (
+          <p className="text-sm text-slate-700">
+            No has seleccionado ningún servicio
+          </p>
+        ) : (
+          services.map((service) => (
+            <div className="flex flex-row justify-between items-center">
+              <p key={service.id} className="text-sm">
+                {service.name}
+              </p>
+              <Button
+                onClick={() => removeService(service)}
+                isIconOnly
+                variant="light"
+                size="sm"
+                color="danger"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              </Button>
+            </div>
+          ))
+        )}
+        {/* Modal de autenticación en caso de que no esté autenticado */}
+        <AuthModal />
+        {/* Modal de reserva exitosa*/}
+        <SuccessModal
+          isOpen={isModalSuccessOpen}
+          onClose={handleCloseSuccessModal}
         />
-        <p>Precio: $0</p>
-        <ButtonCustom variant="bordered" classStyles="self-center">
+        {/* Modal de error */}
+        <ErrorModal
+          isOpen={isModalErrorOpen}
+          onClose={handleCloseErrorModal}
+          error={error}
+        />
+        <p className="text-sm mb-2 font-semibold">
+          Precio total: ${priceTotal}
+        </p>
+        {/* Botón de agendar cita */}
+        <ButtonCustom
+          isLoading={loading}
+          action={handleProtectedAction}
+          primary
+          classStyles="self-center"
+        >
           Agendar cita
         </ButtonCustom>
       </CardBody>
@@ -85,6 +244,23 @@ export default function EmployeeProfile() {
   const [employee, setEmployee] = useState({});
   const [loading, setLoading] = useState(true);
   const { employeeId } = useParams();
+  const [servicesSelected, setServicesSelected] = useState([]);
+  const [service, setService] = useState([]);
+  const [priceTotal, setPriceTotal] = useState(0);
+
+  const handleSelectService = (service) => {
+    if (!servicesSelected.includes(service.id)) {
+      setServicesSelected((prev) => [...prev, service.id]);
+      setService((prev) => [...prev, service]);
+      setPriceTotal((prev) => prev + service.price);
+    }
+  };
+
+  const handleRemoveService = (service) => {
+    setServicesSelected((prev) => prev.filter((id) => id !== service.id));
+    setService((prev) => prev.filter((item) => item.id !== service.id));
+    setPriceTotal((prev) => prev - service.price);
+  };
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -95,7 +271,7 @@ export default function EmployeeProfile() {
           },
         })
         .then((response) => {
-          setEmployee(response.data.employee);
+          setEmployee(response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -107,6 +283,20 @@ export default function EmployeeProfile() {
 
     fetchUserInfo();
   }, [employeeId]);
+
+  const formattedDays = (days) => {
+    const dayMap = {
+      LUN: "Lunes",
+      MAR: "Martes",
+      MIE: "Miércoles",
+      JUE: "Jueves",
+      VIE: "Viernes",
+      SAB: "Sábado",
+      DOM: "Domingo",
+    };
+    const workDays = days.map((day) => dayMap[day] || day);
+    return workDays.join(", ");
+  };
 
   return (
     <>
@@ -124,9 +314,9 @@ export default function EmployeeProfile() {
           <div className="grid gap-4 grid-cols-[auto,1fr]">
             {/* Imagen del empleado */}
             <div className="w-40 h-40 md:w-60 md:h-60 aspect-square rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center">
-              {employee.user?.image ? (
+              {employee.image ? (
                 <Image
-                  src={employee.user?.image}
+                  src={employee.image}
                   alt="Imagen de perfil"
                   className="object-cover w-full h-auto"
                 />
@@ -141,52 +331,71 @@ export default function EmployeeProfile() {
                 <Skeleton className="flex rounded-full w-2/3 h-5 md:h-6 mb-2" />
               ) : (
                 <h1 className="text-lg md:text-2xl font-bold mb-2">
-                  {employee.user?.first_name} {employee.user?.last_name}
+                  {employee.first_name} {employee.last_name}
                 </h1>
               )}
-              <Chip variant="flat" color="success" className="mb-2">
+              <Chip variant="flat" color="success" className="mb-2 select-none">
                 Disponible
               </Chip>
-              <h2 className="title-lg text-neutral-600">
-                Horario: 10 am - 5 pm
-              </h2>
+              <ScheduleDisplay timeData={employee.time} />
               {/* Calificación */}
               <div className="flex font-bold flex-nowrap">
-                <h1>{employee.rating}/5⭐</h1>
+                <h1 className="select-none">
+                  {employee.rating
+                    ? `${employee.rating}/5⭐ (${employee.reviews})`
+                    : "Sin calificación"}
+                </h1>
               </div>
             </div>
           </div>
         </section>
         <section className="w-full ">
-          <ScheduleAppointment />
+          <ScheduleAppointment
+            removeService={handleRemoveService}
+            services={service}
+            servicesSelected={servicesSelected}
+            priceTotal={priceTotal}
+            employee={employee}
+          />
         </section>
       </article>
       <article className="flex flex-col gap-4 p-4">
-        <h1 className="text-xl font-bold">Servicios</h1>
+        <h1 className="text-xl font-bold select-none">Servicios</h1>
         <section className="grid gap-4 justify-items-center grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
-          {loading
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <Card
-                  key={index}
-                  className="w-64 h-fit space-y-5 p-4"
-                  radius="lg"
-                >
-                  <Skeleton className="rounded-lg aspect-square">
-                    <div className="h-24 rounded-lg bg-secondary"></div>
+          {loading ? (
+            Array.from({ length: 4 }).map((_, index) => (
+              <Card
+                key={index}
+                className="w-64 h-fit space-y-5 p-4"
+                radius="lg"
+              >
+                <Skeleton className="rounded-lg aspect-square">
+                  <div className="h-24 rounded-lg bg-secondary"></div>
+                </Skeleton>
+                <div className="space-y-3">
+                  <Skeleton className="w-3/5 rounded-lg">
+                    <div className="h-5 w-full rounded-lg bg-secondary"></div>
                   </Skeleton>
-                  <div className="space-y-3">
-                    <Skeleton className="w-3/5 rounded-lg">
-                      <div className="h-5 w-full rounded-lg bg-secondary"></div>
-                    </Skeleton>
-                    <Skeleton className="w-4/5 rounded-lg">
-                      <div className="h-3 w-full rounded-lg bg-secondary-300"></div>
-                    </Skeleton>
-                  </div>
-                </Card>
-              ))
-            : employee.employee_services?.map((service) => (
-                <ServiceCard key={service.id} service={service} />
-              ))}
+                  <Skeleton className="w-4/5 rounded-lg">
+                    <div className="h-3 w-full rounded-lg bg-secondary-300"></div>
+                  </Skeleton>
+                </div>
+              </Card>
+            ))
+          ) : employee.services ? (
+            employee.services.map((service) => (
+              <ServiceCard
+                duration={service.duration}
+                key={service.id}
+                service={service.service}
+                onSelect={handleSelectService}
+              />
+            ))
+          ) : (
+            <div className="flex items-center justify-center w-full h-32">
+              <p className="select-none">No hay servicios disponibles</p>
+            </div>
+          )}
         </section>
       </article>
     </>
