@@ -10,6 +10,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import DropdownSidebar from "./DropdownSidebar";
+import { PencilIcon } from "@heroicons/react/24/outline";
+import EditButton from "./EditButton";
 
 const adminNavLinks = [
   {
@@ -136,7 +138,7 @@ const adminNavLinks = [
         />
       </svg>
     ),
-    path: "employees",
+    path: "professionals",
   },
 ];
 
@@ -259,6 +261,8 @@ function Sidebar() {
   //   console.log("Usuario en store de zustand: ", user);
   // }, [user]);
   const [logo, setLogo] = useState(null);
+  const [profesionalImage, setProfesionalImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(profesionalImage);
   const handleLogout = () => {
     console.log("Cerrando sesión...");
     Cookies.remove("access");
@@ -266,6 +270,23 @@ function Sidebar() {
     Cookies.remove("establishmentId");
     window.location.reload();
   };
+
+  useEffect(() => {
+    const fetchProfesionalImage = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/employee/get_photo/${Cookies.get(
+            "establishmentId"
+          )}/${Cookies.get("id_employee")}/`
+        );
+        console.log(response.data);
+        setProfesionalImage(response.data.imagen_base64);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProfesionalImage();
+  }, []);
 
   useEffect(() => {
     const fetchLogo = async () => {
@@ -286,7 +307,27 @@ function Sidebar() {
     fetchLogo();
   }, []);
 
+  const uploadPhoto = async () => {
+    const formData = new FormData();
+    formData.append("image", profesionalImage);
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/employee/upload_employee_photo/${Cookies.get(
+          "establishmentId"
+        )}/${Cookies.get("id_employee")}/`,
+        formData
+      );
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const url = useLocation().pathname;
+
+  const handlePhotoChange = (e) => {
+    setProfesionalImage(e.target.files[0]);
+  };
 
   return (
     <aside className="w-full grid py-2 2xl:py-6 md:grid-rows-[auto_1fr_auto] justify-start md:justify-center gap-4 2xl:gap-10 border-r-2 border-slate-200">
@@ -302,11 +343,27 @@ function Sidebar() {
       )}
       <div className="hidden md:flex 2xl:gap-5 gap-3 flex-col items-center">
         <LogoNiceLook className="text-4xl" />
-        <img src={logo} className="size-16 2xl:size-32 rounded-full"></img>
+        {url.includes("employee") ? (
+          <div className="relative size-32 2xl:size-48 ring-2 ring-slate-200 rounded-full">
+            <div className="hover:bg-slate-500 hover:bg-opacity-50 opacity-0 hover:opacity-100 flex transition-all absolute rounded-full z-10 inset-0 items-center justify-center">
+              <EditButton id={"profesional"} onChange={handlePhotoChange} />
+            </div>
+            <img
+              src={profesionalImage}
+              className="size-32 2xl:size-48 rounded-full object-cover"
+            ></img>
+          </div>
+        ) : (
+          <img src={logo} className="size-16 2xl:size-32 rounded-full"></img>
+        )}
         <p>
           {userInfo.first_name} {userInfo.last_name}
         </p>
-        {/* <ButtonCustom secondary name="Configuración" /> */}
+        {url.includes("employee") && (
+          <>
+            <ButtonCustom action={uploadPhoto} secondary name="Subir Imagen" />
+          </>
+        )}
       </div>
       <nav className="hidden md:flex flex-col gap-2 2xl:gap-6">
         {url.includes("admin")

@@ -58,7 +58,7 @@ function Service({ id, name, price, commission, category, state, image }) {
       {" "}
       {/* Image */}
       <img
-        className="hidden lg:block w-[100px] h-[100px] rounded-lg"
+        className="hidden lg:block w-[100px] h-[100px] rounded-lg object-cover"
         src={image}
       />
       {/* Skeleton  */}

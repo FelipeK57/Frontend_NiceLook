@@ -14,7 +14,7 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
     const [selectedDays, setSelectedDays] = useState({
         LUN: false,
         MAR: false,
-        MIÉ: false,
+        MIE: false,
         JUE: false,
         VIE: false,
         SAB: false,
@@ -119,7 +119,7 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
                         <div className="flex flex-col space-y-4 w-full lg:w-1/2">
                             <span className="font-bold text-xl">Días</span>
                             <div className="grid grid-cols-5 gap-3">
-                                {['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SAB', 'DOM'].map((day, index) => (
+                                {['LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB', 'DOM'].map((day, index) => (
                                     <button
                                         key={index}
                                         onClick={() => toggleDay(day)}
