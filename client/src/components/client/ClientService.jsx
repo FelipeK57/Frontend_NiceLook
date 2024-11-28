@@ -1,4 +1,4 @@
-import { createReview, getService } from "@/Api/employeeServices/employeeServicesApi";
+import { createReview, getService, updateReview } from "@/Api/employeeServices/employeeServicesApi";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, useDisclosure } from "@nextui-org/react"
 import { Skeleton } from "@nextui-org/skeleton"
 import PropTypes from "prop-types"
@@ -160,12 +160,12 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
     const [opened, setOpened] = useState(false);
 
     useEffect(() => {
-        setComment(review.comment);
-        setStar1(review.rating >= 1)
-        setStar2(review.rating >= 2)
-        setStar3(review.rating >= 3)
-        setStar4(review.rating >= 4)
-        setStar5(review.rating >= 5)
+        setComment(review?.comment);
+        setStar1(review?.rating >= 1)
+        setStar2(review?.rating >= 2)
+        setStar3(review?.rating >= 3)
+        setStar4(review?.rating >= 4)
+        setStar5(review?.rating >= 5)
     }, [opened, review]);
 
 
@@ -179,11 +179,47 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
         onClose();
     }
 
-    // const handleSave = () => {
-    //     if (comment !== review.comment) {
-    //         "Hola"
-    //     }
-    // }
+    const handleSave = (onClose) => {
+        if (comment !== review?.comment || star !== review?.rating) {
+            const promise = new Promise((resolve, reject) => {
+                const response = updateReview(1, appointments.employee.id, appointments.id, comment, star);
+                setTimeout(() => {
+                    resolve(response);
+                    reject("Ocurrio un error");
+                }, 0);
+            });
+            promise.then((response) => {
+                console.log(response);
+                setWriteReview(false);
+                loadClientReviews();
+                onClose();
+            });
+            promise.catch((error) => {
+                if (error.response.data.error === "You have not reviewed this appointment") {
+                    const promise = new Promise((resolve, reject) => {
+                        const response = createReview(1, appointments.employee.id, appointments.id, comment, star);
+                        setTimeout(() => {
+                            resolve(response);
+                            reject("Ocurrio un error");
+                        }, 0);
+                    });
+                    promise.then((response) => {
+                        console.log(response);
+                        setWriteReview(false);
+                        loadClientReviews();
+                    });
+                    promise.catch((error) => {
+                        console.log(error);
+                    });
+                }
+                setWriteReview(false);
+                loadClientReviews();
+                onClose();
+            })
+        } else {
+            onClose();
+        }
+    }
 
     // console.log(reviews);
     // console.log("Comentario", comment);
@@ -324,7 +360,7 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
                                         variant="bordered"
                                         labelPlacement="outside"
                                         placeholder="Enter your description"
-                                        // defaultValue={comment}
+                                        defaultValue={comment}
                                         className="w-full"
                                         size="lg"
                                         value={comment}
@@ -336,7 +372,7 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
                                 <Button color="danger" className="text-xl" variant="light" onPress={() => handleClose(onClose)}>
                                     Cerrar
                                 </Button>
-                                <Button color="primary" className="text-xl font-bold" onPress={onClose}>
+                                <Button color="primary" className="text-xl font-bold" onPress={() => handleSave(onClose)}>
                                     Guardar
                                 </Button>
                             </ModalFooter>

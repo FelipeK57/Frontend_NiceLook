@@ -17,7 +17,7 @@ const serviceApi = axios.create({
 });
 
 const review = axios.create({
-    baseURL: "http://localhost:8000/review_employee/create_review",
+    baseURL: "http://localhost:8000/review_employee",
 });
 
 const clientApi = axios.create({
@@ -76,8 +76,15 @@ export function createReview(
     comment,
     rating
 ) {
-    return review.post(`/${client_id}/${employee_id}/${appointment_id}/`, {
+    return review.post(`/create_review/${client_id}/${employee_id}/${appointment_id}/`, {
         comment: comment,
         rating: rating,
     });
+}
+
+export function updateReview(client_id, employee_id, appointment_id, comment, rating) {
+    return review.put(`/update_review/${client_id}/${employee_id}/${appointment_id}/`, {
+        comment: comment,
+        rating: rating,
+    })
 }
