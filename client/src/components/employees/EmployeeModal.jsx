@@ -188,7 +188,7 @@ function CreateEmployeeModal(props) {
             <ModalContent>
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
-                        <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar empleado" : "Crear empleado"}</h2>
+                        <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar profesional" : "Crear profesional"}</h2>
                         {props.employee && <h3 className="text-zinc-500 text-base">Puede editar los campos</h3>}
                     </ModalHeader>
                     <ModalBody>

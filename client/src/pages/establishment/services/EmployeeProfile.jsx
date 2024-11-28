@@ -33,6 +33,7 @@ import {
 import Cookies from "js-cookie";
 import axios from "axios";
 import EmployeeAvailability from "@/components/sales/EmployeeAvailability";
+import ErrorModal from "@/components/ui/ErrorModal";
 
 function ScheduleAppointment({
   services,
@@ -47,6 +48,7 @@ function ScheduleAppointment({
   let year = fecha.getFullYear().toString();
   let month = (fecha.getMonth() + 1).toString();
   let day = fecha.getDate().toString();
+  const [error, setError] = useState("");
 
   const [date, setDate] = useState(
     parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
@@ -59,6 +61,13 @@ function ScheduleAppointment({
 
   const handleCloseSuccessModal = () => setIsModalSuccessOpen(false);
   const handleOpenSuccessModal = () => setIsModalSuccessOpen(true);
+
+  const [isModalErrorOpen, setIsModalErrorOpen] = useState(false);
+
+  const handleCloseErrorModal = () => setIsModalErrorOpen(false);
+  const handleOpenErrorModal = () => setIsModalErrorOpen(true);
+
+  const [loading, setLoading] = useState(false);
 
   const createAppointment = async () => {
     const day = date.toDate().getDate();
@@ -73,6 +82,7 @@ function ScheduleAppointment({
         alert("Debes seleccionar al menos un servicio");
         return;
       }
+      setLoading(true);
       const response = await axios.post(
         "http://localhost:8000/api/create_appointment/",
         {
@@ -87,9 +97,30 @@ function ScheduleAppointment({
         }
       );
       console.log(response.data);
+      setLoading(false);
       handleOpenSuccessModal();
     } catch (error) {
-      console.error("Error fetching data", error);
+      setLoading(false);
+      handleOpenErrorModal();
+      handleOpenErrorModal();
+      if (error.response) {
+        // Error con respuesta del servidor
+        setError(
+          error.response.data.error ||
+            "Ocurrió un error desconocido en el servidor."
+        );
+        console.error("Server error:", error.response);
+      } else if (error.request) {
+        // Error relacionado con la red o la solicitud
+        setError(
+          "No se pudo conectar con el servidor. Por favor, verifica tu conexión."
+        );
+        console.error("Network error:", error.request);
+      } else {
+        // Otro tipo de error
+        setError("Ocurrió un error inesperado.");
+        console.error("Unexpected error:", error.message);
+      }
     }
   };
 
@@ -185,11 +216,18 @@ function ScheduleAppointment({
           isOpen={isModalSuccessOpen}
           onClose={handleCloseSuccessModal}
         />
+        {/* Modal de error */}
+        <ErrorModal
+          isOpen={isModalErrorOpen}
+          onClose={handleCloseErrorModal}
+          error={error}
+        />
         <p className="text-sm mb-2 font-semibold">
           Precio total: ${priceTotal}
         </p>
         {/* Botón de agendar cita */}
         <ButtonCustom
+          isLoading={loading}
           action={handleProtectedAction}
           primary
           classStyles="self-center"
@@ -234,8 +272,7 @@ export default function EmployeeProfile() {
         })
         .then((response) => {
           setEmployee(response.data);
-          setTimes(response.data.time);
-          setWorkingDays(response.data.time.working_days);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);

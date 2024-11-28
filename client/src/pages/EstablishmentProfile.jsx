@@ -11,6 +11,7 @@ import FacebookIcon from "@/components/icons/FacebookIcon";
 import InstagramIcon from "@/components/icons/IntagramIcon";
 
 import ServicesTab from "./establishment/ServicesTab";
+import ProfileReviews from "@/components/establishment/review/ProfileReviews";
 import BuyCard from "./buyPage/buyCard";
 import Cookies from "js-cookie";
 
@@ -141,7 +142,7 @@ export default function EstablishmentProfile() {
       {
         key: "reviews",
         title: "Reseñas",
-        component: <h1>Reseñas</h1>,
+        component: <ProfileReviews />,
       },
       {
         key: "employees",
@@ -156,7 +157,7 @@ export default function EstablishmentProfile() {
     ],
     [employeeId]
   );
-
+  
   // Esta función se encarga de renderizar el contenido de la pestaña seleccionada.
   // OJO: Si hay rutas anidadas, implementar lógica de renderizado de outlet con context
   // en establishmentTabs[] arriba ^.

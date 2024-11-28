@@ -33,7 +33,11 @@ import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
+import ClientHistorial from "./components/client/clientHistorial.jsx";
 import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
+import AppointmentsHistory from "./pages/employee/AppointmentsHistory.jsx";
+import ScheduleAppointment from "./pages/employee/ScheduleAppointment.jsx";
+import ServiceProfessional from "./pages/employee/ServicesProfessional.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -46,7 +50,11 @@ const routes = createBrowserRouter([
         element: <HomePage />,
         errorElement: <NotFound />,
       },
-
+      {
+        path: "/historialTest",
+        element: <ClientHistorial />,
+        errorElement: <div>Error Page</div>,
+      },
       {
         path: "/@peluqueriastylospalmira",
         element: <EstablishmentProfile />,
@@ -139,7 +147,7 @@ const routes = createBrowserRouter([
             element: <ProductsManagement />,
           },
           {
-            path: "employees",
+            path: "professionals",
             element: <EmployeesManagement />,
           },
           {
@@ -178,17 +186,17 @@ const routes = createBrowserRouter([
           {
             id: "employee-services",
             path: "services",
-            element: <EmployeeServicesManagement />,
+            element: <ServiceProfessional />,
           },
           {
             id: "employee-schedule",
             path: "schedule",
-            element: <ScheduleManagement />,
+            element: <ScheduleAppointment />,
           },
           {
             id: "employee-record",
             path: "record",
-            element: <RecordManagement />,
+            element: <AppointmentsHistory />,
           },
         ],
       },

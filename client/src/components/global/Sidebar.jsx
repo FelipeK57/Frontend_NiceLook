@@ -9,6 +9,9 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import DropdownSidebar from "./DropdownSidebar";
+import { PencilIcon } from "@heroicons/react/24/outline";
+import EditButton from "./EditButton";
 
 const adminNavLinks = [
   {
@@ -118,7 +121,7 @@ const adminNavLinks = [
     path: "products",
   },
   {
-    name: "Empleados",
+    name: "Profesionales",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +138,7 @@ const adminNavLinks = [
         />
       </svg>
     ),
-    path: "employees",
+    path: "professionals",
   },
 ];
 
@@ -209,27 +212,7 @@ const employeeNavLinks = [
     path: "services",
   },
   {
-    name: "Gestionar Horario",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-        />
-      </svg>
-    ),
-    path: "schedule",
-  },
-  {
-    name: "Calendario de citas",
+    name: "Mi agenda",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -246,6 +229,26 @@ const employeeNavLinks = [
         />
       </svg>
     ),
+    path: "schedule",
+  },
+  {
+    name: "Historial de citas",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="size-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122"
+        />
+      </svg>
+    ),
     path: "record",
   },
 ];
@@ -258,6 +261,8 @@ function Sidebar() {
   //   console.log("Usuario en store de zustand: ", user);
   // }, [user]);
   const [logo, setLogo] = useState(null);
+  const [profesionalImage, setProfesionalImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(profesionalImage);
   const handleLogout = () => {
     console.log("Cerrando sesión...");
     Cookies.remove("access");
@@ -265,6 +270,23 @@ function Sidebar() {
     Cookies.remove("establishmentId");
     window.location.reload();
   };
+
+  useEffect(() => {
+    const fetchProfesionalImage = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/employee/get_photo/${Cookies.get(
+            "establishmentId"
+          )}/${Cookies.get("id_employee")}/`
+        );
+        console.log(response.data);
+        setProfesionalImage(response.data.imagen_base64);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProfesionalImage();
+  }, []);
 
   useEffect(() => {
     const fetchLogo = async () => {
@@ -285,38 +307,65 @@ function Sidebar() {
     fetchLogo();
   }, []);
 
+  const uploadPhoto = async () => {
+    const formData = new FormData();
+    formData.append("image", profesionalImage);
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/employee/upload_employee_photo/${Cookies.get(
+          "establishmentId"
+        )}/${Cookies.get("id_employee")}/`,
+        formData
+      );
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const url = useLocation().pathname;
 
+  const handlePhotoChange = (e) => {
+    setProfesionalImage(e.target.files[0]);
+  };
+
   return (
-    <aside className="bg-slate-50 w-full grid py-2 2xl:py-6 grid-rows-[auto_1fr_auto] justify-center gap-4 2xl:gap-10 border-r-2 border-slate-200">
-      <button className="md:hidden">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-          />
-        </svg>
-      </button>
-      {/* <h1 className="hidden lg:block font-amaranth font-bold text-5xl text-center">
-        NiceLook.
-      </h1> */}
-      <div className="flex 2xl:gap-5 gap-3 flex-col items-center">
+    <aside className="w-full grid py-2 2xl:py-6 md:grid-rows-[auto_1fr_auto] justify-start md:justify-center gap-4 2xl:gap-10 border-r-2 border-slate-200">
+      {url.includes("admin") ? (
+        <DropdownSidebar links={adminNavLinks} handleLogout={handleLogout} />
+      ) : url.includes("recepcionist") ? (
+        <DropdownSidebar
+          links={recepcionistNavLinks}
+          handleLogout={handleLogout}
+        />
+      ) : (
+        <DropdownSidebar links={employeeNavLinks} handleLogout={handleLogout} />
+      )}
+      <div className="hidden md:flex 2xl:gap-5 gap-3 flex-col items-center">
         <LogoNiceLook className="text-4xl" />
-        <img src={logo} className="size-16 2xl:size-32 rounded-full"></img>
+        {url.includes("employee") ? (
+          <div className="relative size-32 2xl:size-48 ring-2 ring-slate-200 rounded-full">
+            <div className="hover:bg-slate-500 hover:bg-opacity-50 opacity-0 hover:opacity-100 flex transition-all absolute rounded-full z-10 inset-0 items-center justify-center">
+              <EditButton id={"profesional"} onChange={handlePhotoChange} />
+            </div>
+            <img
+              src={profesionalImage}
+              className="size-32 2xl:size-48 rounded-full object-cover"
+            ></img>
+          </div>
+        ) : (
+          <img src={logo} className="size-16 2xl:size-32 rounded-full"></img>
+        )}
         <p>
           {userInfo.first_name} {userInfo.last_name}
         </p>
-        <ButtonCustom secondary name="Configuración" />
+        {url.includes("employee") && (
+          <>
+            <ButtonCustom action={uploadPhoto} secondary name="Subir Imagen" />
+          </>
+        )}
       </div>
-      <nav className="flex flex-col gap-2 2xl:gap-6">
+      <nav className="hidden md:flex flex-col gap-2 2xl:gap-6">
         {url.includes("admin")
           ? adminNavLinks.map((link) => (
               <LinkSidebar
@@ -344,7 +393,7 @@ function Sidebar() {
               />
             ))}
       </nav>
-      <div className="flex items-center justify-center">
+      <div className="hidden md:flex items-center justify-center">
         <Button onClick={handleLogout} color="danger" variant="light">
           Cerrar Sesión
         </Button>

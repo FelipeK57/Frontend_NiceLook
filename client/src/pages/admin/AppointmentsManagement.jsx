@@ -24,7 +24,11 @@ function AppointmentsManagement() {
 
     citas.forEach((cita) => {
       // Obtener la hora en formato "HH:mm" directamente de UTC
-      const horaUTC = new Date(cita.time).toISOString().slice(11, 16);
+      const hora1 = new Date(cita.time);
+
+      const horaColombia = new Date(hora1.getTime() - 5 * 60 * 60 * 1000);
+
+      const horaUTC = horaColombia.toISOString().slice(11, 16);
 
       // Si la hora no existe en el Map, la agregamos
       if (!citasAgrupadas.has(horaUTC)) {
