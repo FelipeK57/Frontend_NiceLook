@@ -36,6 +36,7 @@ import TestComponents from "./TestComponents.jsx";
 import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
 import AppointmentsHistory from "./pages/employee/AppointmentsHistory.jsx";
 import ScheduleAppointment from "./pages/employee/ScheduleAppointment.jsx";
+import ServiceProfessional from "./pages/employee/ServicesProfessional.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -141,7 +142,7 @@ const routes = createBrowserRouter([
             element: <ProductsManagement />,
           },
           {
-            path: "employees",
+            path: "professionals",
             element: <EmployeesManagement />,
           },
           {
@@ -180,7 +181,7 @@ const routes = createBrowserRouter([
           {
             id: "employee-services",
             path: "services",
-            element: <EmployeeServicesManagement />,
+            element: <ServiceProfessional />,
           },
           {
             id: "employee-schedule",

@@ -138,7 +138,7 @@ const adminNavLinks = [
         />
       </svg>
     ),
-    path: "employees",
+    path: "professionals",
   },
 ];
 
@@ -350,7 +350,7 @@ function Sidebar() {
             </div>
             <img
               src={profesionalImage}
-              className="size-32 2xl:size-48 rounded-full"
+              className="size-32 2xl:size-48 rounded-full object-cover"
             ></img>
           </div>
         ) : (
