@@ -33,6 +33,7 @@ import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
+import ClientHistorial from "./components/client/clientHistorial.jsx";
 import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
 import AppointmentsHistory from "./pages/employee/AppointmentsHistory.jsx";
 import ScheduleAppointment from "./pages/employee/ScheduleAppointment.jsx";
@@ -48,7 +49,11 @@ const routes = createBrowserRouter([
         element: <HomePage />,
         errorElement: <NotFound />,
       },
-
+      {
+        path: "/historialTest",
+        element: <ClientHistorial />,
+        errorElement: <div>Error Page</div>,
+      },
       {
         path: "/@peluqueriastylospalmira",
         element: <EstablishmentProfile />,
