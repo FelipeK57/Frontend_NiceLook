@@ -306,13 +306,17 @@ function ModalDetailsAppointment({
                 ))}
             </>
           )}
-          <ButtonCustom
-            action={handleCancelAppointment}
-            secondary
-            isLoading={canceling}
-          >
-            Cancelar cita
-          </ButtonCustom>
+          
+          {/* Cancel Appointment Button */}
+          {state !== "Cancelada" && (
+            <ButtonCustom
+              action={handleCancelAppointment}
+              secondary
+              isLoading={canceling}
+            >
+              Cancelar cita
+            </ButtonCustom>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>
