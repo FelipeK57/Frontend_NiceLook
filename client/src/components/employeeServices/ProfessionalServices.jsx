@@ -60,7 +60,7 @@ function ProfessionalServices({ reload, setReload }) {
   };
 
   const handleOpenModalSetDuration = (service) => {
-    setServiceId(service.id);
+    setServiceId(service.service.id);
     onOpen();
   };
 
@@ -197,6 +197,8 @@ function ModalSetDuration({ isOpen, onClose, service_id, setReload, reload }) {
       );
       console.log(response.data);
       setReload(!reload);
+      setHours(0);
+      setMinutes(0);
       onClose();
     } catch (error) {
       console.error(error);

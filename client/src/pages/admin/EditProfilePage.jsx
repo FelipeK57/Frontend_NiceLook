@@ -95,7 +95,13 @@ const EstablishmentProfile = () => {
     console.log("entro 3");
     try {
       console.log(name, address, city, contact_methods);
-      await editarEstablemiento(establishmentId, name, address, city, contact_methods).then(() => {
+      await editarEstablemiento(
+        establishmentId,
+        name,
+        address,
+        city,
+        contact_methods
+      ).then(() => {
         console.log("editado");
       });
     } catch (error) {
@@ -180,13 +186,13 @@ const EstablishmentProfile = () => {
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <ReviewComponent
+          {/*<div className="flex justify-end">
+             <ReviewComponent
               reviews="4.5"
               size="size-10"
               text="text-2xl font-bold text-gray-800"
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Sección de dirección */}
@@ -255,9 +261,7 @@ const EstablishmentProfile = () => {
                   isIconOnly
                   className="border-2 border-slate-200 rounded-full p-2"
                   variant="bordered"
-                  redirectTo={
-                    `https://www.facebook.com/${contact_methods?.facebook}/`
-                  }
+                  redirectTo={`https://www.facebook.com/${contact_methods?.facebook}/`}
                 />
               ) : null}
               <ContactButton type="button" icon="more" onClick={onOpen} />
@@ -288,5 +292,3 @@ const EstablishmentProfile = () => {
 };
 
 export default EstablishmentProfile;
-
-

@@ -77,6 +77,12 @@ export default function BuyCard() {
   const handleAddToCart = async (productCode) => {
     const date = new Date().toISOString().split("T")[0]; // Fecha en formato YYYY-MM-DD
 
+    console.log("Añadiendo producto al carrito:", {
+      establishmentId,
+      clientId,
+      productCode,
+      date,
+    });
     const response = await addProductToCart(
       establishmentId,
       clientId,
