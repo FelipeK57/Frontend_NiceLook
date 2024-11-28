@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useParams, useLocation, useNavigate } from "react-router-dom";
 
 import api from "@/api";
+import Cookies from "js-cookie";
 
 import { Image, Button, Divider, Tabs, Tab, Skeleton } from "@nextui-org/react";
 import { Image as ImageIcon, Mail } from "lucide-react";
@@ -13,7 +14,7 @@ import InstagramIcon from "@/components/icons/IntagramIcon";
 import ServicesTab from "./establishment/ServicesTab";
 import ProfileReviews from "@/components/establishment/review/ProfileReviews";
 import BuyCard from "./buyPage/buyCard";
-import Cookies from "js-cookie";
+import Footer from "@/components/global/Footer";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
@@ -214,109 +215,112 @@ export default function EstablishmentProfile() {
   }, []);
 
   return (
-    <main className="mx-auto flex h-full w-full md:w-4/5 max-w-[1280px]">
-      <article className="flex flex-nowrap flex-col w-full">
-        {/* Imagenes del establecimiento */}
-        <section className="relative flex w-full h-48 md:pt-4 md:h-64 lg:h-80 2xl:h-[420px]">
-          <BackgroundImage backgroundImage={backgroundImage} />
-          <ProfileImage
-            logoImage={logoImage}
-            className="absolute w-24 h-24 md:w-40 md:h-40 left-6 md:left-6 translate-y-32 lg:translate-y-48 2xl:translate-y-72 z-10"
-          />
-        </section>
+    <>
+      <main className="mx-auto flex h-full w-full md:w-4/5 max-w-[1280px]">
+        <article className="flex flex-nowrap flex-col w-full">
+          {/* Imagenes del establecimiento */}
+          <section className="relative flex w-full h-48 md:pt-4 md:h-64 lg:h-80 2xl:h-[420px]">
+            <BackgroundImage backgroundImage={backgroundImage} />
+            <ProfileImage
+              logoImage={logoImage}
+              className="absolute w-24 h-24 md:w-40 md:h-40 left-6 md:left-6 translate-y-32 lg:translate-y-48 2xl:translate-y-72 z-10"
+            />
+          </section>
 
-        {/* Información del establecimiento */}
-        <section className="flex flex-col w-full px-6 pb-2 mt-12 md:mt-16">
-          <div className="grid grid-cols-[1fr_30%] items-start">
-            {/* Nombre del establecimiento */}
-            {!loading ? (
-              <h1 className="text-2xl font-bold select-none">
-                {establishment.information_establishment?.stylos_info?.name}
-              </h1>
-            ) : (
-              <Skeleton className="flex rounded-full w-64 h-8" />
-            )}
+          {/* Información del establecimiento */}
+          <section className="flex flex-col w-full px-6 pb-2 mt-12 md:mt-16">
+            <div className="grid grid-cols-[1fr_30%] items-start">
+              {/* Nombre del establecimiento */}
+              {!loading ? (
+                <h1 className="text-2xl font-bold select-none">
+                  {establishment.information_establishment?.stylos_info?.name}
+                </h1>
+              ) : (
+                <Skeleton className="flex rounded-full w-64 h-8" />
+              )}
 
-            {/* Calificación */}
-            <div className="flex font-bold flex-nowrap justify-end">
-              {!loading ? (
-                establishment.information_establishment?.rating ? (
-                  <h1
-                    onClick={() => setSelectedTab("reviews")}
-                    className="hover:underline cursor-pointer select-none"
-                  >
-                    {establishment.information_establishment?.rating}/5⭐ (
-                    {establishment.information_establishment?.reviews})
-                  </h1>
-                ) : (
-                  <h1>Sin calificación</h1>
-                )
-              ) : (
-                <Skeleton className="flex rounded-full w-32 h-6" />
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 mt-2 md:grid-cols-2 gap-4 items-start">
-            <div className="flex flex-col select-none">
-              {/* Ubicación */}
-              {!loading ? (
-                <p>
-                  📍{" "}
-                  {establishment.information_establishment?.stylos_info?.city}{" "}
-                  {/* <ExternalLink size={12} className="inline" /> */}
-                </p>
-              ) : (
-                <Skeleton className="w-32 h-6 flex rounded-full mb-2" />
-              )}
-              {!loading ? (
-                establishment.information_establishment?.stylos_info?.address
-              ) : (
-                <Skeleton className="w-52 h-5 flex rounded-full" />
-              )}
-            </div>
-            <div className="flex flex-col gap-2 md:justify-self-end">
-              <p className="text-md font-bold md:text-right select-none">
-                Contacto
-              </p>
-              <div className="flex flex-nowrap gap-4 w-fit md:self-end">
+              {/* Calificación */}
+              <div className="flex font-bold flex-nowrap justify-end">
                 {!loading ? (
-                  establishment.information_establishment?.stylos_info
-                    ?.contact_methods && (
-                    <SocialLinks
-                      contactMethods={
-                        establishment.information_establishment?.stylos_info
-                          ?.contact_methods
-                      }
-                    />
+                  establishment.information_establishment?.rating ? (
+                    <h1
+                      onClick={() => setSelectedTab("reviews")}
+                      className="hover:underline cursor-pointer select-none"
+                    >
+                      {establishment.information_establishment?.rating}/5⭐ (
+                      {establishment.information_establishment?.reviews})
+                    </h1>
+                  ) : (
+                    <h1>Sin calificación</h1>
                   )
                 ) : (
-                  <Skeleton className="flex rounded-full w-48 h-10" />
+                  <Skeleton className="flex rounded-full w-32 h-6" />
                 )}
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Tabs */}
-        <section className="flex flex-col w-full">
-          <Tabs
-            variant="underlined"
-            fullWidth
-            size="lg"
-            className="sticky top-16 z-50 bg-white border-b-1 shadow-sm select-none"
-            selectedKey={selectedTab}
-            onSelectionChange={handleTabSelectionChange}
-          >
-            {establishmentTabs.map((tab) => (
-              <Tab key={tab.key} title={tab.title}>
-                {renderTabContent()}
-              </Tab>
-            ))}
-          </Tabs>
-          <Divider />
-        </section>
-      </article>
-    </main>
+            <div className="grid grid-cols-1 mt-2 md:grid-cols-2 gap-4 items-start">
+              <div className="flex flex-col select-none">
+                {/* Ubicación */}
+                {!loading ? (
+                  <p>
+                    📍{" "}
+                    {establishment.information_establishment?.stylos_info?.city}{" "}
+                    {/* <ExternalLink size={12} className="inline" /> */}
+                  </p>
+                ) : (
+                  <Skeleton className="w-32 h-6 flex rounded-full mb-2" />
+                )}
+                {!loading ? (
+                  establishment.information_establishment?.stylos_info?.address
+                ) : (
+                  <Skeleton className="w-52 h-5 flex rounded-full" />
+                )}
+              </div>
+              <div className="flex flex-col gap-2 md:justify-self-end">
+                <p className="text-md font-bold md:text-right select-none">
+                  Contacto
+                </p>
+                <div className="flex flex-nowrap gap-4 w-fit md:self-end">
+                  {!loading ? (
+                    establishment.information_establishment?.stylos_info
+                      ?.contact_methods && (
+                      <SocialLinks
+                        contactMethods={
+                          establishment.information_establishment?.stylos_info
+                            ?.contact_methods
+                        }
+                      />
+                    )
+                  ) : (
+                    <Skeleton className="flex rounded-full w-48 h-10" />
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Tabs */}
+          <section className="flex flex-col w-full">
+            <Tabs
+              variant="underlined"
+              fullWidth
+              size="lg"
+              className="sticky top-16 z-50 bg-white border-b-1 shadow-sm select-none"
+              selectedKey={selectedTab}
+              onSelectionChange={handleTabSelectionChange}
+            >
+              {establishmentTabs.map((tab) => (
+                <Tab key={tab.key} title={tab.title}>
+                  {renderTabContent()}
+                </Tab>
+              ))}
+            </Tabs>
+            <Divider />
+          </section>
+        </article>
+      </main>
+      <Footer />
+    </>
   );
 }
