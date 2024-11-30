@@ -3,7 +3,7 @@ import ButtonCustom from "../global/ButtonCustom";
 import EmployeeReviewsList from "./EmployeeReviewsList";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { createEmployee, getCategories, updateEmployee } from "@/api/employee/employee";
+import { createEmployee, getCategories, updateEmployee } from "@/Api/employee/employee";
 import Cookies from "js-cookie";
 
 const categories = [
@@ -76,27 +76,40 @@ function CreateEmployeeModal(props) {
                     if (!props.employee) {
                         const establishmentId = Cookies.get("establishmentId");
                         try {
-                // employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
-                // console.log(employeeSpecialtyConverted)
-                console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
-                createEmployee(establishmentId, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialty).then(() => {
-                    [props.onClose(), props.listRef.current.loadEmployees()];
-                });
-            } catch (error) {
+                            // employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
+                            // console.log(employeeSpecialtyConverted)
+                            console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
+                            createEmployee(establishmentId, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialty).then(() => {
+                                [props.onClose(), props.listRef.current.loadEmployees()];
+                            });
+                        } catch (error) {
                             console.log(error)
                         }
                     } else {
                         try {
                             console.log(employeeSpecialtyConverted)
-                            updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeStatus).then(() => {
+                            const promise = new Promise((resolve, reject) => {
+                                const response = 
+                                updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeStatus)
+                                setTimeout(() => {
+                                    // si todo va bien, se llama a resolve
+                                    resolve(response);
+                                    reject("Ocurrio un error");
+                                }, 0);
+                            });
+                            promise.then((response) => {
                                 validEmail || validName || validLastName || validPhone || validSpecialty ? null : [props.reloadList(), props.onClose()]
+                                console.log(response)
+                            })
+                            promise.catch((error) => {
+                                console.log(error)
                             })
                         } catch (error) {
                             console.log(error)
                         }
                     }
                 })
-            }else{
+            } else {
                 null
             }
         }, 1000);
@@ -104,7 +117,7 @@ function CreateEmployeeModal(props) {
     }
 
     const [employeeSpecialtyID, setEmployeeSpecialtyID] = useState();
-    console.log(employeeSpecialtyID?.name)
+    // console.log(employeeSpecialtyID?.name)
     useEffect(() => {
         const loadEmployee = async () => {
             if (props.employee) {
@@ -131,7 +144,7 @@ function CreateEmployeeModal(props) {
             });
             promise.then((resultado) => {
                 setCategorys(resultado.data);
-                console.log(resultado.data);
+                // console.log(resultado.data);
             });
             promise.catch((error) => {
                 console.log(error);
@@ -149,7 +162,7 @@ function CreateEmployeeModal(props) {
         //console.log(props.employee);
     }, [props.employee, props.user]);
 
-    //aqui funcionaconsole.log(employeeSpecialty)
+    // console.log("aqui funciona", employeeSpecialty)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -193,7 +206,7 @@ function CreateEmployeeModal(props) {
             } else {
                 setValidEmail(true);
             }
-            if (employeeSpecialty !== "" && employeeSpecialty !== undefined) {
+            if (employeeSpecialtyID !== "" && employeeSpecialtyID !== undefined) {
                 setValidSpecialty(false);
             } else {
                 setValidSpecialty(true);
@@ -422,7 +435,7 @@ function CreateEmployeeModal(props) {
                                         variant="bordered"
                                         className="w-full"
                                         datatype="string"
-                                        defaultSelectedKeys={"Hola"}
+                                        defaultSelectedKeys={[employeeSpecialtyID?.name]}
                                         onChange={(e) => setEmployeeSpecialty(e.target.value)}
                                         isRequired
                                         isInvalid={validSpecialty}

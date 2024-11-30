@@ -4,6 +4,7 @@ import ClientService from "./ClientService"
 import { useEffect, useState } from "react"
 import { getClientHistory, getClientReviews } from "@/Api/profile/profileApi"
 import { getClient } from "@/Api/employeeServices/employeeServicesApi"
+import Cookies from "js-cookie"
 
 function ClientHistorial() {
 
@@ -14,7 +15,7 @@ function ClientHistorial() {
     useEffect(() => {
         function loadClient() {
             const promise = new Promise((resolve, reject) => {
-                const response = getClient(1);
+                const response = getClient(Cookies.get("client_id"));
                 setTimeout(() => {
                     resolve(response);
                     reject("Ocurrio un error");
@@ -88,7 +89,7 @@ function ClientHistorial() {
                     <h2 className="text-3xl font-bold lg:fixed z-10 bg-white w-full">Historial</h2>
                     <div className="lg:h-full mt-10 gap-4 flex flex-col">
                         {clientHistory.length > 0 ? clientHistory?.map((service) => (
-                            <ClientService key={service.id} appointments={service} reviews={reviews} loadClientReviews={loadClientReviews} />
+                            <ClientService key={service.id} appointments={service} reviews={reviews} loadClientReviews={loadClientReviews} client={client} />
                         ))
                             :
                             <div className="flex flex-col gap-4 justify-center w-full items-center">
