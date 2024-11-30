@@ -96,6 +96,10 @@ function ModalEditService({
         newErrors.commission = "La comisión debe ser mayor a 0";
       }
 
+      if (commission > 100) {
+        newErrors.commission = "La comisión debe ser menor a 100";
+      }
+
       if (!category) {
         newErrors.category = "La categoría es requerida";
       }
