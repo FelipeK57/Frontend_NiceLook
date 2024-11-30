@@ -18,7 +18,7 @@ export default function Footer() {
             </Link>
             <Link
               className="hover:underline text-xs"
-              to="/recepcionist/login"
+              to="/employee/login"
               target="_blank"
             >
               Recepcionista

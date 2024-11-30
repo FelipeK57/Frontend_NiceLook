@@ -20,7 +20,7 @@ export const BackgroundImage = ({ backgroundImage }) => {
   return (
     <div className="w-full h-full aspect-[3.91] flex md:rounded-xl overflow-hidden border-b-1 md:border-1">
       {backgroundImage | (backgroundImage !== " ") ? (
-        <Image
+        <img
           src={backgroundImage}
           alt="Imagen de fondo"
           className="object-cover w-full h-auto rounded-none"
@@ -147,13 +147,8 @@ export default function EstablishmentProfile() {
       },
       {
         key: "employees",
-        title: "Empleados",
+        title: "Profesionales",
         component: <h1>Empleados</h1>,
-      },
-      {
-        key: "about",
-        title: "Sobre nosotros",
-        component: <h1>Sobre nosotros</h1>,
       },
     ],
     [employeeId]
