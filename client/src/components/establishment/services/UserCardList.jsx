@@ -6,7 +6,7 @@ import { Image as Imageicon } from "lucide-react";
 import { Skeleton } from "@nextui-org/react";
 import api from "@/api";
 
-export default function UserCardList({ presentationStaff }) {
+export default function UserCardList({ filterQuery }) {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
@@ -34,6 +34,31 @@ export default function UserCardList({ presentationStaff }) {
     };
     fetchUsers();
   }, []);
+
+  // Filter effect
+  useEffect(() => {
+    if (!users.length) return;
+
+    if (!filterQuery || filterQuery === "Todos") {
+      setFilteredEmployees(users);
+      return;
+    }
+
+    const filtered = users.filter((employee) => {
+      // Verificar si el empleado tiene servicios
+      if (!employee.employee_services?.length) return false;
+
+      // Verificar si algún servicio coincide con la categoría
+      return employee.employee_services.some(
+        (service) => service.service?.category === filterQuery
+      );
+    });
+
+    // Debug
+    // console.log("Filtering by:", filterQuery);
+    // console.log("Filtered employees:", filtered);
+    setFilteredEmployees(filtered);
+  }, [filterQuery, users]);
 
   if (loading) {
     return Array.from({ length: 3 }).map((_, index) => (
@@ -103,16 +128,9 @@ export default function UserCardList({ presentationStaff }) {
             ? `${user?.rating}/5⭐(${user?.reviews})`
             : "Sin calificación"}
         </p>
-        {presentationStaff ? null : (
-          <Chip
-            className="text-xs mt-2"
-            color="success"
-            variant="flat"
-            size="sm"
-          >
-            Disponible
-          </Chip>
-        )}
+        <Chip className="text-xs mt-2" color="success" variant="flat" size="sm">
+          Disponible
+        </Chip>
       </CardFooter>
     </Card>
   ));
