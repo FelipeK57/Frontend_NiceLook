@@ -1,7 +1,6 @@
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Switch } from "@nextui-org/react";
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Switch } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 import EmployeeReviewsList from "./EmployeeReviewsList";
-import { useForm } from 'react-hook-form'
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { createEmployee, getCategories, updateEmployee } from "@/api/employee/employee";
@@ -48,7 +47,6 @@ function CreateEmployeeModal(props) {
         reloadList: PropTypes.func
     }
 
-    const { formState: { errors } } = useForm();
     const [categorys, setCategorys] = useState([]);
     const [employeeFirstName, setEmployeeFirstName] = useState();
     const [employeeLastName, setEmployeeLastName] = useState();
@@ -60,10 +58,24 @@ function CreateEmployeeModal(props) {
     const employeeSpecialtyConverted = [];
 
     function onSubmit() {
-
-        if (!props.employee) {
-            const establishmentId = Cookies.get("establishmentId");
-            try {
+        setIsChanged(true);
+        const promise = new Promise((resolve) => {
+            if (validPhone) {
+                setEmployeePhone(undefined)
+            }
+            if (validEmail) {
+                setEmployeeEmail(undefined)
+            }
+            setTimeout(() => {
+                resolve();
+            }, 0);
+        })
+        const timer = setTimeout(() => {
+            if (!validEmail && !validName && !validLastName && !validPhone) {
+                promise.then(() => {
+                    if (!props.employee) {
+                        const establishmentId = Cookies.get("establishmentId");
+                        try {
                 // employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
                 // console.log(employeeSpecialtyConverted)
                 console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
@@ -71,19 +83,24 @@ function CreateEmployeeModal(props) {
                     [props.onClose(), props.listRef.current.loadEmployees()];
                 });
             } catch (error) {
-                console.log(error)
-            }
-        } else {
-            try {
-                console.log(employeeSpecialtyConverted)
-                updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeStatus).then(() => {
-                    props.onClose();
-                    props.reloadList()
+                            console.log(error)
+                        }
+                    } else {
+                        try {
+                            console.log(employeeSpecialtyConverted)
+                            updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeStatus).then(() => {
+                                validEmail || validName || validLastName || validPhone || validSpecialty ? null : [props.reloadList(), props.onClose()]
+                            })
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
                 })
-            } catch (error) {
-                console.log(error)
+            }else{
+                null
             }
-        }
+        }, 1000);
+        return () => clearTimeout(timer);
     }
 
     const [employeeSpecialtyID, setEmployeeSpecialtyID] = useState();
@@ -146,7 +163,53 @@ function CreateEmployeeModal(props) {
         return () => clearTimeout(timer);
     }, [categorys])
 
-    console.log(employeeSpecialty)
+    const [validName, setValidName] = useState(false);
+    const [validLastName, setValidLastName] = useState(false);
+    const [validPhone, setValidPhone] = useState(false);
+    const [validEmail, setValidEmail] = useState(false);
+    const [validSpecialty, setValidSpecialty] = useState(false);
+    const [ischanged, setIsChanged] = useState(false);
+
+    useEffect(() => {
+        console.log("validEmail", validEmail, "validName", validName, "validLastName", validLastName, "validPhone", validPhone, "validSpecialty", validSpecialty)
+        if (ischanged) {
+            if (employeeFirstName !== "" && employeeFirstName !== undefined) {
+                setValidName(false);
+            } else {
+                setValidName(true);
+            }
+            if (employeeLastName !== "" && employeeLastName !== undefined) {
+                setValidLastName(false);
+            } else {
+                setValidLastName(true);
+            }
+            if (employeePhone !== "" && employeePhone !== undefined && employeePhone.length === 10) {
+                setValidPhone(false);
+            } else {
+                setValidPhone(true);
+            }
+            if (employeeEmail !== "" && employeeEmail !== undefined && employeeEmail.includes("@") && employeeEmail.includes(".")) {
+                setValidEmail(false);
+            } else {
+                setValidEmail(true);
+            }
+            if (employeeSpecialty !== "" && employeeSpecialty !== undefined) {
+                setValidSpecialty(false);
+            } else {
+                setValidSpecialty(true);
+            }
+        } else {
+            setIsChanged(false);
+            setValidName(false);
+            setValidLastName(false);
+            setValidPhone(false);
+        }
+    }, [employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialty, ischanged, validEmail, validName, validLastName, validPhone, validSpecialty]);
+
+    const handleClose = () => {
+        setIsChanged(false);
+        props.onClose();
+    }
 
     return (
         <Modal {...props} size="2xl"
@@ -188,8 +251,60 @@ function CreateEmployeeModal(props) {
             <ModalContent>
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
-                        <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar profesional" : "Crear profesional"}</h2>
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar profesional" : "Crear profesional"}</h2>
+                            <Popover placement="right">
+                                <PopoverTrigger>
+                                    <Button
+                                        className="text-xl font-bold rounded-full shadow-sm border-1 border-slate-500 shadow-slate-500"
+                                        isIconOnly
+                                        size="sm"
+                                        variant="bordered">
+                                        ?
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <div className="px-1 py-2">
+                                        <div className="text-small font-bold">Ayuda</div>
+                                        <div className="text-tiny max-w-[350px]">
+                                            <p>
+                                                {props.employee ? "En este formulario usted podra editar la informacion del empleado seleccionado y visualizar las reseñas del mismo" : "En este formulario usted deberá llenar los campos con la información del empleado que desea agregar"}.
+                                                <br />
+                                                <br />
+                                                Los campos son los siguientes:
+                                                <br />
+                                                <br />
+                                                <ul>
+                                                    <li>
+                                                        <b>Nombre:</b> Nombre o nombres del empleado.
+                                                    </li>
+                                                    <li>
+                                                        <b>Apellido:</b> Apellido o apellidos del empleado.
+                                                    </li>
+                                                    <li>
+                                                        <b>Teléfono:</b> Teléfono del empleado (deberá contener 10 dígitos).
+                                                    </li>
+                                                    <li>
+                                                        <b>Correo:</b> Correo del empleado (deberá contener un @ y un . para ser considerado válido).
+                                                    </li>
+                                                    <li>
+                                                        <b>Profesión:</b> Profesión del empleado (deberá seleccionar alguna de las opciones disponibles)
+                                                    </li>
+                                                    {props.employee &&
+                                                        <li>
+                                                            <b>Estado:</b> Estado del empleado (activo o inactivo).
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+
                         {props.employee && <h3 className="text-zinc-500 text-base">Puede editar los campos</h3>}
+
                     </ModalHeader>
                     <ModalBody>
                         <form className="flex flex-col gap-6 sm:gap-8">
@@ -203,7 +318,7 @@ function CreateEmployeeModal(props) {
                                         type="text"
                                         placeholder="Nombres"
                                         variant="bordered"
-                                        isInvalid={errors.name}
+                                        isInvalid={validName}
                                         value={employeeFirstName}
                                         onChange={(e) => setEmployeeFirstName(e.target.value)}
                                         classNames={{
@@ -221,7 +336,7 @@ function CreateEmployeeModal(props) {
                                         name="last_name"
                                         errorMessage="Por favor ingrese un apellido"
                                         id="last_name"
-                                        isInvalid={errors.last_name}
+                                        isInvalid={validLastName}
                                         type="text"
                                         placeholder="Apellidos"
                                         variant="bordered"
@@ -251,13 +366,12 @@ function CreateEmployeeModal(props) {
                                     <label className="font-bold" htmlFor="phone">Telefono</label>
                                     <Input
                                         name="phone"
-                                        errorMessage="Por favor ingrese un numero telefonico"
+                                        errorMessage="Por favor ingrese un numero telefonico valido"
                                         id="phone"
                                         type="number"
                                         placeholder="Numero telefonico"
                                         variant="bordered"
-                                        inputMode="none"
-                                        isInvalid={errors.phone}
+                                        isInvalid={validPhone}
                                         value={employeePhone}
                                         onChange={(e) => setEmployeePhone(e.target.value)}
                                         classNames={{
@@ -274,13 +388,13 @@ function CreateEmployeeModal(props) {
                                 </div>
                                 <div>
                                     <label className="font-bold" htmlFor="email">Correo</label>
-                                    <Input {...props.employee && { readOnly: true }}
+                                    <Input
                                         name="email"
                                         errorMessage="Por favor ingrese un correo valido"
                                         id="email"
                                         type="email"
                                         placeholder="Correo electronico"
-                                        isInvalid={errors.email}
+                                        isInvalid={validEmail}
                                         variant="bordered"
                                         value={employeeEmail}
                                         onChange={(e) => setEmployeeEmail(e.target.value)}
@@ -311,7 +425,7 @@ function CreateEmployeeModal(props) {
                                         defaultSelectedKeys={"Hola"}
                                         onChange={(e) => setEmployeeSpecialty(e.target.value)}
                                         isRequired
-                                        isInvalid={errors.employeeSpecialty ? true : false}
+                                        isInvalid={validSpecialty}
                                         scrollShadowProps={{
                                             isEnabled: true
                                         }}
@@ -337,7 +451,7 @@ function CreateEmployeeModal(props) {
                             </div>
                             {props.employee ? (<EmployeeReviewsList />) : null}
                             <ModalFooter className={props.employee ? " !py-2 sm:py-4" : "py-4"}>
-                                <Button color="danger" variant="light" onPress={onClose}>
+                                <Button color="danger" variant="light" onPress={handleClose}>
                                     Cancelar
                                 </Button>
                                 <ButtonCustom primary name="Guardar" classStyles={"px-[5%]"} onPress={onSubmit} />

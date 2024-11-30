@@ -32,12 +32,13 @@ export function createEmployee(establishmentId, name, last_name, phone, email, e
 
 //query para actualizar un empleado
 
-export function updateEmployee(idUser, name, last_name, phone, state) {
+export function updateEmployee(idUser, name, last_name, phone, email, state) {
     return EmployeesApi.put('/update_employee/',{
         employee_id: idUser,
         name: name,
         last_name: last_name,
         phone: phone,
+        email: email,
         state: state
     });
 }
