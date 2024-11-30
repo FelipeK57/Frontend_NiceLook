@@ -44,28 +44,29 @@ function EmployeesManagement() {
             <section className="flex flex-col gap-6 w-full py-8 px-4 md:px-10">
                 <div className="EmplyeesManagementheader flex justify-between pb-2 md:flex-row flex-col md:gap-0 gap-8">
                     <div className="flex gap-4 items-center">
-                        <h1 className="hidden lg:block text-4xl text-zinc-950 font-bold">Gestion de profesionales</h1>
-                        <Popover placement="right">
-                            <PopoverTrigger>
-                                <Button
-                                    className="text-xl font-bold rounded-full shadow-sm border-1 border-slate-500 shadow-slate-500"
-                                    isIconOnly
-                                    size="sm"
-                                    variant="bordered">
-                                    ?
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <div className="px-1 py-2">
-                                    <div className="text-small font-bold">Ayuda</div>
-                                    <div className="text-tiny max-w-[350px]">
-                                        <p>
-                                            En este apartado usted podrá visualizar la información de los profesionales registrados, editar dicha información o registrar nuevos profesionales en su establecimiento.
-                                        </p>
+                        <h1 className="hidden lg:flex text-4xl text-zinc-950 font-bold items-center gap-2">Gestion de profesionales
+                            <Popover placement="right">
+                                <PopoverTrigger>
+                                    <Button
+                                        className="text-xl font-bold rounded-full shadow-sm border-1 border-slate-500 shadow-slate-500"
+                                        isIconOnly
+                                        size="sm"
+                                        variant="bordered">
+                                        ?
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <div className="px-1 py-2">
+                                        <div className="text-small font-bold">Ayuda</div>
+                                        <div className="text-tiny max-w-[350px]">
+                                            <p>
+                                                En este apartado usted podrá visualizar la información de los profesionales registrados, editar dicha información o registrar nuevos profesionales en su establecimiento.
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </PopoverContent>
-                        </Popover>
+                                </PopoverContent>
+                            </Popover>
+                        </h1>
                     </div>
                     <div className="flex lg:hidden gap-4 items-center">
                         <ButtonCustom secondary isIconOnly classStyles="rounded-full 1/2lg:hidden flex" >
@@ -73,7 +74,29 @@ function EmployeesManagement() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
                             </svg>
                         </ButtonCustom>
-                        <h1 className="block lg:hidden text-2xl md:text-4xl text-zinc-950 font-bold">Gestion de profesionales</h1>
+                        <h1 className="block lg:hidden text-2xl md:text-4xl text-zinc-950 font-bold items-center">Gestion de profesionales
+                            <Popover placement="right">
+                                <PopoverTrigger className="ml-2">
+                                    <Button
+                                        className="text-xl font-bold rounded-full shadow-sm border-1 border-slate-500 shadow-slate-500"
+                                        isIconOnly
+                                        size="sm"
+                                        variant="bordered">
+                                        ?
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <div className="px-1 py-2">
+                                        <div className="text-small font-bold">Ayuda</div>
+                                        <div className="text-tiny max-w-[350px]">
+                                            <p>
+                                                En este apartado usted podrá visualizar la información de los profesionales registrados, editar dicha información o registrar nuevos profesionales en su establecimiento.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+                        </h1>
                     </div>
                     <div className="EmployeesManagementHeaderButtons flex gap-4">
                         <Input
