@@ -2,10 +2,11 @@ import LoginModal from "@/pages/auth/client/LoginModal";
 import LogoNiceLook from "./LogoNiceLook";
 import RegisterModal from "@/pages/auth/client/RegisterModal";
 import ButtonCustom from "../global/ButtonCustom";
-import { Button } from "@nextui-org/react";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import useAuthStore from "@/stores/useAuthStore";
+import { PlusIcon } from "lucide-react";
 
 // const SearchBar = ({ className }) => {
 //   return (
@@ -62,7 +63,8 @@ export default function Navbar() {
           </div>
         ) : (
           <div className="flex justify-end">
-            <Button
+
+            {/* <Button
               onClick={() => {
                 logoutClient();
                 window.location.reload();
@@ -72,7 +74,45 @@ export default function Navbar() {
               variant="light"
             >
               Cerrar sesión
-            </Button>
+            </Button> */}
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly
+                  variant="bordered"
+                  className="w-auto border-1 border-slate-500 shadow-sm shadow-slate-500 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                  </svg>
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu variant="bordered">
+                <DropdownItem
+                  key="new"
+                  description={<span className="text-sm cursor-pointer">Modifica tus datos y mira tu histodrial</span>}
+                  startContent={
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                  }
+                >
+                  <label htmlFor="" className="text-xl cursor-pointer">Perfil</label>
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => {
+                    logoutClient();
+                    window.location.reload();
+                  }}
+                  key="new"
+                  startContent={
+                    <svg xmlns="http://www.w3.org/2000/svg" color="red" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                    </svg>
+                  }
+                >
+                  <label htmlFor="" className="text-xl text-red-500 cursor-pointer">Cerrar sesión</label>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         )}
       </div>
