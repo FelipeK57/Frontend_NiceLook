@@ -79,6 +79,7 @@ function ModalDetailsAppointment({
   const [editMode, setEditMode] = useState(false);
   const [editedDate, setEditedDate] = useState(date);
   const [loading, setLoading] = useState(false);
+  const [canceling, setCanceling] = useState(false);
 
   const formatAppointmentData = (dateTimeObject, appointmentId) => {
     if (!dateTimeObject || !appointmentId) return null;
@@ -109,7 +110,7 @@ function ModalDetailsAppointment({
   }, [isOpen, editMode]);
 
   const handleEditSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault;
     setLoading(true);
     const formattedData = formatAppointmentData(editedDate, id);
 
@@ -146,6 +147,27 @@ function ModalDetailsAppointment({
       })
       .finally(() => {
         setLoading(false);
+        onClose();
+      });
+  };
+
+  const handleCancelAppointment = async (e) => {
+    e.preventDefault;
+    setCanceling(true);
+    api
+      .patch(`api/appointment_change_state/`, {
+        state: "Cancelada",
+        id_appointment: id,
+      })
+      .then((response) => {
+        console.log("response", response);
+        window.dispatchEvent(new Event("reloadAppointments"));
+      })
+      .catch((error) => {
+        console.error("error", error);
+      })
+      .finally(() => {
+        setCanceling(false);
         onClose();
       });
   };
@@ -218,7 +240,7 @@ function ModalDetailsAppointment({
                       Hora: {time}
                     </p>
                   </div>
-                  {!isEmployee && (
+                  {(state === "Pendiente" || state === "Cancelada") && (
                     <Button
                       variant="bordered"
                       onPress={() => setEditMode(!editMode)}
@@ -268,26 +290,25 @@ function ModalDetailsAppointment({
         </ModalBody>
         <ModalFooter className="flex justify-between">
           {/* Modal Footer Buttons */}
-          {!isEmployee && (
-            <>
-              {/* <Button
-                color="default"
-                variant="bordered"
-                // onPress={handleOpenRescheduleAppointment}
-              >
-                Reagendar
-              </Button> */}
-              {state !== "Completada" && (
-                <ButtonCustom
-                  action={handleFinishAppointment}
-                  primary
-                  isLoading={loading}
-                >
-                  <Check />
-                  Marcar completada
-                </ButtonCustom>
-              )}
-            </>
+          {state === "Pendiente" && (
+            <ButtonCustom
+              action={handleFinishAppointment}
+              primary
+              isLoading={loading}
+            >
+              <Check />
+              Marcar completada
+            </ButtonCustom>
+          )}
+          {/* Cancel Appointment Button */}
+          {state === "Pendiente" && (
+            <ButtonCustom
+              action={handleCancelAppointment}
+              secondary
+              isLoading={canceling}
+            >
+              Cancelar cita
+            </ButtonCustom>
           )}
         </ModalFooter>
       </ModalContent>

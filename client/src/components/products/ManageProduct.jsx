@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import api from "@/api";
 import useAuthStore from "@/stores/useAuthStore";
 import { parseDate } from "@internationalized/date";
@@ -17,6 +17,8 @@ import ImageUpload from "../global/ImageUpload";
 export default function ManageProduct({ isEditing, onClose, product }) {
   const user = useAuthStore((state) => state.user);
   const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null); // Para la URL de previsualización
+  const [imageFile, setImageFile] = useState(null); // Para el objeto File real
   const [formData, setFormData] = useState({
     name: "",
     establisment: user.establishment,
@@ -84,6 +86,67 @@ export default function ManageProduct({ isEditing, onClose, product }) {
     return null;
   };
 
+  useEffect(() => {
+    const fetchProductImage = async () => {
+      if (product) {
+        await api
+          .get(`Product/getImage/`, {
+            params: {
+              id_establisment: user.establishment,
+              code_product: product.code,
+            },
+          })
+          .then((res) => {
+            setImagePreview(res.data.imagen);
+          })
+          .catch((err) => {
+            console.error("Error fetching product image:", err);
+          });
+      }
+    };
+
+    fetchProductImage();
+  }, [product, user.establishment]);
+
+  const uploadProductImage = async (productCode, imageToUpload = null) => {
+    // Usa imageFile si no se proporciona una imagen específica
+    const image = imageToUpload || imageFile;
+
+    if (!image || !productCode || !user.establishment) {
+      console.warn("Missing data to submit image");
+      return;
+    }
+
+    // Crear un FormData para enviar el archivo correctamente
+    const formData = new FormData();
+    formData.append("id_establisment", user.establishment);
+    formData.append("code_product", productCode);
+    formData.append("image", imageFile);
+
+    try {
+      // Intentar primero actualizar la imagen existente
+      try {
+        const updateResponse = await api.patch(
+          "Product/updateImage/",
+          formData
+        );
+        return updateResponse;
+      } catch (updateErr) {
+        // Si la actualización falla (posiblemente porque no existe una imagen previa),
+        // intentar subir una nueva imagen
+        const createResponse = await api.post("Product/addImage/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        return createResponse;
+      }
+    } catch (err) {
+      console.error("Error uploading/updating image:", err);
+      throw err; // Re-throw para que el llamador pueda manejar el error si es necesario
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -111,6 +174,10 @@ export default function ManageProduct({ isEditing, onClose, product }) {
         setLoading(false);
         onClose();
       });
+
+    if (imageFile) {
+      await uploadProductImage(formattedData.code, null);
+    }
   };
 
   const handleEdit = async (e) => {
@@ -138,6 +205,10 @@ export default function ManageProduct({ isEditing, onClose, product }) {
         setLoading(false);
         onClose();
       });
+
+    if (imageFile) {
+      await uploadProductImage(formattedData.code, imageFile);
+    }
   };
 
   return (
@@ -148,7 +219,11 @@ export default function ManageProduct({ isEditing, onClose, product }) {
       >
         <Skeleton className="rounded-lg" isLoaded={isEditing ? product : true}>
           <section className="ProductImage flex flex-wrap flex-col content-center justify-start gap-4 p-6 items-center">
-            <ImageUpload />
+            <ImageUpload
+              image={imagePreview}
+              setImage={setImagePreview}
+              onFileChange={setImageFile}
+            />
             <Input
               label="Nombre del producto"
               aria-label="Nombre del producto"

@@ -9,6 +9,8 @@ function InputCustom({
   errorMessage,
   placeholder,
   required,
+  description,
+  max,
 }) {
   if (required) {
     label = label + "*";
@@ -29,7 +31,9 @@ function InputCustom({
       isInvalid={isInvalid}
       errorMessage={errorMessage}
       placeholder={placeholder}
-      min={type === "number" ? 1 : undefined}
+      min={type === "number" && 0}
+      max={max}
+      description={description}
     />
   );
 }

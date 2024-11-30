@@ -6,32 +6,36 @@ import PropTypes from "prop-types";
 import { createEmployee, getCategories, updateEmployee } from "@/api/employee/employee";
 import Cookies from "js-cookie";
 
-// const categories = [
-//     {
-//         id: 1,
-//         name: "Barberia",
-//     },
-//     {
-//         id: 2,
-//         name: "SPA de uñas",
-//     },
-//     {
-//         id: 3,
-//         name: "SPA",
-//     },
-//     {
-//         id: 4,
-//         name: "Peluqueria",
-//     },
-//     {
-//         id: 5,
-//         name: "Maquillaje",
-//     },
-//     {
-//         id: 6,
-//         name: "Tatuajes"
-//     }
-// ];
+const categories = [
+    {
+        id: 1,
+        name: "Recepcionista"
+    },
+    {
+        id: 2,
+        name: "Barberia",
+    },
+    {
+        id: 3,
+        name: "SPA de uñas",
+    },
+    {
+        id: 4,
+        name: "SPA",
+    },
+    {
+        id: 5,
+        name: "Peluqueria",
+    },
+    {
+        id: 6,
+        name: "Maquillaje",
+    },
+    {
+        id: 7,
+        name: "Tatuajes"
+    },
+];
 
 function CreateEmployeeModal(props) {
     CreateEmployeeModal.propTypes = {
@@ -72,13 +76,13 @@ function CreateEmployeeModal(props) {
                     if (!props.employee) {
                         const establishmentId = Cookies.get("establishmentId");
                         try {
-                            employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
-                            console.log(employeeSpecialtyConverted)
-                            console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
-                            createEmployee(establishmentId, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialtyConverted).then(() => {
-                                [props.onClose(), props.listRef.current.loadEmployees()];
-                            });
-                        } catch (error) {
+                // employeeSpecialtyConverted.push(parseInt(employeeSpecialty.target.value))
+                // console.log(employeeSpecialtyConverted)
+                console.log(`employeeFirstName = ${employeeFirstName}`, `employeeLastName = ${employeeLastName}`, `employeePhone = ${employeePhone}`, `employeeEmail = ${employeeEmail}`, `employeeSpecialty = ${employeeSpecialtyConverted}`)
+                createEmployee(establishmentId, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialty).then(() => {
+                    [props.onClose(), props.listRef.current.loadEmployees()];
+                });
+            } catch (error) {
                             console.log(error)
                         }
                     } else {
@@ -99,8 +103,9 @@ function CreateEmployeeModal(props) {
         return () => clearTimeout(timer);
     }
 
+    const [employeeSpecialtyID, setEmployeeSpecialtyID] = useState();
+    console.log(employeeSpecialtyID?.name)
     useEffect(() => {
-
         const loadEmployee = async () => {
             if (props.employee) {
                 setEmployeeFirstName(props.user.first_name);
@@ -111,6 +116,7 @@ function CreateEmployeeModal(props) {
                 const idSpecialty = props.employee.especialty[0];
                 setEmployeeSpecialty(idSpecialty);
                 setEmployeeCode(props.employee.id);
+                setEmployeeSpecialtyID(idSpecialty);
             }
         }
 
@@ -246,7 +252,7 @@ function CreateEmployeeModal(props) {
                 {(onClose) => (<>
                     <ModalHeader className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">
-                            <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar empleado" : "Crear empleado"}</h2>
+                            <h2 className="text-2xl sm:text-4xl text-zinc-950 font-bold">{props.employee ? "Visualizar profesional" : "Crear profesional"}</h2>
                             <Popover placement="right">
                                 <PopoverTrigger>
                                     <Button
@@ -296,6 +302,7 @@ function CreateEmployeeModal(props) {
                                 </PopoverContent>
                             </Popover>
                         </div>
+
                         {props.employee && <h3 className="text-zinc-500 text-base">Puede editar los campos</h3>}
 
                     </ModalHeader>
@@ -411,12 +418,12 @@ function CreateEmployeeModal(props) {
                                         name="especialty"
                                         id="especialty"
                                         label="Especialidad"
-                                        placeholder="Seleccione la categoria del empleado"
+                                        placeholder={employeeSpecialtyID?.name ? employeeSpecialtyID?.name : "Seleccione una especialidad"}
                                         variant="bordered"
                                         className="w-full"
                                         datatype="string"
-                                        defaultSelectedKeys={`${employeeSpecialty}`}
-                                        onChange={setEmployeeSpecialty}
+                                        defaultSelectedKeys={"Hola"}
+                                        onChange={(e) => setEmployeeSpecialty(e.target.value)}
                                         isRequired
                                         isInvalid={validSpecialty}
                                         scrollShadowProps={{
@@ -424,9 +431,11 @@ function CreateEmployeeModal(props) {
                                         }}
                                     >
                                         {/* Aqui va la lista de elementos con selectItem de nextui */}
-                                        {categorys.map((category) => (
-                                            <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
-                                        ))}
+                                        {categories.map((category) => {
+                                            return (
+                                                <SelectItem key={category.name}>{category.name}</SelectItem>
+                                            )
+                                        })}
                                     </Select>
                                 </div>
                                 <div className={`flex-col gap-2 ${props.employee ? "flex" : "hidden"}`}>

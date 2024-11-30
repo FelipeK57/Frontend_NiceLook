@@ -179,6 +179,7 @@ function ModalEditService({
             placeholder={"Ejemplo: 15000"}
           />
           <SelectCategorie
+            notAll
             category={category}
             setCategory={handleSelectCategory}
             invalid={!!error.category}
@@ -233,7 +234,7 @@ function ModalEditService({
               color="success"
             />
           </div>
-          <div>
+          <div className="hidden md:block">
             <label className={"font-semibold text-medium lg:text-xl"}>
               Vista previa
             </label>

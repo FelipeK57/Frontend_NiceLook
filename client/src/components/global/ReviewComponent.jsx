@@ -4,6 +4,7 @@ const ReviewComponent = (props) => {
     ReviewComponent.propTypes = {
         reviews: PropTypes.string.isRequired
     }
+    console.log(props.product)
     return (
         <div className="flex items-center justify-center gap-2">
             <span className={`items-center text-center justify-center self-center mt-1 ${props.text}`}>{props.reviews}/5</span>

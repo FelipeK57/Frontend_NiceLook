@@ -1,22 +1,43 @@
-import { useState, useRef } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import { Button } from "@nextui-org/react";
 import { Image } from "@nextui-org/image";
 import { Image as ImageIcon, Pencil } from "lucide-react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
+import DragAndDrop from "@/components/ui/DragAndDrop";
+import ButtonCustom from "@/components/global/ButtonCustom";
 
-const ImageUpload = () => {
-  const [image, setImage] = useState(null);
-  const fileInputRef = useRef(null);
+const ImageUpload = ({ image, setImage, onFileChange }) => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selectedFile, setSelectedFile] = useState(null);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
+  const handleImageUpload = () => {
+    if (selectedFile) {
+      // Convierte el archivo a una URL para previsualización
+      const imageUrl = URL.createObjectURL(selectedFile);
+
+      // Establece la imagen para previsualización
       setImage(imageUrl);
+
+      // Llama a la función de cambio de archivo (si se proporciona)
+      if (onFileChange) {
+        onFileChange(selectedFile);
+      }
+
+      onOpenChange();
     }
   };
 
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
+  const handleClose = () => {
+    setSelectedFile(null);
+    onOpenChange();
   };
 
   return (
@@ -37,18 +58,31 @@ const ImageUpload = () => {
         isIconOnly
         className="absolute bottom-2 right-2 bg-white/80 hover:bg-white rounded-full z-30"
         variant="bordered"
-        onClick={handleButtonClick}
+        onPress={onOpen}
       >
         <Pencil size={20} />
       </Button>
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={handleImageChange}
-      />
+      <Modal isOpen={isOpen} onOpenChange={handleClose}>
+        <ModalContent>
+          <ModalHeader>Subir imagen</ModalHeader>
+          <ModalBody>
+            <DragAndDrop file={selectedFile} setFile={setSelectedFile} />
+          </ModalBody>
+          <ModalFooter>
+            <ButtonCustom secondary action={handleClose}>
+              Cancelar
+            </ButtonCustom>
+            <ButtonCustom
+              primary
+              onPress={handleImageUpload}
+              isDisabled={!selectedFile}
+            >
+              Guardar
+            </ButtonCustom>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

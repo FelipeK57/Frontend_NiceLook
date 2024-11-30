@@ -11,7 +11,7 @@ function AppointmentsManagement() {
   let year = fecha.getFullYear().toString();
   let month = (fecha.getMonth() + 1).toString();
   let day = fecha.getDate().toString();
-  
+
   const [date, setDate] = useState(
     parseDate(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
   );
@@ -24,7 +24,11 @@ function AppointmentsManagement() {
 
     citas.forEach((cita) => {
       // Obtener la hora en formato "HH:mm" directamente de UTC
-      const horaUTC = new Date(cita.time).toISOString().slice(11, 16);
+      const hora1 = new Date(cita.time);
+
+      const horaColombia = new Date(hora1.getTime() - 5 * 60 * 60 * 1000);
+
+      const horaUTC = horaColombia.toISOString().slice(11, 16);
 
       // Si la hora no existe en el Map, la agregamos
       if (!citasAgrupadas.has(horaUTC)) {
@@ -51,7 +55,7 @@ function AppointmentsManagement() {
         fecha: cita.date, // Fecha de la cita
         emailClient: cita.client.user.email, // Correo electrónico del cliente
         phoneClient: cita.client.phone, // Teléfono del cliente
-        commission: cita.commission
+        commission: cita.commission,
       };
 
       // Añadir la cita al grupo correspondiente
@@ -103,6 +107,12 @@ function AppointmentsManagement() {
     };
 
     fetchData();
+
+    window.addEventListener("reloadAppointments", fetchData);
+
+    return () => {
+      window.removeEventListener("reloadAppointments", fetchData);
+    };
   }, [date]);
 
   useEffect(() => {

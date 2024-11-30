@@ -7,7 +7,7 @@ const categories = [
   },
   {
     id: 1,
-    name: "Barberia",
+    name: "Barbería",
   },
   {
     id: 2,
@@ -25,6 +25,10 @@ const categories = [
     id: 5,
     name: "Maquillaje",
   },
+  {
+    id: 6,
+    name: "Tatuajes",
+  },
 ];
 
 function CategoriesAppointments({ setCategory }) {
@@ -32,7 +36,7 @@ function CategoriesAppointments({ setCategory }) {
   const handleCategorySelected = (category) => {
     setCategory(category);
     setCategorySelected(category);
-  }
+  };
   return (
     <article className="flex gap-4 py-3 overflow-x-auto scrollbar scrollbar-thumb-slate-200  scrollbar-thumb-rounded-full scrollbar-track-rounded-full active:scrollbar-thumb-primary hover:scrollbar-thumb-slate-300 lg:pr-2">
       {categories.map((category) => (

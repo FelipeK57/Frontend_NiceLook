@@ -38,7 +38,7 @@ function Categories({ setSelectCategory }) {
     },
     {
       id: 1,
-      name: "Barberia",
+      name: "Barbería",
     },
     {
       id: 2,
@@ -50,7 +50,7 @@ function Categories({ setSelectCategory }) {
     },
     {
       id: 4,
-      name: "Peluqueria",
+      name: "Peluquería",
     },
     {
       id: 5,
@@ -72,7 +72,7 @@ function Categories({ setSelectCategory }) {
 
   return (
     <article className="flex flex-col items-center border-2 border-slate-200 rounded-xl p-4">
-      <h1 className="text-xl font-bold">Categorias</h1>
+      <h1 className="text-xl font-bold">Categorías</h1>
       <ul className="mt-2 flex flex-col gap-4 [&>li]:w-full [&>li]:py-2 [&>li]:font-semibold items-start py-3 w-full">
         {categories.map((category) => (
           <li

@@ -44,7 +44,7 @@ function EmployeesManagement() {
             <section className="flex flex-col gap-6 w-full py-8 px-4 md:px-10">
                 <div className="EmplyeesManagementheader flex justify-between pb-2 md:flex-row flex-col md:gap-0 gap-8">
                     <div className="flex gap-4 items-center">
-                        <h1 className="hidden lg:block text-4xl text-zinc-950 font-bold">Gestion de empleados</h1>
+                        <h1 className="hidden lg:block text-4xl text-zinc-950 font-bold">Gestion de profesionales</h1>
                         <Popover placement="right">
                             <PopoverTrigger>
                                 <Button
