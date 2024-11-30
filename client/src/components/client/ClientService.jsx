@@ -255,7 +255,7 @@ function ClientService({ appointments, reviews, loadClientReviews, client }) {
                         <text className="text-xl"><b>Establecimiento:</b> {appointments.establisment.name}</text>
                         <text className="text-xl"><b>Total:</b> <b>${appointments.total_price}</b></text>
                         {!writeReview &&
-                            <Button isIconOnly variant="bordered" radius="full" className="absolute border-2 border-slate-200 bottom-2 right-2" onPress={handleOpen}>
+                            <Button isIconOnly variant="bordered" radius="full" className="absolute border-1 border-slate-500 shadow-sm shadow-slate-500 bottom-2 right-2" onPress={handleOpen}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                 </svg>
