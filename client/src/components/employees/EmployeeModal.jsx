@@ -268,7 +268,7 @@ function CreateEmployeeModal(props) {
                                         <div className="text-small font-bold">Ayuda</div>
                                         <div className="text-tiny max-w-[350px]">
                                             <p>
-                                                {props.employee ? "En este formulario usted podra editar la informacion del empleado seleccionado y visualizar las reseñas del mismo" : "En este formulario usted deberá llenar los campos con la información del empleado que desea agregar"}.
+                                                {props.employee ? "En este formulario usted podra editar la informacion del profesional seleccionado y visualizar las reseñas del mismo" : "En este formulario usted deberá llenar los campos con la información del profesional que desea agregar"}.
                                                 <br />
                                                 <br />
                                                 Los campos son los siguientes:
@@ -276,23 +276,23 @@ function CreateEmployeeModal(props) {
                                                 <br />
                                                 <ul>
                                                     <li>
-                                                        <b>Nombre:</b> Nombre o nombres del empleado.
+                                                        <b>Nombre:</b> Nombre o nombres del profesional.
                                                     </li>
                                                     <li>
-                                                        <b>Apellido:</b> Apellido o apellidos del empleado.
+                                                        <b>Apellido:</b> Apellido o apellidos del profesional.
                                                     </li>
                                                     <li>
-                                                        <b>Teléfono:</b> Teléfono del empleado (deberá contener 10 dígitos).
+                                                        <b>Teléfono:</b> Teléfono del profesional (deberá contener 10 dígitos).
                                                     </li>
                                                     <li>
-                                                        <b>Correo:</b> Correo del empleado (deberá contener un @ y un . para ser considerado válido).
+                                                        <b>Correo:</b> Correo del profesional (deberá contener un @ y un . para ser considerado válido).
                                                     </li>
                                                     <li>
-                                                        <b>Profesión:</b> Profesión del empleado (deberá seleccionar alguna de las opciones disponibles)
+                                                        <b>Profesión:</b> Profesión del profesional (deberá seleccionar alguna de las opciones disponibles)
                                                     </li>
                                                     {props.employee &&
                                                         <li>
-                                                            <b>Estado:</b> Estado del empleado (activo o inactivo).
+                                                            <b>Estado:</b> Estado del profesional (activo o inactivo).
                                                         </li>
                                                     }
                                                 </ul>
@@ -358,7 +358,7 @@ function CreateEmployeeModal(props) {
                                     type="text"
                                     id="first_name"
                                     name="first_name"
-                                    placeholder="Nombre del empleado"
+                                    placeholder="Nombre del profesional"
                                     className="p-2 border-2 border-slate-200 bg-transparent rounded-xl text-md hover:border-slate-400 transition-all duration-300" />*/}
                             </div>
                             <div className="grid grid-cols-2 gap-4">

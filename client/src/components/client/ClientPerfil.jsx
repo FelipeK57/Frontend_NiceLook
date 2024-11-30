@@ -19,8 +19,8 @@ function ClientPerfil({ client }) {
     const [alert, setAlert] = useState(false);
 
     useEffect(() => {
-        setClientNames(client.first_name);
-        setClientLastNames(client.last_name);
+        setClientNames(client.user?.first_name);
+        setClientLastNames(client.user?.last_name);
         setClientPhone(client.phone);
         setClientEmail(client.user?.email);
     }, [client]);

@@ -60,7 +60,7 @@ function EmployeesManagement() {
                                     <div className="text-small font-bold">Ayuda</div>
                                     <div className="text-tiny max-w-[350px]">
                                         <p>
-                                            En este apartado usted podrá visualizar la información de los empleados registrados, editar dicha información o registrar nuevos empleados en su establecimiento.
+                                            En este apartado usted podrá visualizar la información de los profesionales registrados, editar dicha información o registrar nuevos profesionales en su establecimiento.
                                         </p>
                                     </div>
                                 </div>
@@ -73,7 +73,7 @@ function EmployeesManagement() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
                             </svg>
                         </ButtonCustom>
-                        <h1 className="block lg:hidden text-2xl md:text-4xl text-zinc-950 font-bold">Gestion de empleados</h1>
+                        <h1 className="block lg:hidden text-2xl md:text-4xl text-zinc-950 font-bold">Gestion de profesionales</h1>
                     </div>
                     <div className="EmployeesManagementHeaderButtons flex gap-4">
                         <Input

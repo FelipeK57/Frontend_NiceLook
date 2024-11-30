@@ -69,7 +69,7 @@ function ClientHistorial() {
     }
 
     // console.log("Historial de citas: ", clientHistory)
-    // console.log("cliente: ", client)
+    console.log("cliente: ", client)
 
     return (
         <div className="w-full lg:h-[93.6vh] flex flex-col 2xl:px-64 xl:px-20  py-10 transition-all duration-300">
