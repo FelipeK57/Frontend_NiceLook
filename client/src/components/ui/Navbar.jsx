@@ -7,6 +7,7 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import useAuthStore from "@/stores/useAuthStore";
 import { PlusIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // const SearchBar = ({ className }) => {
 //   return (
@@ -35,6 +36,8 @@ export default function Navbar() {
 
   const handleOpenRegisterModal = () => setIsModalRegisterOpen(true);
   const handleCloseRegisterModal = () => setIsModalRegisterOpen(false);
+
+  const navigate = useNavigate();
   return (
     <header className="sticky top-0 z-50 h-16 items-center bg-white border-b-2 flex justify-center">
       <div className="px-4 sm:px-0 w-full md:w-4/5 max-w-[1280px] grid gap-4 grid-cols-2 items-center h-full">
@@ -87,6 +90,7 @@ export default function Navbar() {
               </DropdownTrigger>
               <DropdownMenu variant="bordered">
                 <DropdownItem
+                  onPress={() => navigate("/profile")}
                   key="new"
                   description={<span className="text-sm cursor-pointer">Modifica tus datos y mira tu histodrial</span>}
                   startContent={

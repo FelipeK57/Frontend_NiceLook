@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { getClientHistory, getClientReviews } from "@/Api/profile/profileApi"
 import { getClient } from "@/Api/employeeServices/employeeServicesApi"
 import Cookies from "js-cookie"
+import { useNavigate } from "react-router-dom"
 
 function ClientHistorial() {
 
@@ -71,11 +72,15 @@ function ClientHistorial() {
 
     // console.log("Historial de citas: ", clientHistory)
     console.log("cliente: ", client)
+    const navigate = useNavigate();
 
     return (
         <div className="w-full lg:h-[93.6vh] flex flex-col 2xl:px-64 xl:px-20  py-10 transition-all duration-300">
             <div className="flex flex-row gap-4 items-center">
-                <Button isIconOnly variant="bordered" className="rounded-full border-2 border-slate-200 shadow-sm shadow-slate-200">
+                <Button onPress={() => navigate(-1, { replace: true })}
+                isIconOnly 
+                variant="bordered" 
+                className="rounded-full border-2 border-slate-200 shadow-sm shadow-slate-200">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
@@ -93,7 +98,7 @@ function ClientHistorial() {
                         ))
                             :
                             <div className="flex flex-col gap-4 justify-center w-full items-center">
-                                <h2 className="text-3xl font-bold">No hay nada para ver aqui</h2>
+                                <h2 className="sm:text-3xl text-2xl font-bold">No hay nada para ver aqui</h2>
                             </div>
                         }
                     </div>
