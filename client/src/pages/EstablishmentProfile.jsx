@@ -15,6 +15,7 @@ import ServicesTab from "./establishment/ServicesTab";
 import ProfileReviews from "@/components/establishment/review/ProfileReviews";
 import BuyCard from "./buyPage/buyCard";
 import Footer from "@/components/global/Footer";
+import StaffPresentation from "./employee/StaffPresentation";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
@@ -148,12 +149,12 @@ export default function EstablishmentProfile() {
       {
         key: "employees",
         title: "Profesionales",
-        component: <h1>Empleados</h1>,
+        component: <StaffPresentation />,
       },
     ],
     [employeeId]
   );
-  
+
   // Esta función se encarga de renderizar el contenido de la pestaña seleccionada.
   // OJO: Si hay rutas anidadas, implementar lógica de renderizado de outlet con context
   // en establishmentTabs[] arriba ^.
