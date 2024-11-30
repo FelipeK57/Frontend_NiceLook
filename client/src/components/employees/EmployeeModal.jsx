@@ -87,7 +87,7 @@ function CreateEmployeeModal(props) {
     }
 
     const [employeeSpecialtyID, setEmployeeSpecialtyID] = useState();
-    console.log(employeeSpecialtyID)
+    console.log(employeeSpecialtyID?.name)
     useEffect(() => {
         const loadEmployee = async () => {
             if (props.employee) {
@@ -304,11 +304,11 @@ function CreateEmployeeModal(props) {
                                         name="especialty"
                                         id="especialty"
                                         label="Especialidad"
-                                        placeholder="Seleccione la categoria del empleado"
+                                        placeholder={employeeSpecialtyID?.name ? employeeSpecialtyID?.name : "Seleccione una especialidad"}
                                         variant="bordered"
                                         className="w-full"
                                         datatype="string"
-                                        defaultSelectedKeys={employeeSpecialtyID?.name}
+                                        defaultSelectedKeys={"Hola"}
                                         onChange={(e) => setEmployeeSpecialty(e.target.value)}
                                         isRequired
                                         isInvalid={errors.employeeSpecialty ? true : false}
