@@ -57,12 +57,18 @@ function ModalNewService({ isOpen, onClose }) {
 
   const handleCreateService = async () => {
     console.log(name, price, commission, category, image);
+    const isCommissionValid = commission >= 0 && commission <= 100;
+
     const newErrors = {
-      name: name ? "" : "El nombre del servicio es requerido.",
-      category: category ? "" : "La categoría del servicio es requerida.",
-      price: price ? "" : "El precio del servicio es requerido.",
-      commission: commission ? "" : "La comisión del servicio es requerida.",
-      image: image ? "" : "La imagen del servicio es requerida.",
+        name: name ? "" : "El nombre del servicio es requerido.",
+        category: category ? "" : "La categoría del servicio es requerida.",
+        price: price ? "" : "El precio del servicio es requerido.",
+        commission: commission
+            ? isCommissionValid
+                ? ""
+                : "La comisión debe estar entre 0 y 100."
+            : "La comisión del servicio es requerida.",
+        image: image ? "" : "La imagen del servicio es requerida.",
     };
     console.log(newErrors);
     setError(newErrors);
