@@ -6,6 +6,7 @@ import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import useAuthStore from "@/stores/useAuthStore";
+import ClientMenu from "./ClientMenu";
 
 // const SearchBar = ({ className }) => {
 //   return (
@@ -25,7 +26,6 @@ import useAuthStore from "@/stores/useAuthStore";
 // };
 
 export default function Navbar() {
-  const { logoutClient } = useAuthStore();
   const [isModalRegisterOpen, setIsModalRegisterOpen] = useState(false);
   const [isModalLoginOpen, setIsModalLoginOpen] = useState(false);
 
@@ -62,7 +62,7 @@ export default function Navbar() {
           </div>
         ) : (
           <div className="flex justify-end">
-            <Button
+            {/* <Button
               onClick={() => {
                 logoutClient();
                 window.location.reload();
@@ -72,7 +72,8 @@ export default function Navbar() {
               variant="light"
             >
               Cerrar sesión
-            </Button>
+            </Button> */}
+            <ClientMenu />
           </div>
         )}
       </div>

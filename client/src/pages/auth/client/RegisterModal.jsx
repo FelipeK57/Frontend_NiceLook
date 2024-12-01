@@ -127,7 +127,7 @@ function RegisterModal({ isOpen, onClose }) {
         isOpen={isOpen}
         backdrop="blur"
         onClose={onClose}
-        placement="center"
+        placement="auto"
         size="md"
       >
         <ModalContent>

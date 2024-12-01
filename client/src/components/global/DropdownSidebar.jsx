@@ -36,12 +36,12 @@ function DropdownSidebar({ links, handleLogout }) {
         {links.map((link) => {
           return (
             <DropdownItem onClick={useNavigate(`/${link.path}`)} key={link.id}>
-              <Link className="font-semibold text-lg" to={link.path}>{link.name}</Link>
+              <Link className="font-medium text-lg" to={link.path}>{link.name}</Link>
             </DropdownItem>
           );
         })}
         <DropdownItem onClick={handleLogout}>
-          <p className="text-[#f31260] text-lg font-semibold">Cerrar sesión</p>
+          <p className="text-[#f31260] text-lg font-medium">Cerrar sesión</p>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
