@@ -12,7 +12,7 @@ function ClientHistorial() {
     const [clientHistory, setClientHistory] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [client, setClient] = useState({});
-    const [filter, setFilter] = useState("Todos");
+    const [filter, setFilter] = useState({ anchorKey: "Todos" });
 
     useEffect(() => {
         function loadClient() {
