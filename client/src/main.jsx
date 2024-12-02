@@ -51,7 +51,7 @@ const routes = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "/historialTest",
+        path: "/profile",
         element: <ClientHistorial />,
         errorElement: <div>Error Page</div>,
       },

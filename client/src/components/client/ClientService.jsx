@@ -4,18 +4,18 @@ import { Skeleton } from "@nextui-org/skeleton"
 import PropTypes from "prop-types"
 import { useEffect, useState } from "react";
 
-function ClientService({ appointments, reviews, loadClientReviews }) {
+function ClientService({ appointments, reviews, loadClientReviews, client }) {
 
     ClientService.propTypes = {
         appointments: PropTypes.object,
         reviews: PropTypes.array,
-        loadClientReviews: PropTypes.func
+        loadClientReviews: PropTypes.func,
+        client: PropTypes.object
     }
 
     const fechaYHora = appointments.time;
     const horaAmigable = new Date(fechaYHora).toLocaleTimeString();
     const [review, setReview] = useState([]);
-    const [firstService, setFirstService] = useState();
     const [writeReview, setWriteReview] = useState(false);
     const [comment, setComment] = useState("");
 
@@ -28,6 +28,8 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
+    const [firstService, setFirstService] = useState();
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     useEffect(() => {
         if (reviews) {
@@ -141,7 +143,7 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
 
     function CreateReview() {
         const promise = new Promise((resolve, reject) => {
-            const response = createReview(1, appointments.employee.id, appointments.id, comment, star);
+            const response = createReview(client?.id, appointments.employee.id, appointments.id, comment, star);
             setTimeout(() => {
                 resolve(response);
                 reject("Ocurrio un error");
@@ -182,7 +184,7 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
     const handleSave = (onClose) => {
         if (comment !== review?.comment || star !== review?.rating) {
             const promise = new Promise((resolve, reject) => {
-                const response = updateReview(1, appointments.employee.id, appointments.id, comment, star);
+                const response = updateReview(client?.id, appointments.employee.id, appointments.id, comment, star);
                 setTimeout(() => {
                     resolve(response);
                     reject("Ocurrio un error");
@@ -197,7 +199,7 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
             promise.catch((error) => {
                 if (error.response.data.error === "You have not reviewed this appointment") {
                     const promise = new Promise((resolve, reject) => {
-                        const response = createReview(1, appointments.employee.id, appointments.id, comment, star);
+                        const response = createReview(client?.id, appointments.employee.id, appointments.id, comment, star);
                         setTimeout(() => {
                             resolve(response);
                             reject("Ocurrio un error");
@@ -224,16 +226,19 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
     // console.log(reviews);
     // console.log("Comentario", comment);
     // console.log("Servicio", appointments);
-    console.log("Estrellas", star);
+    // console.log("Estrellas", star);
     // console.log("Review", review);
+    // console.log("Total", appointments);
+    // console.log("Primer servicio", firstService)
 
     return (
         <div className="border-2 border-slate-300 rounded-3xl min-w-full w-full min-h-[25%] p-4">
             <div className="flex lg:flex-row flex-col gap-4 h-full relative">
-                <Skeleton className="flex w-[200px] self-center h-[150px] rounded-3xl">
+                <Skeleton className="flex w-[200px] self-center h-[150px] rounded-3xl" isLoaded={imageLoaded}>
                     <img className="lg:w-full lg:h-full w-[200px] h-[150px] object-cover rounded-3xl"
-                        src=""
-                        alt="esta es la imagen" />
+                        src={firstService?.image_base64}
+                        alt="esta es la imagen"
+                        onLoad={() => setImageLoaded(true)} />
                 </Skeleton>
                 <div className="grid sm:grid-cols-2 grid-cols-1 gap-4 lg:w-[85%] lg:border-none lg:pt-0 pt-4 border-t-2 border-slate-300">
                     <div className="flex flex-col gap-1">
@@ -248,9 +253,9 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
                             <text className="text-xl text-nowrap">{horaAmigable}</text>
                         </div>
                         <text className="text-xl"><b>Establecimiento:</b> {appointments.establisment.name}</text>
-                        <text className="text-xl"><b>Total:</b> <b>${appointments.total}</b></text>
+                        <text className="text-xl"><b>Total:</b> <b>${appointments.total_price}</b></text>
                         {!writeReview &&
-                            <Button isIconOnly variant="bordered" radius="full" className="absolute border-2 border-slate-200 bottom-2 right-2" onPress={handleOpen}>
+                            <Button isIconOnly variant="bordered" radius="full" className="absolute border-1 border-slate-500 shadow-sm shadow-slate-500 bottom-2 right-2" onPress={handleOpen}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                 </svg>
@@ -314,7 +319,7 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
                                     <h4 className="text-lg">{appointments.establisment.name}</h4>
                                 </div>
                                 <div className="flex  gap-2">
-                                    <h3 className="font-semibold text-xl">Telefono del empleado:</h3>
+                                    <h3 className="font-semibold text-xl">Telefono del profesional:</h3>
                                     <h4 className="text-lg">{appointments?.employee?.phone}</h4>
                                 </div>
                                 <div className="flex  gap-2">
@@ -333,7 +338,7 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
                                 </div>
                                 <div className="flex  gap-2">
                                     <h3 className="font-semibold text-xl">Estado:</h3>
-                                    <h4 className={`text-lg ${appointments.estate === "Completada" ? "text-green-500" : "text-red-500"}`}>{appointments.estate}</h4>
+                                    <h4 className={`text-lg ${appointments.estate?.toLowerCase().includes("completada") ? "text-green-500" : "text-red-500"}`}>{appointments.estate}</h4>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <div className="flex gap-2">
@@ -366,6 +371,29 @@ function ClientService({ appointments, reviews, loadClientReviews }) {
                                         value={comment}
                                         onChange={(e) => setComment(e.target.value)}
                                     />
+                                    {appointments.estate === "Completada" &&
+                                        <div className="flex gap-2 w-full justify-end items-center">
+                                            <h3 className="text-xl flex">Metodo de pago: </h3>
+                                            {appointments.method.toLowerCase().includes("tarjeta") ?
+                                                <div className="flex gap-2">
+                                                    <h4 className="text-xl flex font-bold">Tarjeta</h4>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                                    </svg>
+                                                </div>
+                                                :
+                                                <div className="flex gap-2">
+                                                    <h4 className="text-xl flex font-bold">Efectivo</h4>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                                                    </svg>
+                                                </div>
+                                            }
+                                        </div>}
+                                    <div className="flex gap-2 w-full justify-end items-center">
+                                        <h3 className="text-xl flex">Total: </h3>
+                                        <h4 className="text-2xl flex font-bold">${appointments.total_price}</h4>
+                                    </div>
                                 </div>
                             </ModalBody>
                             <ModalFooter>

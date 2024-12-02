@@ -2,9 +2,11 @@ import PropTypes from 'prop-types'
 const ReviewComponent = (props) => {
 
     ReviewComponent.propTypes = {
-        reviews: PropTypes.string.isRequired
+        reviews: PropTypes.string.isRequired,
+        size: PropTypes.string.isRequired,
+        text: PropTypes.string
     }
-    console.log(props.product)
+
     return (
         <div className="flex items-center justify-center gap-2">
             <span className={`items-center text-center justify-center self-center mt-1 ${props.text}`}>{props.reviews}/5</span>

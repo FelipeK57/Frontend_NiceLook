@@ -27,3 +27,13 @@ const ServicesApi = axios.create({
 export function getServices(establishment_id) {
     return ServicesApi.get(`/?establishment_id=${establishment_id}`);
 }
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+const ProductsApi = axios.create({
+    baseURL: "http://localhost:8000/client/client_product_purchases",
+});
+
+export function getProductsHistory(client_id) {
+    return ProductsApi.get(`/${client_id}/`);
+}
