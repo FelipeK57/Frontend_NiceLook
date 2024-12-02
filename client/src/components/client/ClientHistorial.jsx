@@ -2,10 +2,11 @@ import { Button, Select, SelectItem, } from "@nextui-org/react"
 import ClientPerfil from "./ClientPerfil"
 import ClientService from "./ClientService"
 import { useEffect, useState } from "react"
-import { getClientHistory, getClientReviews } from "@/Api/profile/profileApi"
+import { getClientHistory, getClientReviews, getProductsHistory } from "@/Api/profile/profileApi"
 import { getClient } from "@/Api/employeeServices/employeeServicesApi"
 import Cookies from "js-cookie"
 import { useNavigate } from "react-router-dom"
+import CLientProduct from "./ClientProduct"
 
 function ClientHistorial() {
 
@@ -13,6 +14,7 @@ function ClientHistorial() {
     const [reviews, setReviews] = useState([]);
     const [client, setClient] = useState({});
     const [filter, setFilter] = useState({ anchorKey: "Todos" });
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
         function loadClient() {
@@ -48,12 +50,30 @@ function ClientHistorial() {
             });
         }
 
-
-
         loadClient();
         loadClientHistory();
         loadClientReviews();
-    }, [client.id,])
+
+        function loadProductsHistory() {
+            const promise = new Promise((resolve, reject) => {
+                const response = getProductsHistory(client.id);
+                setTimeout(() => {
+                    resolve(response);
+                    reject("Ocurrio un error");
+                }, 1000);
+            });
+            promise.then((response) => {
+                setProducts(response.data);
+                console.log("Estos son los productos comprados de este cliente: ", response.data);
+            });
+            promise.catch((error) => {
+                console.log(error);
+            });
+        }
+
+        loadProductsHistory();
+
+    }, [client.id])
 
     function loadClientReviews() {
         const promise = new Promise((resolve, reject) => {
@@ -84,7 +104,7 @@ function ClientHistorial() {
     }
     console.log("filter: ", filter)
     return (
-        <div className="w-full lg:h-[93.6vh] flex flex-col 2xl:px-64 xl:px-20  py-10 transition-all duration-300">
+        <div className="w-full lg:h-[93vh] flex flex-col 2xl:px-64 xl:px-20  py-10 transition-all duration-300">
             <div className="flex flex-row gap-4 items-center">
                 <Button onPress={() => navigate(-1, { replace: true })}
                     isIconOnly
@@ -105,7 +125,7 @@ function ClientHistorial() {
                         <Select
                             variant="bordered"
                             label="Filtro"
-                            className="w-[10%]"
+                            className="lg:w-[15%] w-[20%]"
                             value={filter}
                             onSelectionChange={(value) => handleChange(value)}
                             size="sm"
@@ -123,24 +143,42 @@ function ClientHistorial() {
                     </div>
                     <div className="lg:h-full lg:mt-16 gap-4 flex flex-col">
                         {filter.anchorKey === "Todos" ?
-                            clientHistory.length > 0 ? clientHistory?.map((service) => (
-                                <ClientService key={service.id} appointments={service} reviews={reviews} loadClientReviews={loadClientReviews} client={client} />
-                            ))
-                                :
-                                <div className="flex flex-col gap-4 justify-center w-full items-center">
-                                    <h2 className="sm:text-3xl text-2xl font-bold">No hay nada para ver aqui</h2>
-                                </div>
-                            :
-                            filter.anchorKey === "Appointments" ?
-                                clientHistory.length > 0 ? clientHistory?.map((service) => (
+                            <>
+                                <h2 className="sm:text-2xl text-xl font-bold">Citas</h2>
+                                {clientHistory.length > 0 ? clientHistory?.map((service) => (
                                     <ClientService key={service.id} appointments={service} reviews={reviews} loadClientReviews={loadClientReviews} client={client} />
                                 ))
                                     :
                                     <div className="flex flex-col gap-4 justify-center w-full items-center">
                                         <h2 className="sm:text-3xl text-2xl font-bold">No hay nada para ver aqui</h2>
-                                    </div>
+                                    </div>}
+                            </>
+                            :
+                            filter.anchorKey === "Appointments" ?
+                                <>
+                                    {clientHistory.length > 0 ? clientHistory?.map((service) => (
+                                        <ClientService key={service.id} appointments={service} reviews={reviews} loadClientReviews={loadClientReviews} client={client} />
+                                    ))
+                                        :
+                                        <div className="flex flex-col gap-4 justify-center w-full items-center">
+                                            <h2 className="sm:text-3xl text-2xl font-bold">No hay nada para ver aqui</h2>
+                                        </div>}
+                                </>
                                 :
-                                "hola"
+                                <>
+                                    <h2 className="sm:text-2xl text-xl font-bold">Productos</h2>
+                                    {products.data.length > 0 ?
+                                        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+                                            {products?.data?.map((product) => (
+                                                <CLientProduct key={product.id} product={product} />
+                                            ))}
+                                        </div>
+                                        :
+                                        <div className="flex flex-col gap-4 justify-center w-full items-center">
+                                            <h2 className="sm:text-3xl text-2xl font-bold">No hay nada para ver aqui</h2>
+                                        </div>
+                                    }
+                                </>
                         }
                     </div>
                 </article>

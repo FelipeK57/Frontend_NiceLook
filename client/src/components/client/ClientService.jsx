@@ -228,7 +228,7 @@ function ClientService({ appointments, reviews, loadClientReviews, client }) {
     // console.log("Servicio", appointments);
     // console.log("Estrellas", star);
     // console.log("Review", review);
-    console.log("Total", appointments);
+    // console.log("Total", appointments);
     // console.log("Primer servicio", firstService)
 
     return (
