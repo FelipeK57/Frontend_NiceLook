@@ -3,6 +3,7 @@ import { Accordion, AccordionItem, Button } from "@nextui-org/react";
 import { AccordionCustomTitle, AccordionCustomContent } from "./AccordionCustomContent";
 import { getEmployees } from "../../api/employee/employee"
 import PropTypes from "prop-types"
+import Cookies from "js-cookie";
 
 //+++++++++ Importacion dinamica +++++++++
 const LazyEmployee = lazy(() => import("./Employee"))
@@ -19,11 +20,12 @@ const EmployeesList = forwardRef(({ filteredEmployees }, ref) => {
     }
 
     const [employees, setEmployees] = useState([]);
+    const establishmentId = Cookies.get("establishmentId");
 
 
     function loadEmployees() {
         const promise = new Promise((resolve, reject) => {
-            const response = getEmployees();
+            const response = getEmployees(establishmentId);
             setTimeout(() => {
                 // si todo va bien, se llama a resolve
                 resolve(response);
@@ -31,7 +33,7 @@ const EmployeesList = forwardRef(({ filteredEmployees }, ref) => {
             }, 0);
         });
         promise.then((resultado) => {
-            setEmployees(resultado.data);
+            setEmployees(resultado.data.employees);
         });
         promise.catch((error) => {
             console.log(error);
