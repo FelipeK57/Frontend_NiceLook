@@ -4,12 +4,14 @@ import CartItem from "../../components/ui/CartItem";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import { Button } from "@nextui-org/react";
 import { getCartDetails, completePurchase } from "../../Api/product/product";
+import useAddCart from "@/stores/useAddCart";
 
 const ShoppingCart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [subtotal, setSubtotal] = useState(0);
     const [discount, setDiscount] = useState(0);
     const [total, setTotal] = useState(0);
+    const { items, setItems } = useAddCart();
 
     const navigate = useNavigate();
 
@@ -49,8 +51,9 @@ const ShoppingCart = () => {
         try {
             const response = await completePurchase(); // Llama a la API
             alert(response.mensaje); // Muestra el mensaje de éxito
+            setItems(0);
             await updateCart(); // Actualiza el carrito (vacía el carrito tras completar la compra)
-            navigate("/"); // Redirige al inicio o a otra página después de la compra
+            navigate("/@peluqueriastylospalmira/store"); // Redirige al inicio o a otra página después de la compra
         } catch (error) {
             console.error("Error al completar la compra:", error);
             alert("Hubo un problema al generar el pedido. Inténtalo nuevamente.");
@@ -98,16 +101,18 @@ const ShoppingCart = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cartItems.map((product, index) => (
-                                <CartItem
-                                    key={product.id} // Usa un identificador único como clave
-                                    index={index + 1}
-                                    product={product}
-                                    establishmentId={establishmentId}
-                                    clientId={clientId}
-                                    updateCart={updateCart}
-                                />
-                            ))}
+                            {cartItems
+                                .sort((a, b) => a.code - b.code) // Ordenar por id (u otro campo único)
+                                .map((product, index) => (
+                                    <CartItem
+                                        key={product.code}  // Asegúrate de que `id` sea único y fijo
+                                        index={index + 1} // Posición en la lista
+                                        product={product}
+                                        establishmentId={establishmentId}
+                                        clientId={clientId}
+                                        updateCart={updateCart}
+                                    />
+                                ))}
                         </tbody>
                     </table>
                 </div>

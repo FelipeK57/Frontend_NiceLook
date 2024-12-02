@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import Product from "../../components/ui/Product";
 import InputCart from "../../components/ui/InputCart";
-import { Button } from "@nextui-org/react";
+import { Badge, Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import {
   getProductsByEstablishment,
   searchProductsByName,
   addProductToCart,
 } from "../../Api/product/product";
+import useAuthStore from "@/stores/useAuthStore";
+import AuthModal from "@/components/auth/AuthModal";
+import Cookies from "js-cookie";
+import useAddCart from "@/stores/useAddCart";
 
 export default function BuyCard() {
   const [products, setProducts] = useState([]);
@@ -15,20 +19,19 @@ export default function BuyCard() {
   const navigate = useNavigate();
   const establishmentId = 1;
   const clientId = 1; // ID del establecimiento, puede ser dinámico en una implementación completa
+  const { triggerAuthModal } = useAuthStore();
+  const {items, setItems} = useAddCart();
+
+  const fetchProducts = async () => {
+    try {
+      const fetchedProducts = await getProductsByEstablishment(establishmentId);
+      setProducts(fetchedProducts.sort((a, b) => a.name.localeCompare(b.name)));
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const fetchedProducts = await getProductsByEstablishment(
-          establishmentId
-        );
-        setProducts(
-          fetchedProducts.sort((a, b) => a.name.localeCompare(b.name))
-        );
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
     fetchProducts();
   }, []);
 
@@ -90,12 +93,18 @@ export default function BuyCard() {
       date
     );
     if (response.mensaje) {
-      alert("Producto añadido al carrito con éxito");
-      fetchProducts();
+      setItems(items + 1);
+      fetchProducts()
     } else {
-      alert(
-        response.error || "Hubo un problema al añadir el producto al carrito"
-      );
+      console.error("Error adding product to cart:", response.error);
+    }
+  };
+
+  const handleProtectedAction = (product) => {
+    if (!Cookies.get("isAuthenticated")) {
+      triggerAuthModal();
+    } else {
+      handleAddToCart(product.code);
     }
   };
 
@@ -107,35 +116,37 @@ export default function BuyCard() {
           onChange={handleSearch}
           value={searchTerm}
         />
-        <Button
-          isIconOnly
-          radius="full"
-          variant="bordered"
-          onPress={() => navigate("/shoppingCart")}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
+        <Badge color="primary" content={items} shape="circle">
+          <Button
+            isIconOnly
+            radius="full"
+            variant="bordered"
+            onPress={() => navigate("/shoppingCart")}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-            />
-          </svg>
-        </Button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+              />
+            </svg>
+          </Button>
+        </Badge>
       </div>
-
+      <AuthModal />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mt-6">
         {products.map((product) => (
           <Product
             key={product.id}
             product={product}
-            onAddToCart={() => handleAddToCart(product.code)}
+            onAddToCart={() => handleProtectedAction(product)}
           />
         ))}
       </div>
