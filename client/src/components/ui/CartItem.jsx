@@ -1,23 +1,39 @@
 import { Button } from "@nextui-org/react";
 import defaultImage from "../../assets/hola.png";
 import { addProductToCart, deleteProduct, removeProductFromCart } from "../../Api/product/product";
+import useAddCart from "@/stores/useAddCart";
 
 const CartItem = ({ index, product, establishmentId, clientId, updateCart }) => {
-    const { image, description, price, quantity, code } = product;
+    const { image, description, price, quantity, code, discount } = product;
+    const { items, setItems } = useAddCart();
 
     const handleAdd = async (productCode) => {
         try {
             const date = new Date().toISOString().split("T")[0]; // Fecha en formato YYYY-MM-DD
             const response = await addProductToCart(establishmentId, clientId, productCode, date);
-
+    
+            // Solo entra aquí si la respuesta es exitosa (status 2xx)
             if (response.mensaje) {
-                alert("Producto añadido al carrito con éxito");
+                setItems(items + 1);
                 await updateCart();
             } else {
                 alert(response.error || "Hubo un problema al añadir el producto al carrito");
             }
         } catch (error) {
-            console.error("Error al añadir producto al carrito:", error);
+            // Aquí capturamos errores de la API, incluyendo status 404
+            if (error.response) {
+                const apiError = error.response.data.error;
+    
+                if (apiError === "Existencias agotadas") {
+                    alert("Existencias agotadas");
+                    await updateCart();
+                } else {
+                    alert(apiError || "Error inesperado al añadir el producto al carrito");
+                }
+            } else {
+                console.error("Error desconocido al añadir producto al carrito:", error);
+                alert("Hubo un problema de conexión o error desconocido.");
+            }
         }
     };
 
@@ -27,10 +43,10 @@ const CartItem = ({ index, product, establishmentId, clientId, updateCart }) => 
         try {
             const response = await removeProductFromCart(productCode);
             if (response.mensaje) {
-                alert("Producto eliminado del carrito");
+                setItems(items - 1);
                 await updateCart(); // Actualizar carrito después de eliminar
             } else {
-                alert("Hubo un problema al eliminar el producto");
+                console.error("Error al eliminar producto del carrito:", response.error);
             }
         } catch (error) {
             console.error("Error al eliminar producto del carrito:", error);
@@ -41,17 +57,19 @@ const CartItem = ({ index, product, establishmentId, clientId, updateCart }) => 
     const handleDelete = async (productCode) => {
         try {
             const response = await deleteProduct(productCode); // Llama al endpoint para eliminar el producto
-            if (response.message === "Product deleted successfully") {
-                alert("Producto eliminado con éxito");
+            if (response.message === "Producto eliminado") {
+                setItems(items - quantity);
                 await updateCart(); // Actualiza el carrito después de eliminar
             } else {
-                alert("No se pudo eliminar el producto. Verifica que no tenga pagos activos.");
+                console.error("Error eliminando producto:", response.error);
             }
         } catch (error) {
             console.error("Error eliminando producto:", error);
-            alert("Hubo un problema al intentar eliminar el producto.");
+            console.error("Hubo un problema al intentar eliminar el producto.");
         }
     };
+
+    const newPrice = price - discount;
 
     return (
         <tr className="border-b">
@@ -64,7 +82,7 @@ const CartItem = ({ index, product, establishmentId, clientId, updateCart }) => 
                 />
             </td>
             <td className="p-2 text-left">{description}</td>
-            <td className="p-2 text-left">${price.toFixed(2)}</td>
+            <td className="p-2 text-left">${newPrice.toFixed(2)}</td>
             <td className="p-2 text-left">
                 <div className="flex items-center gap-2">
                     <Button
@@ -110,7 +128,7 @@ const CartItem = ({ index, product, establishmentId, clientId, updateCart }) => 
                     </Button>
                 </div>
             </td>
-            <td className="p-2 text-left">${(price * quantity).toFixed(2)}</td>
+            <td className="p-2 text-left">${(newPrice * quantity).toFixed(2)}</td>
             <td className="p-8 text-left">
                 <button
                     className="text-red-500 hover:text-red-700"
