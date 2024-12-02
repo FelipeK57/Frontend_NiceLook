@@ -85,3 +85,10 @@ export function loginEmployee(token) {
         token: token
     });
 }
+
+//=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+
+
+export function getEmployeeReviews(professional_id){
+    return EmployeesApi.get(`/professional_reviews/${professional_id}/`);
+}

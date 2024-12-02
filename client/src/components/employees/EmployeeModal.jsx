@@ -89,8 +89,8 @@ function CreateEmployeeModal(props) {
                         try {
                             console.log(employeeSpecialtyConverted)
                             const promise = new Promise((resolve, reject) => {
-                                const response = 
-                                updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeStatus)
+                                const response =
+                                    updateEmployee(employeeCode, employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeStatus)
                                 setTimeout(() => {
                                     // si todo va bien, se llama a resolve
                                     resolve(response);
@@ -462,7 +462,9 @@ function CreateEmployeeModal(props) {
                                         size="lg" />
                                 </div>
                             </div>
-                            {props.employee ? (<EmployeeReviewsList />) : null}
+                            {props.employee ? (
+                                <EmployeeReviewsList employee={props.employee} />
+                            ) : null}
                             <ModalFooter className={props.employee ? " !py-2 sm:py-4" : "py-4"}>
                                 <Button color="danger" variant="light" onPress={handleClose}>
                                     Cancelar
