@@ -106,7 +106,7 @@ const EmployeesList = forwardRef(({ filteredEmployees }, ref) => {
                     employees?.receptionists?.length > 0 &&
                     employees?.receptionists?.map((employee) => (
                         <AccordionItem key={employee.id} aria-label="Empleado 1" title={<AccordionCustomTitle nombre={employee.user.last_name} nuip={employee.code} />}>
-                            <AccordionCustomContent button={true} employee={employee} user={employee.user} estado={employee.state} reloadList={loadEmployees} receptionists={true} />
+                            <AccordionCustomContent receptionists={true} button={true} employee={employee} user={employee.user} estado={employee.state} reloadList={loadEmployees} receptionists={true} />
                         </AccordionItem>
                     ))
                     : null}
