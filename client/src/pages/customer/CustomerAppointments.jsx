@@ -87,7 +87,7 @@ export default function CustomerAppointments() {
   return (
     <article className="mx-auto flex flex-col h-full w-full px-4 md:px-0 md:w-4/5 max-w-[1280px]">
       <header className="py-5">
-        <h1 className="font-bold text-xl">Citas</h1>
+        <h1 className="font-bold text-2xl">Citas</h1>
         <p>
           Aquí puedes ver tus citas programadas y cancelarlas si es necesario.
         </p>
