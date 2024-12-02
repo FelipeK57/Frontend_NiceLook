@@ -206,7 +206,7 @@ function CreateEmployeeModal(props) {
             } else {
                 setValidEmail(true);
             }
-            if (employeeSpecialtyID !== "" && employeeSpecialtyID !== undefined) {
+            if (employeeSpecialty !== "" && employeeSpecialty !== undefined) {
                 setValidSpecialty(false);
             } else {
                 setValidSpecialty(true);
@@ -217,12 +217,14 @@ function CreateEmployeeModal(props) {
             setValidLastName(false);
             setValidPhone(false);
         }
-    }, [employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialty, ischanged, validEmail, validName, validLastName, validPhone, validSpecialty]);
+    }, [employeeFirstName, employeeLastName, employeePhone, employeeEmail, employeeSpecialty, ischanged, validEmail, validName, validLastName, validPhone, validSpecialty, employeeSpecialtyID]);
 
     const handleClose = () => {
         setIsChanged(false);
         props.onClose();
     }
+
+    console.log(employeeSpecialty)
 
     return (
         <Modal {...props} size="2xl"
@@ -320,7 +322,7 @@ function CreateEmployeeModal(props) {
 
                     </ModalHeader>
                     <ModalBody>
-                        <form className="flex flex-col gap-6 sm:gap-8">
+                        <form className="flex flex-col flex-1 gap-6 sm:gap-8">
                             <div className="flex flex-col gap-2">
                                 <label className="font-bold" htmlFor="name">Nombre</label>
                                 <div className="grid grid-cols-2 gap-4">
@@ -427,7 +429,7 @@ function CreateEmployeeModal(props) {
                             <div className={`grid gap-4 ${props.employee ? "grid-cols-2" : "grid-cols-1"}`}>
                                 <div className={`flex flex-col ${props.employee ? "w-full" : null}`}>
                                     <label className="font-bold" htmlFor="especialty">Especialidad</label>
-                                    <Select {...props.employee && { isDisabled: true }}
+                                    {!props.receptionists ? <Select {...props.employee && { isDisabled: true }}
                                         name="especialty"
                                         id="especialty"
                                         label="Especialidad"
@@ -450,6 +452,9 @@ function CreateEmployeeModal(props) {
                                             )
                                         })}
                                     </Select>
+                                        :
+                                        <text className="h-full flex items-center">Recepcionista</text>
+                                    }
                                 </div>
                                 <div className={`flex-col gap-2 ${props.employee ? "flex" : "hidden"}`}>
                                     <label className="font-bold" htmlFor="state">Estado</label>
@@ -463,9 +468,11 @@ function CreateEmployeeModal(props) {
                                 </div>
                             </div>
                             {props.employee ? (
-                                <EmployeeReviewsList employee={props.employee} />
+
+                                !props.receptionists ? <EmployeeReviewsList employee={props.employee} />
+                                    : null
                             ) : null}
-                            <ModalFooter className={props.employee ? " !py-2 sm:py-4" : "py-4"}>
+                            <ModalFooter className={props.employee ? " !py-1 sm:py-4 justify-end" : "py-4"}>
                                 <Button color="danger" variant="light" onPress={handleClose}>
                                     Cancelar
                                 </Button>

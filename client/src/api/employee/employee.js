@@ -8,8 +8,8 @@ const EmployeesApi = axios.create({
 
 //query para obtener todos los empleados
 
-export function getEmployees() {
-    return EmployeesApi.get("/employee_list/");
+export function getEmployees(establishmentId) {
+    return EmployeesApi.get(`/employee_list/${establishmentId}`);
 }
 
 //query para buscar entre empleados por medio del nombre y apellido
