@@ -17,7 +17,7 @@ const ShoppingCart = () => {
     const navigate = useNavigate();
 
     const establishmentId = 1; // ID del establecimiento
-    const clientId = parseInt(Cookies.get("userId") || "0", 10); // Obtén el userId de las cookies
+    const clientId = parseInt(Cookies.get("client_id") || "0", 10); // Obtén el userId de las cookies
 
     const updateCart = async () => {
         const items = await getCartDetails();
