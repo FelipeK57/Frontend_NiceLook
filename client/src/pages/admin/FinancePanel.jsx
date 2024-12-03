@@ -77,7 +77,7 @@ function FinancePanel() {
     };
     fetchData();
   }, [date]);
-  
+
   return (
     <main className="h-screen flex flex-col py-6 gap-4 px-10">
       <header className="flex items-center justify-between">
@@ -136,8 +136,8 @@ function FinancePanel() {
             <>
               {services.length === 0 ? (
                 <p className="text-lg font-medium text-slate-500">
-                No hay pagos recibidos en esta fecha
-              </p>
+                  No hay pagos recibidos en esta fecha
+                </p>
               ) : (
                 <>
                   <ul className="grid items-start grid-cols-4 gap-2 py-4 mr-6 px-8">

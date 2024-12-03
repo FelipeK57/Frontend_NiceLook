@@ -37,10 +37,10 @@ function SalesPanel() {
           `http://localhost:8000/receptionist/products_sold/`,
           {
             params: {
+              id_establisment: establishmentId,
               day: day,
               month: month,
               year: year,
-              id_establisment: establishmentId,
             },
           }
         );

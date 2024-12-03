@@ -85,7 +85,7 @@ const EmployeesList = forwardRef(({ filteredEmployees }, ref) => {
 
                         {
                             <>
-                                <h2 className="font-semibold text-center border-2 rounded-full border-black">profesionales</h2>
+                                <h2 className="font-semibold text-center border-2 rounded-full border-black">Profesionales</h2>
                                 {employees?.employees?.map((employee) => (
                                     <Suspense key={employee.id} fallback={<div>Loading...</div>}>
                                         <LazyEmployee user={employee.user} employee={employee} colNumber={'[1fr_1fr_1fr_1fr_1fr_0.15fr]'} button estado={employee.state} reloadList={loadEmployees} />
