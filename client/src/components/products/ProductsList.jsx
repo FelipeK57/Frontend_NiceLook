@@ -1,6 +1,9 @@
+/* eslint-disable react/prop-types */
 import { lazy, Suspense, useEffect, useState } from "react";
 import api from "@/api";
 import Cookies from "js-cookie";
+
+import { stableSort } from "@/utils/stableSort";
 
 import { Skeleton } from "@nextui-org/skeleton";
 import { Chip } from "@nextui-org/chip";
@@ -8,7 +11,7 @@ import { Chip } from "@nextui-org/chip";
 const Product = lazy(() => import("./Product"));
 
 const Loading = (colNumber) => (
-  <Skeleton className="rounded-full w-full max-h-14">
+  <Skeleton className="rounded-full w-full max-h-16">
     <div
       className={`ProductContent border-2 border-slate-200 rounded-full py-2 grid pr-10 place-items-center
   grid-cols-${colNumber}`}
@@ -26,10 +29,21 @@ const Loading = (colNumber) => (
   </Skeleton>
 );
 
-export default function ProductsList() {
+export default function ProductsList({ query }) {
   const [establishmentId, setEstablishmentId] = useState(undefined);
   const [products, setProducts] = useState([]);
+  // const [filteredProducts, setFilteredProducts] = useState([]);
   const colNumber = "[1fr_1fr_1fr_1fr_1fr_1fr_1fr_0.15fr]";
+
+  const filteredProducts = query
+    ? products.filter(
+        (product) =>
+          product.code.toString().includes(query.toLowerCase()) ||
+          product.name.toLowerCase().includes(query.toLowerCase()) ||
+          product.brand.toLowerCase().includes(query.toLowerCase()) ||
+          product.distributor.toLowerCase().includes(query.toLowerCase())
+      )
+    : products;
 
   useEffect(() => {
     setEstablishmentId(Cookies.get("establishmentId"));
@@ -77,16 +91,25 @@ export default function ProductsList() {
         {/* Este es el componente de producto cargado de forma perezosa el cual recibe el numero de columnas si tiene o no un boton y el estado */}
         {/* Recordar que si se pone el button se debe agregar una columna de 0.15fr para el mismo */}
 
-        {products.map((product) => (
-          <Suspense key={product.id} fallback={<Loading colNumber />}>
-            <Product
-              colNumber={colNumber}
-              button
-              estado={product.estate}
-              productData={product}
-            />
-          </Suspense>
-        ))}
+        {stableSort(filteredProducts).length > 0 ? (
+          stableSort(filteredProducts).map((product) => (
+            <Suspense
+              key={product.id}
+              fallback={<Loading colNumber={colNumber} />}
+            >
+              <Product
+                colNumber={colNumber}
+                button
+                estado={product.estate}
+                productData={product}
+              />
+            </Suspense>
+          ))
+        ) : (
+          <div className="w-full min-h-32 flex flex-col items-center justify-center select-none">
+            <p className="text-neutral-600">No hay productos.</p>
+          </div>
+        )}
       </div>
     </article>
   );
