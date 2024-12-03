@@ -1,113 +1,40 @@
-/* eslint-disable react/prop-types */
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  useDisclosure,
-  Chip,
-  Skeleton,
-} from "@nextui-org/react";
-
-import ButtonCustom from "@/components/global/ButtonCustom";
+import { Skeleton } from "@nextui-org/react";
 
 import api from "@/api";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-function AppointmentCard({ appointment }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+import AppointmentCard from "@/components/client/appoinments/AppointmentCard";
 
-  return (
-    <Card isPressable className="select-none w-full h-max" onPress={onOpen}>
-      <CardHeader>
-        <h2 className="font-semibold text-lg">{appointment.service?.name}</h2>
-      </CardHeader>
-      <CardBody className="flex flex-col items-start text-sm">
-        <p>Fecha: {appointment.date}</p>
-        <p>Hora: {appointment.time}</p>
-      </CardBody>
-      <CardFooter>
-        <AppointmentModal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          appointment={appointment}
-        />
-      </CardFooter>
-    </Card>
-  );
-}
-
-function AppointmentModal({ isOpen, onOpenChange, appointment }) {
-  const [loading, setLoading] = useState(false);
-
-  const handleCancelAppointment = async (e) => {
-    e.preventDefault;
-    setLoading(true);
-
-    await api
-      .patch("api/appointment_change_state/", {
-        id_appointment: appointment.id,
-        state: "Cancelada",
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(setLoading(false));
-  };
-
-  return (
-    <>
-      <Modal
-        isOpen={isOpen}
-        onClose={() => onOpenChange(false)}
-        backdrop="blur"
-      >
-        <ModalContent>
-          <ModalHeader>Detalles de la cita</ModalHeader>
-          <ModalBody className="flex flex-col items-start text-sm">
-            <p>Fecha: {appointment.date}</p>
-            <p>Hora: {appointment.time}</p>
-            <p>Servicio: {appointment.service?.name}</p>
-            <p>
-              Profesional: {appointment.professional.first_name}{" "}
-              {appointment.professional.last_name}
-            </p>
-            <div className="flex h-max gap-2 items-center">
-              <p>Estado:</p>
-              <Chip color="warning" variant="flat" size="sm">
-                {appointment.state}
-              </Chip>
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <ButtonCustom
-              color="danger"
-              action={handleCancelAppointment}
-              loading={loading}
-            >
-              Cancelar cita
-            </ButtonCustom>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  );
-}
-
+/**
+ * Componente que muestra las citas del cliente.
+ *
+ * @component
+ * @returns {JSX.Element} Un artículo que contiene las citas del cliente.
+ *
+ * @example
+ * return (
+ *   <CustomerAppointments />
+ * )
+ *
+ * @description
+ * Este componente obtiene las citas del cliente desde una API y las muestra en una lista.
+ * Si no hay citas programadas, muestra un mensaje indicando que no hay citas.
+ * Mientras se están cargando las citas, muestra un esqueleto de carga.
+ *
+ * @requires Cookies - Para obtener el ID del cliente desde las cookies.
+ * @requires useState - Para manejar el estado de las citas y el estado de carga.
+ * @requires useEffect - Para realizar la llamada a la API cuando el componente se monta.
+ * @requires api - Para realizar la llamada a la API y obtener las citas del cliente.
+ * @requires AppointmentCard - Componente para mostrar cada cita individualmente.
+ * @requires Skeleton - Componente para mostrar el esqueleto de carga mientras se obtienen las citas.
+ */
 export default function CustomerAppointments() {
   const clientId = Cookies.get("client_id");
   const [fetching, setFetching] = useState(true);
   const [appointments, setAppointments] = useState([
     {
+      id: 342564,
       service: {
         name: "Corte de cabello",
         length: 30,
