@@ -4,7 +4,7 @@ import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import CreateEmployeeModal from "./EmployeeModal";
 
-function Employee({ colNumber, button, estado,employee, user, reloadList }) {
+function Employee({ colNumber, button, estado,employee, user, reloadList, receptionists }) {
 
     Employee.propTypes = {
         colNumber: PropTypes.string,
@@ -12,7 +12,8 @@ function Employee({ colNumber, button, estado,employee, user, reloadList }) {
         estado: PropTypes.bool,
         employee: PropTypes.object.isRequired,
         user: PropTypes.object.isRequired,
-        reloadList: PropTypes.func.isRequired
+        reloadList: PropTypes.func.isRequired,
+        receptionists: PropTypes.bool
     };
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,7 +27,8 @@ function Employee({ colNumber, button, estado,employee, user, reloadList }) {
     return (
         <div className={`EmployeeContent border-2 border-slate-200 rounded-full py-2 grid pr-10 place-items-center
         grid-cols-${colNumber} `}>
-            <h3 className=" font-bold text-center">{employee.code}</h3>
+            {employee.code && <h3 className=" font-bold text-center">{employee.code}</h3>}
+            {employee.id && !employee.code && <h3 className=" font-bold text-center">{employee.id}</h3>}
             <h3 className="text-center flex">{user.last_name}</h3>
             <h3 className="text-center flex">{employee.phone}</h3>
             <h3 className="text-center flex">{user.email}</h3>
@@ -39,7 +41,7 @@ function Employee({ colNumber, button, estado,employee, user, reloadList }) {
                 </ButtonCustom>
             ) : null}
 
-            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employee={employee} user={user} reloadList={reloadList}  />
+            <CreateEmployeeModal isOpen={isOpen} onClose={onClose} backdrop={backdrop} employee={employee} user={user} reloadList={reloadList} receptionists={receptionists}  />
         </div>
     );
 }

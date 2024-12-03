@@ -13,12 +13,14 @@ import AuthModal from "@/components/auth/AuthModal";
 import Cookies from "js-cookie";
 import useAddCart from "@/stores/useAddCart";
 
+
 export default function BuyCard() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const establishmentId = Cookies.get("establishmentId");
-  const clientId = 1; // ID del establecimiento, puede ser dinámico en una implementación completa
+  const establishmentId = 1;
+  const clientId = parseInt(Cookies.get("client_id") || "0", 10); // ID del establecimiento, puede ser dinámico en una implementación completa
   const { triggerAuthModal } = useAuthStore();
   const {items, setItems} = useAddCart();
 

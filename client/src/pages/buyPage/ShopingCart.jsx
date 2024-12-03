@@ -5,6 +5,7 @@ import ButtonCustom from "../../components/global/ButtonCustom";
 import { Button } from "@nextui-org/react";
 import { getCartDetails, completePurchase } from "../../Api/product/product";
 import useAddCart from "@/stores/useAddCart";
+import Cookies from "js-cookie"; // Importa js-cookie
 
 const ShoppingCart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -16,7 +17,7 @@ const ShoppingCart = () => {
     const navigate = useNavigate();
 
     const establishmentId = 1; // ID del establecimiento
-    const clientId = 1; // ID del cliente
+    const clientId = parseInt(Cookies.get("client_id") || "0", 10); // Obtén el userId de las cookies
 
     const updateCart = async () => {
         const items = await getCartDetails();
@@ -25,8 +26,13 @@ const ShoppingCart = () => {
     };
 
     useEffect(() => {
+        if (!clientId) {
+            alert("Usuario no identificado.");
+            navigate("/login"); // Redirige si no hay un usuario válido
+            return;
+        }
         updateCart(); // Inicializa el carrito
-    }, []);
+    }, [clientId]);
 
     const calculateTotals = (items) => {
         const subtotal = items.reduce(
@@ -165,3 +171,4 @@ const ShoppingCart = () => {
 };
 
 export default ShoppingCart;
+

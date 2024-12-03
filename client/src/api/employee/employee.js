@@ -8,8 +8,8 @@ const EmployeesApi = axios.create({
 
 //query para obtener todos los empleados
 
-export function getEmployees() {
-    return EmployeesApi.get("/employee_list/");
+export function getEmployees(establishmentId) {
+    return EmployeesApi.get(`/employee_list/${establishmentId}`);
 }
 
 //query para buscar entre empleados por medio del nombre y apellido
@@ -41,6 +41,10 @@ export function updateEmployee(idUser, name, last_name, phone, email, state) {
         email: email,
         state: state
     });
+}
+
+export function getEmployeeReviews(professional_id){
+    return EmployeesApi.get(`/professional_reviews/${professional_id}/`);
 }
 
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -88,7 +92,16 @@ export function loginEmployee(token) {
 
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
+const RecepcionistApi = axios.create({
+    baseURL: "http://localhost:8000/receptionist",
+});
 
-export function getEmployeeReviews(professional_id){
-    return EmployeesApi.get(`/professional_reviews/${professional_id}/`);
+export function updateReceptionist(receptionistId, first_name, last_name, phone, email, state) {
+    return RecepcionistApi.put(`/update_receptionist/${receptionistId}/`,{
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        phone: phone,
+        state: state
+    });
 }
