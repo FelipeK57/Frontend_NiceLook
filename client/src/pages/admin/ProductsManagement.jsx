@@ -32,6 +32,31 @@ function DebounceInput({ handleDebounce, debounceTimeout, ...rest }) {
   return <Input {...rest} onChange={handleChange} />;
 }
 
+/**
+ * Componente para la gestión de productos en el panel de administración.
+ *
+ * @component
+ * @returns {JSX.Element} Página de gestión de productos con funcionalidades de búsqueda y creación
+ *
+ * @example
+ * ```jsx
+ * <ProductsManagement />
+ * ```
+ *
+ * @description
+ * Este componente renderiza una página que permite:
+ * - Visualizar una lista de productos
+ * - Buscar productos mediante un campo de búsqueda con debounce
+ * - Crear nuevos productos a través de un modal
+ *
+ * @state
+ * - query {string} - Estado para almacenar el término de búsqueda
+ * - backdrop {string} - Estado para controlar el efecto de fondo del modal
+ *
+ * @uses
+ * - useDisclosure - Hook para controlar el estado del modal
+ * - useMediaQuery - Hook para detectar el tamaño de pantalla
+ */
 export default function ProductsManagement() {
   const [query, setQuery] = useState("");
   const [backdrop, setBackdrop] = useState("blur");
