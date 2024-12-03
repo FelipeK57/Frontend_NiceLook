@@ -1,18 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-
-import api from "@/api";
-
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  Chip,
-} from "@nextui-org/react";
-
-import ButtonCustom from "@/components/global/ButtonCustom";
 
 /**
  * Componente AppointmentModal
@@ -32,6 +18,22 @@ import ButtonCustom from "@/components/global/ButtonCustom";
  *
  * @returns {JSX.Element} Modal con los detalles de la cita y opción para cancelarla
  */
+
+import { useState } from "react";
+
+import api from "@/api";
+
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  Chip,
+} from "@nextui-org/react";
+
+import ButtonCustom from "@/components/global/ButtonCustom";
+
 export default function AppointmentModal({
   isOpen,
   onOpenChange,
