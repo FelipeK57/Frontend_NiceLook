@@ -18,6 +18,7 @@ export default function BuyCard() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const establishmentId = Cookies.get("establishmentId");
   const establishmentId = 1;
   const clientId = parseInt(Cookies.get("client_id") || "0", 10); // ID del establecimiento, puede ser dinámico en una implementación completa
   const { triggerAuthModal } = useAuthStore();
