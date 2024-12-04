@@ -13,6 +13,10 @@ function LinkSidebar({ name, icon, path }) {
     }
   }, [location.pathname]);
 
+  if (!name, !icon, !path) {
+    return null;
+  }
+
   return (
     <Link
       id="link"

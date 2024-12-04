@@ -23,6 +23,7 @@ function EmployeeLogin() {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isSmallScreen, setIsSmallScreen] = useState(windowWidth < 768);
+  const [errorServer, setErrorServer] = useState("");
 
   useEffect(() => {
     const handleResize = () => {
@@ -105,21 +106,21 @@ function EmployeeLogin() {
   const loginTest = useGoogleLogin({
     onSuccess: async (response) => {
       console.log("Response:", response);
-  
+
       const authCode = response.code;
       console.log("Authorization Code:", authCode);
-  
+
       // Verificar si el usuario otorgó todos los permisos necesarios
       const hasAccess = hasGrantedAllScopesGoogle(
         response,
-        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar"
       );
-  
+
       if (!hasAccess) {
         alert("Necesitamos permiso para gestionar el calendario.");
         return;
       }
-  
+
       try {
         const response = await axios.post(
           "http://localhost:8000/employee/EmployeeLogin/",
@@ -127,34 +128,42 @@ function EmployeeLogin() {
             auth_code: authCode,
           }
         );
-        console.log("Recibiendo datos")
+        console.log("Recibiendo datos");
         console.log("Tokens y datos recibidos:", response.data);
         const access = response.data.access_token;
         const refresh = response.data.refresh_token;
         const decoded = jwtDecode(response.data.access_token);
         console.log(decoded);
-  
+
         login(decoded, access, refresh);
-        
-        Cookies.set("establishmentId", response.data.establishment_id, { expires: 7 });
+
+        Cookies.set("establishmentId", response.data.establishment_id, {
+          expires: 7,
+        });
         console.log(response.data);
-        const isArtist = response.data.isArtist
+        const isArtist = response.data.isArtist;
         // console.log(isArtist);
-        if(isArtist === true){
+        if (isArtist === true) {
+          setErrorServer("");
           Cookies.set("id_employee", response.data.id_employee, { expires: 7 });
           navigate("/employee/dashboard/schedule");
-        }else{
-          Cookies.set("id_receptionist", response.data.id_receptionist, { expires: 7 });
+        } else {
+          setErrorServer("");
+          Cookies.set("id_receptionist", response.data.id_receptionist, {
+            expires: 7,
+          });
           navigate("/recepcionist/dashboard/finance");
           // console.log(response.data);
         }
       } catch (error) {
+        setErrorServer(error.response.data.error);
         console.error("Error al obtener los tokens:", error);
       }
     },
     flow: "auth-code",
-    scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events",
-  });  
+    scope:
+      "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events",
+  });
 
   return (
     <section className="relative w-full overflow-hidden h-screen flex justify-center items-center">
@@ -252,13 +261,20 @@ function EmployeeLogin() {
                     loginTest();
                   }}
                 />
+                <div className="w-full">
+                  {errorServer && (
+                    <p className="text-[#f31260] text-sm font-semibold">
+                      {errorServer}
+                    </p>
+                  )}
+                </div>
                 {!isRegister && (
                   <p className="xl:text-xl sm:text-lg">
                     O tambien puedes iniciar sesion con tus credenciales como:
                   </p>
                 )}
               </div>
-              <div className="w-full flex flex-col justify-evenly sm:h-[85%] h-[75%]">
+              <div className="w-full flex flex-col sm:h-[85%] h-[75%]">
                 <EmployeeLoginForm
                   isVisible={isVisible}
                   setIsVisible={setIsVisible}
@@ -269,7 +285,6 @@ function EmployeeLogin() {
                   codeValid={codeValid}
                   setCodeValid={setCodeValid}
                 />
-
                 {/* {!isRegister && (
                   <Button
                     variant="gost"

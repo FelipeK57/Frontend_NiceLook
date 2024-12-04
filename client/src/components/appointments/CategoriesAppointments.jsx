@@ -19,7 +19,7 @@ const categories = [
   },
   {
     id: 4,
-    name: "Peluqueria",
+    name: "Peluquería",
   },
   {
     id: 5,

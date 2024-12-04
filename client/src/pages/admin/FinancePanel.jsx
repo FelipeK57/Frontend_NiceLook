@@ -23,7 +23,7 @@ function FinancePanel() {
   const [products, setProducts] = useState([]);
   const [services, setServices] = useState([]);
   const [earningsProducts, setEarningsProducts] = useState(0);
-  const columnsProducts = ["Precio", "Cantidad", "Metodo de pago", "Productos"];
+  const columnsProducts = ["Precio", "Cantidad", "Comprador", "Productos"];
   const columnsServices = ["Precio", "Ganancia", "Profesional", "Servicios"];
   const establishmentId = Cookies.get("establishmentId");
 
