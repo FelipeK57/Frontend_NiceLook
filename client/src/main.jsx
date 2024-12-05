@@ -10,6 +10,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import NotFound from "@/pages/NotFound.jsx";
 
 import AdminLogin from "./pages/auth/admin/AdminLogin.jsx";
@@ -239,5 +243,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <GoogleOAuthProvider clientId="659540305448-65l2ttvn04541tpuke3c411nrocbupdv.apps.googleusercontent.com">
       <RouterProvider router={routes} />
     </GoogleOAuthProvider>
+    <ToastContainer />
   </React.StrictMode>
 );
