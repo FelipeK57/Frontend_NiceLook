@@ -80,7 +80,7 @@ function EmployeeAvailability({ employee, date }) {
                   } gap-4`}
                 >
                   {times.length === 0 ? (
-                    <p className="text-base font-semibold text-center text-gray-800">
+                    <p className="text-lg font-bold text-center text-slate-950">
                       No hay horarios disponibles
                     </p>
                   ) : (
