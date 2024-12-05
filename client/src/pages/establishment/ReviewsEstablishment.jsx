@@ -32,13 +32,13 @@ function ReviewsEstablishment() {
         <ModalAddReview reload={reload} setReload={setReload} />
       </header>
       <section className="grid grid-cols-4 gap-6">
-        {reviews.map((review) => (
+        {reviews?.map((review) => (
           <div
             className="border-2 border-slate-200 rounded-xl p-4 flex gap-2 flex-col justify-between shadow"
             key={review.id}
           >
             <div className="flex flex-row justify-start items-center gap-4">
-              <div class="inline-flex items-center justify-center w-8 h-8 text-sm text-black font-bold bg-primary rounded-full">
+              <div className="inline-flex items-center justify-center w-8 h-8 text-sm text-black font-bold bg-primary rounded-full">
                 {review.autor.user.first_name.charAt(0) + review.autor.user.last_name.charAt(0)}
               </div>
               <h3 className="font-bold text-lg">

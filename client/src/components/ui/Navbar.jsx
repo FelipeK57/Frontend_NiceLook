@@ -48,7 +48,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 h-16 items-center bg-white border-b-2 flex justify-center">
       <div className="px-4 sm:px-0 w-full md:w-4/5 max-w-[1280px] grid gap-4 grid-cols-2 items-center h-full">
-        <LogoNiceLook className="text-3xl md:text-4xl" />
+        <LogoNiceLook className="text-3xl md:text-4xl" onPress={() => navigate("/@peluqueriastylospalmira")} />
         {/* <SearchBar className="hidden md:block" /> */}
         {!Cookies.get("isAuthenticated") ? (
           <div className="flex flex-row justify-end gap-4">
