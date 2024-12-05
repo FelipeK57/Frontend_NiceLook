@@ -45,9 +45,9 @@ export const searchProductsByName = async (name, establisment_id) => {
     }
   };
   
-  export const getCartDetails = async () => {
+  export const getCartDetails = async (client_id) => {
     try {
-        const response = await ProductApi.get("/details/");
+        const response = await ProductApi.get(`/details/${client_id}/`);
         return response.data; // La API ya devuelve el formato correcto
     } catch (error) {
         console.error("Error fetching cart details:", error);
@@ -55,9 +55,9 @@ export const searchProductsByName = async (name, establisment_id) => {
     }
 };
 
-export const removeProductFromCart = async (code) => {
+export const removeProductFromCart = async (code, client_id) => {
     try {
-        const response = await ProductApi.delete(`/delete_product_of_payment/`, {
+        const response = await ProductApi.delete(`/delete_product_of_payment/${client_id}/`, {
             data: { code }, // Enviar el cuerpo como data
         });
         return response.data;
@@ -67,9 +67,9 @@ export const removeProductFromCart = async (code) => {
     }
 };
 
-export const deleteProduct = async (code) => {
+export const deleteProduct = async (code, client_id) => {
     try {
-        const response = await ProductApi.delete(`/delete_product/${code}/`);
+        const response = await ProductApi.delete(`/delete_product/${code}/${client_id}/`);
         return response.data;
     } catch (error) {
         console.error("Error deleting product:", error.response || error.message);
@@ -77,9 +77,11 @@ export const deleteProduct = async (code) => {
     }
 };
 
-export const completePurchase = async () => {
+export const completePurchase = async (client_id) => {
     try {
-        const response = await ProductApi.post(`/complete_payment/`);
+        const response = await ProductApi.post(`/complete_payment/`, {
+            client_id: client_id,
+        });
         return response.data; // Devuelve el mensaje de éxito
     } catch (error) {
         console.error("Error completing purchase:", error.response || error.message);

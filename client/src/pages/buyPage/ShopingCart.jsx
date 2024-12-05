@@ -17,10 +17,10 @@ const ShoppingCart = () => {
     const navigate = useNavigate();
 
     const establishmentId = 1; // ID del establecimiento
-    const clientId = parseInt(Cookies.get("client_id") || "0", 10); // Obtén el userId de las cookies
+    const clientId = Cookies.get("client_id"); // Obtén el userId de las cookies
 
     const updateCart = async () => {
-        const items = await getCartDetails();
+        const items = await getCartDetails(clientId);
         setCartItems(items);
         calculateTotals(items);
     };
@@ -55,7 +55,7 @@ const ShoppingCart = () => {
         }
 
         try {
-            const response = await completePurchase(); // Llama a la API
+            const response = await completePurchase(clientId); // Llama a la API
             alert(response.mensaje); // Muestra el mensaje de éxito
             setItems(0);
             await updateCart(); // Actualiza el carrito (vacía el carrito tras completar la compra)
