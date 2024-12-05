@@ -130,7 +130,7 @@ function ClientHistorial() {
 
     const handleSm = () => {
         if(isOnMenu){
-            setIsOnMenu(false);
+            navigate(-1, { replace: true });
         } else{
             setIsOnMenu(true);
         }
@@ -183,7 +183,7 @@ function ClientHistorial() {
                             <div className="lg:h-full lg:mt-16 gap-4 flex-col sm:flex hidden">
                                 {filter.anchorKey === "Appointments" ?
                                     <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
-                                        {clientHistory.length > 0 ? clientHistory?.map((service) => (
+                                        {clientHistory?.length > 0 ? clientHistory?.map((service) => (
                                             <>
                                                 <ClientService key={service.id} appointments={service} reviews={reviews} loadClientReviews={loadClientReviews} client={client} />
                                             </>
@@ -195,7 +195,7 @@ function ClientHistorial() {
                                     </div>
                                     :
                                     <>
-                                        {products.data.length > 0 ?
+                                        {products?.data?.length > 0 ?
                                             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
                                                 {products?.data?.map((product) => (
                                                     <>
@@ -236,7 +236,7 @@ function ClientHistorial() {
                         className="lg:h-full lg:mt-16 gap-4 flex-col flex">
                         {filter.anchorKey === "Appointments" ?
                             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
-                                {clientHistory.length > 0 ? clientHistory?.map((service) => (
+                                {clientHistory?.length > 0 ? clientHistory?.map((service) => (
                                     <>
                                         <ClientService key={service.id} appointments={service} reviews={reviews} loadClientReviews={loadClientReviews} client={client} />
                                     </>
@@ -248,7 +248,7 @@ function ClientHistorial() {
                             </div>
                             :
                             <>
-                                {products.data.length > 0 ?
+                                {products?.data?.length > 0 ?
                                     <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
                                         {products?.data?.map((product) => (
                                             <>
