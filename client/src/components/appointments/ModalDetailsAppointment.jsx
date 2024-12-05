@@ -15,6 +15,9 @@ import {
 } from "@nextui-org/react";
 import { today, getLocalTimeZone, now } from "@internationalized/date";
 import ButtonCustom from "../global/ButtonCustom";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import RescheduleAppointment from "./RescheduleAppointment";
 
 /**
@@ -52,7 +55,7 @@ function ModalDetailsAppointment({
   price,
   // commission,
   services,
-  isEmployee,
+  // isEmployee,
 }) {
   const boduDetails = [
     { item: "Profesional", value: artistName },
@@ -79,6 +82,7 @@ function ModalDetailsAppointment({
   const [editMode, setEditMode] = useState(false);
   const [editedDate, setEditedDate] = useState(date);
   const [loading, setLoading] = useState(false);
+  const [rescheduling, setRescheduling] = useState(false);
   const [canceling, setCanceling] = useState(false);
 
   const formatAppointmentData = (dateTimeObject, appointmentId) => {
@@ -110,8 +114,8 @@ function ModalDetailsAppointment({
   }, [isOpen, editMode]);
 
   const handleEditSubmit = (e) => {
-    e.preventDefault;
-    setLoading(true);
+    e.preventDefault();
+    setRescheduling(true);
     const formattedData = formatAppointmentData(editedDate, id);
 
     api
@@ -119,15 +123,24 @@ function ModalDetailsAppointment({
       .then((response) => {
         console.log("response", response);
         window.dispatchEvent(new Event("reloadAppointments"));
+        setEditMode(false);
       })
       .catch((error) => {
         console.error("error", error);
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       })
       .finally(() => {
-        setEditMode(false);
-        setLoading(false);
+        setRescheduling(false);
       });
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleFinishAppointment = (e) => {
@@ -218,7 +231,7 @@ function ModalDetailsAppointment({
                       className="max-w-[250px]"
                       // labelPlacement="outside"
                     />
-                    <ButtonCustom primary type="submit" isLoading={loading}>
+                    <ButtonCustom primary type="submit" isLoading={rescheduling}>
                       Guardar Cambios
                     </ButtonCustom>
                     <Button
