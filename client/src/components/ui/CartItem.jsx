@@ -2,10 +2,13 @@ import { Button } from "@nextui-org/react";
 import defaultImage from "../../assets/hola.png";
 import { addProductToCart, deleteProduct, removeProductFromCart } from "../../Api/product/product";
 import useAddCart from "@/stores/useAddCart";
+import Cookies from "js-cookie";
 
 const CartItem = ({ index, product, establishmentId, clientId, updateCart }) => {
     const { image, description, price, quantity, code, discount } = product;
     const { items, setItems } = useAddCart();
+
+    const client_id = Cookies.get("client_id")
 
     const handleAdd = async (productCode) => {
         try {
@@ -41,7 +44,7 @@ const CartItem = ({ index, product, establishmentId, clientId, updateCart }) => 
         console.log("Trying to remove product with code:", productCode); // Log de los datos enviados al eliminar
 
         try {
-            const response = await removeProductFromCart(productCode);
+            const response = await removeProductFromCart(productCode, clientId);
             if (response.mensaje) {
                 setItems(items - 1);
                 await updateCart(); // Actualizar carrito después de eliminar
@@ -56,7 +59,7 @@ const CartItem = ({ index, product, establishmentId, clientId, updateCart }) => 
 
     const handleDelete = async (productCode) => {
         try {
-            const response = await deleteProduct(productCode); // Llama al endpoint para eliminar el producto
+            const response = await deleteProduct(productCode, clientId); // Llama al endpoint para eliminar el producto
             if (response.message === "Producto eliminado") {
                 setItems(items - quantity);
                 await updateCart(); // Actualiza el carrito después de eliminar
