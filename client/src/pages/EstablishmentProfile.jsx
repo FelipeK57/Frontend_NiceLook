@@ -15,6 +15,7 @@ import ServicesTab from "./establishment/ServicesTab";
 import ProfileReviews from "@/components/establishment/review/ProfileReviews";
 import BuyCard from "./buyPage/buyCard";
 import Footer from "@/components/global/Footer";
+import ReviewsEstablishment from "./establishment/ReviewsEstablishment";
 
 export const BackgroundImage = ({ backgroundImage }) => {
   return (
@@ -143,7 +144,7 @@ export default function EstablishmentProfile() {
       {
         key: "reviews",
         title: "Reseñas",
-        component: <ProfileReviews />,
+        component: <ReviewsEstablishment />,
       },
     ],
     [employeeId]
