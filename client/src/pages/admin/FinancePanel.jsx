@@ -19,6 +19,8 @@ function FinancePanel() {
   );
   const [earningsEstablishment, setEarningsEstablishment] = useState(0);
   const [earningsArtist, setEarningsArtist] = useState(0);
+  const [earningsMonthly, setEarningsMonthly] = useState(0);
+  const [earningsProductsMonthly, setEarningsProductsMonthly] = useState(0);
   const [module, setModule] = useState("Servicios");
   const [products, setProducts] = useState([]);
   const [services, setServices] = useState([]);
@@ -46,6 +48,7 @@ function FinancePanel() {
       setEarningsArtist(response.data.ganancia_employee);
       setEarningsEstablishment(response.data.ganancia_establecimiento);
       setServices(response.data.appointments_services);
+      setEarningsMonthly(response.data.ganancias_meses);
     };
     fetchData();
   }, [date]);
@@ -67,10 +70,10 @@ function FinancePanel() {
             },
           }
         );
-        console.log(response.data.products);
-        console.log(response.data.total);
+        console.log(response.data);
         setEarningsProducts(response.data.total);
         setProducts(response.data.products);
+        setEarningsProductsMonthly(response.data.ganancias_meses);
       } catch (error) {
         console.error(error);
       }
@@ -116,9 +119,10 @@ function FinancePanel() {
             <EarningsSummaryServices
               earningsEstablishment={earningsEstablishment}
               earningsArtist={earningsArtist}
+              earningsMonthly={earningsMonthly}
             />
           ) : (
-            <EarningsSummaryProducts earningsProducts={earningsProducts} />
+            <EarningsSummaryProducts earningsProducts={earningsProducts} earningsProductsMonthly={earningsProductsMonthly} />
           )}
         </div>
       </section>

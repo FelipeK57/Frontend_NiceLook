@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { Select, SelectItem } from "@nextui-org/react";
 function PaymentProductItem({ id, price, quantity, paymentMethod, products }) {
-  console.log(products);
 
   const productsList = () =>
     products.map((product) => (
