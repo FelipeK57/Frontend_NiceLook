@@ -20,24 +20,22 @@ import EmployeesManagement from "./pages/admin/EmployeesManagement.jsx";
 import AppointmentsManagement from "./pages/admin/AppointmentsManagement.jsx";
 import FinancePanel from "./pages/admin/FinancePanel.jsx";
 import ProductsManagement from "./pages/admin/ProductsManagement.jsx";
-import EmployeeServicesManagement from "./pages/employee/ServicesManagement.jsx";
 import EditProfilePage from "./pages/admin/EditProfilePage.jsx";
 import SalesPanel from "./pages/recepcionist/SalesPanel.jsx";
 import Appointments from "./pages/recepcionist/Appointments.jsx";
 import EmployeeLogin from "./pages/auth/employee/EmployeeLogin.jsx";
 import ProtectedEmployeeRoute from "./components/auth/ProtectedEmployeeRoute.jsx";
-import ScheduleManagement from "./pages/employee/ScheduleManagement.jsx";
-import RecordManagement from "./pages/employee/RecordManagement.jsx";
 import ProtectedReceptionistRoute from "./components/auth/ProtectedReceptionistRoute.jsx";
 import EstablishmentProfile from "./pages/EstablishmentProfile.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import EmployeeProfile from "./pages/establishment/services/EmployeeProfile.jsx";
 import TestComponents from "./TestComponents.jsx";
-import ClientHistorial from "./components/client/clientHistorial.jsx";
+import ClientHistorial from "./components/client/ClientHistorial.jsx";
 import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
 import AppointmentsHistory from "./pages/employee/AppointmentsHistory.jsx";
 import ScheduleAppointment from "./pages/employee/ScheduleAppointment.jsx";
 import ServiceProfessional from "./pages/employee/ServicesProfessional.jsx";
+import CustomerAppointments from "@/pages/customer/CustomerAppointments.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -54,6 +52,11 @@ const routes = createBrowserRouter([
         path: "/profile",
         element: <ClientHistorial />,
         errorElement: <div>Error Page</div>,
+      },
+      {
+        path: "appointments",
+        element: <CustomerAppointments />,
+        errorElement: <NotFound />,
       },
       {
         path: "/@peluqueriastylospalmira",
@@ -89,10 +92,10 @@ const routes = createBrowserRouter([
         ],
       },
       {
-      path:"/shoppingCart",
-      element: <ShoppingCart />,
-      errorElement: <div>Error Page</div>,
-    },
+        path: "/shoppingCart",
+        element: <ShoppingCart />,
+        errorElement: <div>Error Page</div>,
+      },
     ],
   },
   {
