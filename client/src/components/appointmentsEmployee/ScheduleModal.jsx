@@ -4,7 +4,7 @@ import { getEmployeeSchedules, updateEmployeeSchedule } from '../../api/employee
 
 const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
     const [isTwoShifts, setIsTwoShifts] = useState(() => {
-        const storedValue = localStorage.getItem('isTwoShifts');
+        const storedValue = localStorage.getItem("isTwoShifts");
         return storedValue !== null ? JSON.parse(storedValue) : false;
     });
     const [selectedHoursJoin, setSelectedHoursJoin] = useState("09:00");
@@ -31,7 +31,8 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
                 if (response.data && response.data.length > 0) {
                     const schedule = response.data[0];
                     setScheduleId(schedule.id);
-                    setIsTwoShifts(schedule.double_day);  // Establecer el estado de acuerdo con el valor cargado
+                    setIsTwoShifts(schedule.double_day); // Sincroniza con el backend
+                    console.log("Estado del backend (double_day):", schedule.double_day); // Verifica lo que devuelve el backend
                     setSelectedHoursJoin(schedule.time_start_day_one);
                     setSelectedHoursExit(schedule.time_end_day_one);
                     setSelectedDays(schedule.working_days.reduce((days, day) => ({ ...days, [day]: true }), {}));
@@ -39,7 +40,6 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
                         setSelectedHoursJoin2(schedule.time_start_day_two);
                         setSelectedHoursExit2(schedule.time_end_day_two);
                     }
-                    console.log("Horario cargado:", schedule); // Log para verificar datos cargados
                 } else {
                     console.log("No se encontró horario para el empleado.");
                 }
@@ -49,6 +49,9 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
         };
 
         if (isOpen) {
+            const storedValue = localStorage.getItem('isTwoShifts');
+            console.log("Valor en localStorage:", storedValue); // Verifica lo que se está leyendo
+            setIsTwoShifts(storedValue !== null ? JSON.parse(storedValue) : false); // Lee de localStorage
             fetchSchedule();
         }
     }, [isOpen, employeeId]);
@@ -97,7 +100,7 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
 
     return (
         <Modal
-            key={isOpen ? "open" : "closed"}  // Clave para forzar recreación del modal al abrir
+            key={isOpen ? "open" : "closed"} // Clave para forzar la recreación del modal
             closeButton
             isOpen={isOpen}
             onOpenChange={onOpenChange}
@@ -132,11 +135,13 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
                             </div>
                             <span className="font-bold text-xl mt-4">Dos jornadas</span>
                             <Switch
-                                checked={isTwoShifts}
-                                color='success'
+                                isSelected={isTwoShifts} // Usa isSelected en lugar de checked si es un componente de NextUI
+                                color="success"
                                 onChange={(e) => {
-                                    setIsTwoShifts(e.target.checked);
-                                    localStorage.setItem('isTwoShifts', JSON.stringify(e.target.checked));
+                                    const newValue = e.target.checked;
+                                    console.log("Nuevo estado del switch:", newValue); // Debug
+                                    setIsTwoShifts(newValue);
+                                    localStorage.setItem("isTwoShifts", JSON.stringify(newValue));
                                 }}
                             />
                         </div>
@@ -186,3 +191,4 @@ const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
 };
 
 export default ScheduleModal;
+//hola al mundo
