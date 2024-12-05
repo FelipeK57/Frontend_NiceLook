@@ -21,6 +21,9 @@
 
 import { useState } from "react";
 
+import { toast } from "react-toastify";
+import { format } from "date-fns";
+
 import api from "@/api";
 
 import {
@@ -42,23 +45,43 @@ export default function AppointmentModal({
   const [loading, setLoading] = useState(false);
 
   const handleCancelAppointment = async (e) => {
-    console.log("entro");
-    e.preventDefault();
     setLoading(true);
+    e.preventDefault();
 
     await api
-      .patch("api/appointment_change_state/", {
+      .patch("api/client_cancel_appointment/", {
         id_appointment: appointment.id,
-        state: "Cancelada",
       })
       .then((response) => {
-        console.log(response.data);
+        toast.success(response.data.message, {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        onOpenChange(false);
+        window.dispatchEvent(new Event("reloadAppointments"));
       })
       .catch((error) => {
-        console.error(error);
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       })
       .finally(setLoading(false));
   };
+
+  // Formatear fecha y hora
+  const formattedDate = appointment.date; // Ya viene en formato adecuado
+  const formattedTime = format(new Date(`${appointment.time}`), "hh:mm a");
 
   return (
     <>
@@ -71,17 +94,26 @@ export default function AppointmentModal({
           <form onSubmit={handleCancelAppointment}>
             <ModalHeader>Detalles de la cita</ModalHeader>
             <ModalBody className="flex flex-col items-start text-sm">
-              <p>Fecha: {appointment.date}</p>
-              <p>Hora: {appointment.time}</p>
-              <p>Servicio: {appointment.service?.name}</p>
+              <p>Fecha: {formattedDate}</p>
+              <p>Hora: {formattedTime}</p>
+              <div className="flex flex-wrap gap-2">
+              <p>Servicio(s):</p>
+                {appointment.services.map((service) => (
+                  <Chip key={service.id} variant="flat" size="sm"
+                  className="bg-tulip-tree-200 text-tulip-tree-950"
+                  >
+                    {service.name}
+                  </Chip>
+                ))}
+              </div>
               <p>
-                Profesional: {appointment.professional.first_name}{" "}
-                {appointment.professional.last_name}
+                Profesional: {appointment.employee.user.first_name}{" "}
+                {appointment.employee.user.last_name}
               </p>
               <div className="flex h-max gap-2 items-center">
                 <p>Estado:</p>
-                <Chip color="warning" variant="flat" size="sm">
-                  {appointment.state}
+                <Chip className="bg-tulip-tree-200 text-tulip-tree-950" variant="flat" size="sm">
+                  {appointment.estate}
                 </Chip>
               </div>
             </ModalBody>
