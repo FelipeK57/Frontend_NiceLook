@@ -1,10 +1,14 @@
 import { Skeleton } from "@nextui-org/react";
 
 import api from "@/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import Cookies from "js-cookie";
 
-import AppointmentCard from "@/components/client/appoinments/AppointmentCard";
+// import AppointmentCard from "@/components/client/appoinments/AppointmentCard";
+
+const AppointmentCard = lazy(() =>
+  import("@/components/client/appoinments/AppointmentCard")
+);
 
 /**
  * Componente que muestra las citas del cliente.
@@ -31,36 +35,27 @@ import AppointmentCard from "@/components/client/appoinments/AppointmentCard";
  */
 export default function CustomerAppointments() {
   const clientId = Cookies.get("client_id");
-  const [fetching, setFetching] = useState(true);
-  const [appointments, setAppointments] = useState([
-    {
-      id: 342564,
-      service: {
-        name: "Corte de cabello",
-        length: 30,
-      },
-      date: "2022-10-10",
-      time: "10:00",
-      professional: { first_name: "Juan", last_name: "Pérez" },
-      state: "Pendiente",
-    },
-  ]);
+  const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
     const fetchAppointments = async () => {
       await api
-        .get(`/client/client_appointments/${clientId}`)
+        .get(`/api/client_appointments_pending/${clientId}`)
         .then((response) => {
-          console.log(response.data);
-          // setAppointments(response.data);
+          setAppointments(response.data.appointments);
         })
         .catch((error) => {
           console.error(error);
-        })
-        .finally(setFetching(false));
+        });
     };
 
     fetchAppointments();
+
+    window.addEventListener("reloadAppointments", fetchAppointments);
+
+    return () => {
+      window.removeEventListener("reloadAppointments", fetchAppointments);
+    };
   }, [clientId]);
 
   return (
@@ -72,21 +67,17 @@ export default function CustomerAppointments() {
         </p>
       </header>
       <section className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {!fetching ? (
-          appointments.length > 0 ? (
-            appointments.map((appointment) => (
-              <AppointmentCard key={appointment.id} appointment={appointment} />
-            ))
-          ) : (
-            <p className="text-neutral-600">No tienes citas programadas.</p>
-          )
+        {appointments.length > 0 ? (
+          appointments.map((appointment) => (
+            <Suspense
+              key={appointment.id}
+              fallback={<Skeleton height="200px" />}
+            >
+              <AppointmentCard appointment={appointment} />
+            </Suspense>
+          ))
         ) : (
-          <>
-            <Skeleton height="200px" />
-            <Skeleton height="200px" />
-            <Skeleton height="200px" />
-            <Skeleton height="200px" />
-          </>
+          <p className="text-neutral-600">No tienes citas programadas.</p>
         )}
       </section>
     </article>
