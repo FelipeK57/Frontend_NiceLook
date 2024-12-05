@@ -13,6 +13,7 @@ import axios from "axios";
 
 function EmployeeAvailability({ employee, date }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [errorServer, setErrorServer] = useState("");
   const [times, setTimes] = useState([]);
   const day = date.toDate().getDate();
   const month = date.toDate().getMonth() + 1;
@@ -34,6 +35,10 @@ function EmployeeAvailability({ employee, date }) {
         console.log(response.data);
         setTimes(response.data.disponibilidad);
       } catch (error) {
+        if (error.status === 400) {
+          setTimes([]);
+          setErrorServer("No hay horarios disponibles");
+        }
         console.error(error);
       }
     };
@@ -69,9 +74,13 @@ function EmployeeAvailability({ employee, date }) {
                   Estos son los intervalos de horas disponibles el dia: {day}/
                   {month}/{year}
                 </p>
-                <div className="grid grid-cols-2 gap-4">
+                <div
+                  className={`grid ${
+                    times.length === 0 ? "grid-cols-1" : "grid-cols-2"
+                  } gap-4`}
+                >
                   {times.length === 0 ? (
-                    <p className="text-lg text-gray-800">
+                    <p className="text-base font-semibold text-center text-gray-800">
                       No hay horarios disponibles
                     </p>
                   ) : (
