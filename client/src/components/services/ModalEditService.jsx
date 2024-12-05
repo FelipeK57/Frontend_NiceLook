@@ -47,6 +47,7 @@ function ModalEditService({
     category: "",
     image: null,
   });
+  const [errorServer, setErrorServer] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -140,12 +141,26 @@ function ModalEditService({
         category: "",
         image: "",
       });
+      setErrorServer("");
       console.log(response.data);
       window.location.reload();
     } catch (error) {
+      setErrorServer(error.response.data.error);
       console.error(error);
     }
   };
+  
+  const handleClose = () => {
+    onClose();
+    setError({
+      name: "",
+      price: "",
+      commission: "",
+      category: "",
+      image: "",
+    });
+    setErrorServer("");
+  }
 
   return (
     <Modal size="xl" backdrop="blur" isOpen={isOpen} onClose={onClose}>
@@ -205,7 +220,7 @@ function ModalEditService({
           <div className="flex flex-col gap-2">
             <label
               className={`font-semibold text-xl ${
-                !!error.image && "text-[#f31260]"
+                !!error.image && "text-[#f31260] text-sm font-semibold"
               }`}
               htmlFor="comissionService"
             >
@@ -248,9 +263,16 @@ function ModalEditService({
               className="w-40 h-40 object-cover rounded-lg mb-4 shadow-md"
             />
           </div>
+          <div>
+            {
+              errorServer && (
+                <p className="text-[#f31260] text-[12px]">{errorServer}</p>
+              )
+            }
+          </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" variant="light" onPress={onClose}>
+          <Button color="danger" variant="light" onPress={handleClose}>
             Cancelar
           </Button>
           <ButtonCustom action={handleEditService} name="Guardar" primary />

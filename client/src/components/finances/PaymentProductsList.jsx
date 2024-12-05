@@ -10,7 +10,7 @@ function PaymentProductList({ paymentProducts }) {
           id={paymentProduct.payment_id}
           price={paymentProduct.total_price}
           quantity={paymentProduct.total_quantity}
-          paymentMethod={paymentProduct.method}
+          paymentMethod={paymentProduct.client.user.first_name + " " + paymentProduct.client.user.last_name} 
           products={paymentProduct.details}
         />
       ))}

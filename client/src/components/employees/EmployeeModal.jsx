@@ -360,7 +360,7 @@ function CreateEmployeeModal(props) {
                                                         <b>Correo:</b> Correo del profesional (deberá contener un @ y un . para ser considerado válido).
                                                     </li>
                                                     <li>
-                                                        <b>Profesión:</b> Profesión del profesional (deberá seleccionar alguna de las opciones disponibles)
+                                                        <b>Especialidad:</b> Especialidad del profesional (deberá seleccionar alguna de las opciones disponibles)
                                                     </li>
                                                     {props.employee &&
                                                         <li>
@@ -381,7 +381,10 @@ function CreateEmployeeModal(props) {
                     <ModalBody>
                         <form className="flex flex-col flex-1 gap-6 sm:gap-8">
                             <div className="flex flex-col gap-2">
-                                <label className="font-bold" htmlFor="name">Nombre</label>
+                            <div className="grid grid-cols-2 gap-4">
+                                <label className="font-bold" htmlFor="name">Nombres</label>
+                                <label className="font-bold" htmlFor="name">Apellidos</label>
+                                </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <Input
                                         name="name"

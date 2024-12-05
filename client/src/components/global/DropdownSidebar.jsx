@@ -8,6 +8,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 
 function DropdownSidebar({ links, handleLogout }) {
+  console.log(links);
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -36,7 +37,9 @@ function DropdownSidebar({ links, handleLogout }) {
         {links.map((link) => {
           return (
             <DropdownItem onClick={useNavigate(`/${link.path}`)} key={link.id}>
-              <Link className="font-semibold text-lg" to={link.path}>{link.name}</Link>
+              <Link className="font-semibold text-lg" to={link.path}>
+                {link.name}
+              </Link>
             </DropdownItem>
           );
         })}
