@@ -39,6 +39,7 @@ import ShoppingCart from "./pages/buyPage/ShopingCart.jsx";
 import AppointmentsHistory from "./pages/employee/AppointmentsHistory.jsx";
 import ScheduleAppointment from "./pages/employee/ScheduleAppointment.jsx";
 import ServiceProfessional from "./pages/employee/ServicesProfessional.jsx";
+import ReviewsEstablishment from "./pages/establishment/ReviewsEstablishment.jsx";
 import CustomerAppointments from "@/pages/customer/CustomerAppointments.jsx";
 
 const routes = createBrowserRouter([
@@ -122,6 +123,10 @@ const routes = createBrowserRouter([
     path: "/EditProfilePage",
     element: <EditProfilePage />,
     errorElement: <NotFound />,
+  },
+  {
+    path: "/reviews",
+    element: <ReviewsEstablishment />,
   },
   {
     path: "/services",
