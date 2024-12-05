@@ -47,18 +47,18 @@ function ClientPerfil({ client }) {
     // console.log(client);
 
     return (
-        <aside className=" h-[90%] w-full flex p-4">
-            <div className=" flex flex-col border-2 border-slate-300 w-full rounded-3xl h-fit pb-8">
-                <form action="" className="px-2 flex flex-col gap-4">
-                    <h2 className="text-2xl font-bold p-4">Datos personales</h2>
+        <aside className=" h-[100%] sm:w-full w-[90%] justify-center m-auto sm:m-0 lg:justify-normal flex p-2 border-slate-300 rounded-3xl lg:rounded-none sm:border-r-2 sm:border-l-0 sm:border-y-0 border-2">
+            <div className=" flex flex-col  h-fit pb-8 sm:w-auto w-full">
+                <form action="" className="lg:px-10 flex flex-col lg:gap-6 gap-4">
+                    <h2 className="text-2xl font-bold py-4">Datos personales</h2>
                     <div>
                         <label className="text-xl font-semibold">Nombres:</label>
                         <Input onChange={(e) => setClientNames(e.target.value)}
                             value={clientNames}
                             variant="bordered"
-                            className="w-3/4 mx-auto border-2 border-slate-400 rounded-xl text-lg"
+                            className=" mx-auto text-lg"
                             classNames={{
-                                input: "text-lg",
+                                input: "text-lg "
                             }} />
                     </div>
                     <div>
@@ -66,7 +66,7 @@ function ClientPerfil({ client }) {
                         <Input onChange={(e) => setClientLastNames(e.target.value)}
                             value={clientLastNames}
                             variant="bordered"
-                            className="w-3/4 mx-auto border-2 border-slate-400 rounded-xl text-lg"
+                            className=" mx-auto text-lg"
                             classNames={{
                                 input: "text-lg",
                             }} />
@@ -77,7 +77,7 @@ function ClientPerfil({ client }) {
                             value={clientEmail}
                             variant="bordered"
                             readOnly
-                            className="w-3/4 mx-auto border-2 border-slate-400 rounded-xl pointer-events-none text-lg"
+                            className=" mx-auto pointer-events-none text-lg"
                             classNames={{
                                 input: "text-lg",
                             }} />
@@ -87,13 +87,13 @@ function ClientPerfil({ client }) {
                         <Input onChange={(e) => setClientPhone(e.target.value)}
                             value={clientPhone}
                             variant="bordered"
-                            className="w-3/4 mx-auto border-2 border-slate-400 rounded-xl text-lg"
+                            className=" mx-auto rounded-xl text-lg"
                             classNames={{
                                 input: "text-lg",
                             }} />
                     </div>
                     <div className="w-full flex justify-center mt-4">
-                        <ButtonCustom onPress={handleEditClient} secondary>
+                        <ButtonCustom onPress={handleEditClient} secondary classStyles="w-1/2 text-lg">
                             Guardar
                         </ButtonCustom>
                     </div>

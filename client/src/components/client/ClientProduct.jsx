@@ -11,7 +11,7 @@ function CLientProduct({ product }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     return (
-        <div className=" flex flex-col  border-1 mb-8 border-slate-300 p-4 rounded-xl w-full">
+        <div className=" flex flex-col  border-1 mb-8 border-slate-300 p-4 rounded-xl sm:w-full w-[95%] sm:m-0 m-auto">
             <div className='grid grid-cols-[1.8fr_0.2fr] '>
                 <div className='flex flex-col gap-2'>
                     <h3 className='text-2xl font-bold line-clamp-1 text-ellipsis'>
