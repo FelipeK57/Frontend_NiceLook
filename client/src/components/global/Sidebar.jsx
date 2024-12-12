@@ -299,7 +299,6 @@ function Sidebar() {
             "establishmentId"
           )}/${Cookies.get("id_employee")}/`
         );
-        console.log(response.data);
         setProfesionalImage(response.data.imagen_base64);
       } catch (error) {
         console.error(error);

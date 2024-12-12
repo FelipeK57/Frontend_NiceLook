@@ -1,11 +1,64 @@
 import MonthSelector from "@/components/employees/MonthSelector";
 import ButtonCustom from "@/components/global/ButtonCustom";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 
 function TimesManagement() {
   const date = new Date().getMonth();
   const [month, setMonth] = useState(date);
-  console.log(date);
+  const [dayStates, setDayStates] = useState({});
+
+  useEffect(() => {
+    const fetchTimes = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/times/${Cookies.get("id_employee")}`
+        );
+
+        const { exceptions, times } = response.data;
+        console.log(exceptions, times);
+
+        const days = {}; // Mapa para almacenar el estado de cada día
+
+        // Procesar excepciones
+        exceptions.forEach((exception) => {
+          const date = exception.date_start;
+          if (!days[date]) days[date] = { exception: true };
+          else days[date].exception = true;
+        });
+
+        // Procesar horarios
+        times.forEach((time) => {
+          let currentDate = new Date(time.date_start);
+          const endDate = new Date(time.date_end);
+
+          while (currentDate <= endDate) {
+            const dateStr = currentDate.toISOString().split("T")[0];
+            if (!days[dateStr]) days[dateStr] = { schedule: true };
+            else days[dateStr].schedule = true;
+
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        });
+
+        // Marcar días mixtos
+        Object.keys(days).forEach((date) => {
+          if (days[date].exception && days[date].schedule) {
+            days[date].mixed = true;
+            delete days[date].exception;
+            delete days[date].schedule;
+          }
+        });
+
+        setDayStates(days);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchTimes();
+  }, []);
 
   return (
     <main className="grid grid-rows-[auto_1fr_auto] gap-4 py-2 px-6">
@@ -17,7 +70,7 @@ function TimesManagement() {
       </header>
       <section className="flex flex-col gap-2">
         <p className="text-lg lg:text-2xl font-semibold">Calendario del mes</p>
-        <Calendar month2={month} />
+        <Calendar month2={month} dayStates={dayStates} />
       </section>
       <section className="flex flex-col gap-6">
         <div className="flex flex-row gap-6 flex-grow justify-between md:justify-start">
@@ -28,8 +81,7 @@ function TimesManagement() {
     </main>
   );
 }
-
-const Calendar = ({ month2 }) => {
+const Calendar = ({ month2, dayStates }) => {
   const [monthInfo, setMonthInfo] = useState({
     month: null,
     year: null,
@@ -37,20 +89,16 @@ const Calendar = ({ month2 }) => {
     firstDayOfWeek: null,
   });
 
-  // Esta función genera el calendario
   const generateCalendar = () => {
     const { month, year, daysInMonth, firstDayOfWeek } = monthInfo;
 
-    // Crear una matriz para las semanas del calendario
     const calendar = [];
     let week = [];
 
-    // Primero, agregar los días antes del primer día del mes
     for (let i = 0; i < firstDayOfWeek; i++) {
-      week.push(null); // Vacío antes del primer día
+      week.push(null);
     }
 
-    // Llenar los días del mes
     for (let day = 1; day <= daysInMonth; day++) {
       week.push(day);
       if (week.length === 7) {
@@ -59,10 +107,9 @@ const Calendar = ({ month2 }) => {
       }
     }
 
-    // Si hay días restantes en la última semana (menos de 7 días), agregarla
     if (week.length > 0) {
       while (week.length < 7) {
-        week.push(null); // Llenar el resto con null para completar la semana
+        week.push(null);
       }
       calendar.push(week);
     }
@@ -71,18 +118,14 @@ const Calendar = ({ month2 }) => {
   };
 
   useEffect(() => {
-    // Obtener la fecha actual
     const currentDate = new Date();
-    const month = month2; // Mes actual (0-11)
-    const year = currentDate.getFullYear(); // Año actual
+    const month = month2;
+    const year = currentDate.getFullYear();
 
-    // Obtener el número de días en el mes
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // Obtener el día de la semana del primer día del mes
-    const firstDayOfWeek = new Date(year, month, 1).getDay(); // Día de la semana del primer día (0-6)
+    const firstDayOfWeek = new Date(year, month, 1).getDay();
 
-    // Establecer el estado con la información del mes
     setMonthInfo({
       month,
       year,
@@ -93,10 +136,21 @@ const Calendar = ({ month2 }) => {
 
   const calendar = monthInfo.daysInMonth ? generateCalendar() : [];
 
+  const getDayClass = (day) => {
+    if (!day) return "text-gray-400";
+    const dateStr = `${monthInfo.year}-${String(monthInfo.month + 1).padStart(
+      2,
+      "0"
+    )}-${String(day).padStart(2, "0")}`;
+    if (dayStates[dateStr]?.mixed) return "bg-yellow-400";
+    if (dayStates[dateStr]?.exception) return "bg-red-400";
+    if (dayStates[dateStr]?.schedule) return "bg-green-400";
+    return "bg-white";
+  };
+
   return (
     <div className="flex flex-col shadow rounded-2xl">
       <header>
-        {/* Dias de la semana */}
         <article className="grid grid-cols-7 shadow rounded-t-2xl">
           {["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"].map(
             (day, index) => (
@@ -111,17 +165,20 @@ const Calendar = ({ month2 }) => {
         </article>
       </header>
       <article>
-        {/* Calendario */}
         {calendar.map((week, index) => (
           <div key={index} className="grid grid-cols-7">
             {week.map((day, index) => (
               <div
                 key={index}
-                className={`last:border-r-0 border-r-1 px-2 py-2 md:py-6 2xl:py-10 border-t-1 font-medium text-medium text-center ${
-                  day === null ? "text-gray-400" : "text-black"
-                }`}
+                className={`last:border-r-0 border-r-1 px-2 py-2 md:py-6 2xl:py-10 border-t-1 font-semibold text-medium text-center`}
               >
-                {day}
+                <p
+                  className={`text-center rounded-full p-2 xl:w-1/4 xl:mx-auto ${getDayClass(
+                    day
+                  )}`}
+                >
+                  {day}
+                </p>
               </div>
             ))}
           </div>
