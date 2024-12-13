@@ -1,5 +1,7 @@
 import MonthSelector from "@/components/employees/MonthSelector";
 import ButtonCustom from "@/components/global/ButtonCustom";
+import { AddException } from "@/components/schedule/AddException";
+import { AddTimes } from "@/components/schedule/AddTimes";
 import { Button, Tooltip } from "@nextui-org/react";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -36,7 +38,6 @@ function TimesManagement() {
         );
 
         const { exceptions, times } = response.data;
-        console.log(exceptions, times);
 
         const days = {}; // Mapa para almacenar el estado de cada día
 
@@ -102,7 +103,7 @@ function TimesManagement() {
   const handleOpenTooltip = () => setOpenTooltip(true);
 
   return (
-    <main className="grid grid-rows-[auto_1fr_auto] gap-4 2xl:gap-8 py-2 px-6">
+    <main className="grid grid-rows-[auto_1fr_auto] gap-4 2xl:gap-6 py-2 px-6">
       <header className="flex gap-4 flex-row md:items-center">
         <h1 className="text-2xl lg:text-4xl text-slate-950 font-bold">
           Gestión de agenda y disponibilidad
@@ -187,8 +188,8 @@ function TimesManagement() {
       </section>
       <section className="flex flex-col gap-6">
         <div className="flex flex-row gap-6 flex-grow justify-between md:justify-start">
-          <ButtonCustom primary name="Agregar horario" />
-          <ButtonCustom variant="light" secondary name="Agregar excepción" />
+          <AddTimes />
+          <AddException />
         </div>
       </section>
     </main>
@@ -268,7 +269,7 @@ const Calendar = ({ month2, year2, dayStates }) => {
             (day, index) => (
               <div
                 key={index}
-                className="last:border-0 last:rounded-tr-2xl first:rounded-tl-2xl flex items-center justify-center border-r-1 bg-slate-100 border-slate-200 py-2 md:py-4 font-semibold text-sm md:text-lg"
+                className="last:border-0 last:rounded-tr-2xl first:rounded-tl-2xl flex items-center justify-center border-r-1 bg-slate-50 border-slate-200 py-2 md:py-4 font-semibold text-sm md:text-lg"
               >
                 {day}
               </div>
