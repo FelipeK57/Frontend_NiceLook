@@ -1,13 +1,32 @@
 import MonthSelector from "@/components/employees/MonthSelector";
 import ButtonCustom from "@/components/global/ButtonCustom";
+import { Button, Tooltip } from "@nextui-org/react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 
+export const months = [
+  { id: 0, name: "Enero" },
+  { id: 1, name: "Febrero" },
+  { id: 2, name: "Marzo" },
+  { id: 3, name: "Abril" },
+  { id: 4, name: "Mayo" },
+  { id: 5, name: "Junio" },
+  { id: 6, name: "Julio" },
+  { id: 7, name: "Agosto" },
+  { id: 8, name: "Septiembre" },
+  { id: 9, name: "Octubre" },
+  { id: 10, name: "Noviembre" },
+  { id: 11, name: "Diciembre" },
+];
+
 function TimesManagement() {
-  const date = new Date().getMonth();
-  const [month, setMonth] = useState(date);
+  const dateMonth = new Date().getMonth();
+  const dateYear = new Date().getFullYear();
+  const [month, setMonth] = useState(dateMonth);
+  const [year, setYear] = useState(dateYear);
   const [dayStates, setDayStates] = useState({});
+  const [openTooltip, setOpenTooltip] = useState(false);
 
   useEffect(() => {
     const fetchTimes = async () => {
@@ -58,19 +77,113 @@ function TimesManagement() {
     };
 
     fetchTimes();
-  }, []);
+  }, [month]);
+
+  const handleNextMonth = () => {
+    if (month !== 11) {
+      setMonth(month + 1);
+      return;
+    }
+    setMonth(0);
+    setYear(year + 1);
+    return;
+  };
+
+  const handlePreviousMonth = () => {
+    if (month !== 0) {
+      setMonth(month - 1);
+      return;
+    }
+    setMonth(11);
+    setYear(year - 1);
+    return;
+  };
+
+  const handleOpenTooltip = () => setOpenTooltip(true);
 
   return (
-    <main className="grid grid-rows-[auto_1fr_auto] gap-4 py-2 px-6">
-      <header className="flex flex-col gap-4 md:flex-row justify-between md:items-center">
-        <h1 className="text-2xl lg:text-4xl text-slate-950 font-bold w-full">
+    <main className="grid grid-rows-[auto_1fr_auto] gap-4 2xl:gap-8 py-2 px-6">
+      <header className="flex gap-4 flex-row md:items-center">
+        <h1 className="text-2xl lg:text-4xl text-slate-950 font-bold">
           Gestión de agenda y disponibilidad
         </h1>
-        <MonthSelector month={date} setMonth={setMonth} />
+        <Tooltip
+          isOpen={openTooltip}
+          onOpenChange={(open) => setOpenTooltip(open)}
+          placement="bottom"
+          content={
+            <div className="max-w-[300px] px-2 py-1">
+              <p>
+                Aqui puedes gestionar tus horarios de trabajo y disponibilidad
+                además de los dias con excepciones (ej: Calamidad domestica,
+                Salud etc.).
+              </p>
+            </div>
+          }
+        >
+          <Button
+            onPress={() => handleOpenTooltip()}
+            isIconOnly
+            className="rounded-full"
+            variant="bordered"
+          >
+            ?
+          </Button>
+        </Tooltip>
       </header>
-      <section className="flex flex-col gap-2">
-        <p className="text-lg lg:text-2xl font-semibold">Calendario del mes</p>
-        <Calendar month2={month} dayStates={dayStates} />
+      <section className="flex flex-col items-center gap-4">
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
+          <Button
+            variant="bordered"
+            onPress={() => {
+              handlePreviousMonth();
+            }}
+            isIconOnly
+            className="rounded-full"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="size-4 rotate-180"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </Button>
+          <p className="font-semibold text-lg text-center min-w-[150px]">
+            {months[month].name} {year}
+          </p>
+          <Button
+            variant="bordered"
+            onPress={() => {
+              handleNextMonth();
+            }}
+            isIconOnly
+            className="rounded-full"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="size-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </Button>
+        </div>
+        <Calendar month2={month} year2={year} dayStates={dayStates} />
       </section>
       <section className="flex flex-col gap-6">
         <div className="flex flex-row gap-6 flex-grow justify-between md:justify-start">
@@ -81,7 +194,7 @@ function TimesManagement() {
     </main>
   );
 }
-const Calendar = ({ month2, dayStates }) => {
+const Calendar = ({ month2, year2, dayStates }) => {
   const [monthInfo, setMonthInfo] = useState({
     month: null,
     year: null,
@@ -118,9 +231,8 @@ const Calendar = ({ month2, dayStates }) => {
   };
 
   useEffect(() => {
-    const currentDate = new Date();
     const month = month2;
-    const year = currentDate.getFullYear();
+    const year = year2;
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -149,14 +261,14 @@ const Calendar = ({ month2, dayStates }) => {
   };
 
   return (
-    <div className="flex flex-col shadow rounded-2xl">
+    <div className="flex flex-col shadow rounded-2xl w-full">
       <header>
         <article className="grid grid-cols-7 shadow rounded-t-2xl">
           {["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"].map(
             (day, index) => (
               <div
                 key={index}
-                className="last:border-0 last:rounded-tr-2xl first:rounded-tl-2xl flex items-center justify-center border-r-1 bg-slate-100 border-slate-200 py-2 md:py-6 font-semibold text-sm md:text-lg"
+                className="last:border-0 last:rounded-tr-2xl first:rounded-tl-2xl flex items-center justify-center border-r-1 bg-slate-100 border-slate-200 py-2 md:py-4 font-semibold text-sm md:text-lg"
               >
                 {day}
               </div>
@@ -170,10 +282,10 @@ const Calendar = ({ month2, dayStates }) => {
             {week.map((day, index) => (
               <div
                 key={index}
-                className={`last:border-r-0 border-r-1 px-2 py-2 md:py-6 2xl:py-10 border-t-1 font-semibold text-medium text-center`}
+                className={`last:border-r-0 border-r-1 px-2 py-2 md:py-4 2xl:py-8 border-t-1 font-semibold text-medium text-center`}
               >
                 <p
-                  className={`text-center rounded-full p-2 xl:w-1/4 xl:mx-auto ${getDayClass(
+                  className={`rounded-full py-1 2xl:py-3 px-3 flex items-center justify-center xl:w-1/4 xl:mx-auto ${getDayClass(
                     day
                   )}`}
                 >
