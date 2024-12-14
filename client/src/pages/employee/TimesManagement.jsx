@@ -2,6 +2,8 @@ import MonthSelector from "@/components/employees/MonthSelector";
 import ButtonCustom from "@/components/global/ButtonCustom";
 import { AddException } from "@/components/schedule/AddException";
 import { AddTimes } from "@/components/schedule/AddTimes";
+import { DateNavbar } from "@/components/schedule/DateNavbar";
+import { ViewDate } from "@/components/schedule/ViewDate";
 import { Button, Tooltip } from "@nextui-org/react";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -133,57 +135,12 @@ function TimesManagement() {
         </Tooltip>
       </header>
       <section className="flex flex-col items-center gap-4">
-        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
-          <Button
-            variant="bordered"
-            onPress={() => {
-              handlePreviousMonth();
-            }}
-            isIconOnly
-            className="rounded-full"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="size-4 rotate-180"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </Button>
-          <p className="font-semibold text-lg text-center min-w-[150px]">
-            {months[month].name} {year}
-          </p>
-          <Button
-            variant="bordered"
-            onPress={() => {
-              handleNextMonth();
-            }}
-            isIconOnly
-            className="rounded-full"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="size-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </Button>
-        </div>
+        <DateNavbar
+          handlePreviousMonth={handlePreviousMonth}
+          handleNextMonth={handleNextMonth}
+          month={months[month].name}
+          year={year}
+        />
         <Calendar month2={month} year2={year} dayStates={dayStates} />
       </section>
       <section className="flex flex-col gap-6">
@@ -258,7 +215,7 @@ const Calendar = ({ month2, year2, dayStates }) => {
     if (dayStates[dateStr]?.mixed) return "bg-yellow-400";
     if (dayStates[dateStr]?.exception) return "bg-red-400";
     if (dayStates[dateStr]?.schedule) return "bg-green-400";
-    return "bg-white";
+    return "bg-transparent";
   };
 
   return (
@@ -283,15 +240,13 @@ const Calendar = ({ month2, year2, dayStates }) => {
             {week.map((day, index) => (
               <div
                 key={index}
-                className={`last:border-r-0 border-r-1 px-2 py-2 md:py-4 2xl:py-8 border-t-1 font-semibold text-medium text-center`}
+                className={`last:border-r-0 border-r-1 px-2 py-1 md:py-2 2xl:py-8 border-t-1 flex justify-center items-center`}
               >
-                <p
-                  className={`rounded-full py-1 2xl:py-3 px-3 flex items-center justify-center xl:w-1/4 xl:mx-auto ${getDayClass(
-                    day
-                  )}`}
-                >
-                  {day}
-                </p>
+                {day ? (
+                  <ViewDate color={getDayClass(day)} day={day} />
+                ) : (
+                  <p className="bg-transparent">{day}</p>
+                )}
               </div>
             ))}
           </div>
