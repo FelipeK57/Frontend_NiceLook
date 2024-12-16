@@ -10,17 +10,20 @@ import {
 } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
 import { HourIntervals } from "./HourIntervals";
+import { useEffect, useState } from "react";
+import { useWindowWidth } from "@/hooks/useWindowWidth";
 
 export const AddTimes = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const width = useWindowWidth();
 
   return (
     <>
       <ButtonCustom primary action={onOpen} name={"Agregar horarios"} />
       <Modal
         isOpen={isOpen}
-        size="3xl"
-        placement="center"
+        placement="auto"
+        size={width <= 400 ? "full" : "4xl"}
         onOpenChange={onOpenChange}
       >
         <ModalContent>
@@ -29,15 +32,15 @@ export const AddTimes = () => {
               <ModalHeader>
                 <h1 className="font-bold text-xl">Agregar horario</h1>
               </ModalHeader>
-              <ModalBody className="grid grid-cols-2 text-sm text-center items-stretch gap-2">
+              <ModalBody className="grid md:grid-cols-2 text-sm items-stretch gap-2 overflow-y-auto">
                 <section className="flex flex-col items-center gap-4">
-                  <p className="font-semibold">
+                  <p className="font-semibold text-center">
                     Rango de fechas en la que vas a trabajar
                   </p>
                   <RangeCalendar />
                 </section>
-                <section className="flex flex-col gap-4">
-                  <p className="font-semibold">
+                <section className="flex flex-col gap-4 items-center">
+                  <p className="font-semibold text-centerz  ">
                     Intervalos de horas en los que estaras disponible
                   </p>
                   <HourIntervals />
