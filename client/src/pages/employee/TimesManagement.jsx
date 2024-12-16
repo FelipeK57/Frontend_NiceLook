@@ -105,7 +105,7 @@ function TimesManagement() {
   const handleOpenTooltip = () => setOpenTooltip(true);
 
   return (
-    <main className="grid grid-rows-[auto_1fr_auto] gap-4 2xl:gap-6 py-2 px-6">
+    <main className="grid grid-rows-[auto_1fr] gap-4 2xl:gap-6 py-2 px-6 min-h-svh">
       <header className="flex gap-4 flex-row md:items-center">
         <h1 className="text-2xl lg:text-4xl text-slate-950 font-bold">
           Gestión de agenda y disponibilidad
@@ -134,7 +134,7 @@ function TimesManagement() {
           </Button>
         </Tooltip>
       </header>
-      <section className="flex flex-col items-center gap-4">
+      <section className="flex flex-col h-full items-center gap-4">
         <DateNavbar
           handlePreviousMonth={handlePreviousMonth}
           handleNextMonth={handleNextMonth}
@@ -142,12 +142,6 @@ function TimesManagement() {
           year={year}
         />
         <Calendar month2={month} year2={year} dayStates={dayStates} />
-      </section>
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-row gap-6 flex-grow justify-between md:justify-start">
-          <AddTimes />
-          <AddException />
-        </div>
       </section>
     </main>
   );
@@ -219,40 +213,52 @@ const Calendar = ({ month2, year2, dayStates }) => {
   };
 
   return (
-    <div className="flex flex-col shadow rounded-2xl w-full">
-      <header>
-        <article className="grid grid-cols-7 shadow rounded-t-2xl">
-          {["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"].map(
-            (day, index) => (
-              <div
-                key={index}
-                className="last:border-0 last:rounded-tr-2xl first:rounded-tl-2xl flex items-center justify-center border-r-1 bg-slate-50 border-slate-200 py-2 md:py-4 font-semibold text-sm md:text-lg"
-              >
-                {day}
-              </div>
-            )
-          )}
+    <>
+      <div className="flex flex-col h-4/5 shadow rounded-2xl w-full">
+        <header>
+          <article className="grid grid-cols-7 shadow rounded-t-2xl">
+            {["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"].map(
+              (day, index) => (
+                <div
+                  key={index}
+                  className="last:border-0 last:rounded-tr-2xl first:rounded-tl-2xl flex items-center justify-center border-r-1 bg-slate-50 border-slate-200 font-semibold text-sm py-4 md:text-lg"
+                >
+                  {day}
+                </div>
+              )
+            )}
+          </article>
+        </header>
+        <article
+          className={`grid ${
+            calendar.length <= 5 ? "grid-rows-5" : "grid-rows-6"
+          } auto-rows-fr h-full`}
+        >
+          {calendar.map((week, index) => (
+            <div key={index} className="grid grid-cols-7">
+              {week.map((day, index) => (
+                <div
+                  key={index}
+                  className={`last:border-r-0 border-r-1 border-t-1 flex justify-center items-center`}
+                >
+                  {day ? (
+                    <ViewDate color={getDayClass(day)} day={day} />
+                  ) : (
+                    <p className="bg-transparent">{day}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
         </article>
-      </header>
-      <article>
-        {calendar.map((week, index) => (
-          <div key={index} className="grid grid-cols-7">
-            {week.map((day, index) => (
-              <div
-                key={index}
-                className={`last:border-r-0 border-r-1 px-2 py-1 md:py-2 2xl:py-8 border-t-1 flex justify-center items-center`}
-              >
-                {day ? (
-                  <ViewDate color={getDayClass(day)} day={day} />
-                ) : (
-                  <p className="bg-transparent">{day}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        ))}
-      </article>
-    </div>
+      </div>
+      <section className="flex flex-col gap-6">
+        <div className="flex flex-row gap-6 flex-grow justify-between md:justify-start">
+          <AddTimes />
+          <AddException />
+        </div>
+      </section>
+    </>
   );
 };
 
