@@ -17,10 +17,10 @@ export const ViewDate = ({ color, day }) => {
       <Button
         onPress={onOpen}
         isIconOnly
-        className={`rounded-full py-1 px-3 font-medium 2xl:font-semibold 2xl:text-medium flex items-center justify-center xl:w-1/5 xl:mx-auto ${color}`}
+        className={`rounded-none py-1 px-3 font-medium 2xl:font-semibold 2xl:text-medium flex items-center justify-center w-full h-full ${color}`}
       >
         {day}
-      </Button>
+      </Button> 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (

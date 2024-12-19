@@ -24,6 +24,18 @@ export const months = [
   { id: 11, name: "Diciembre" },
 ];
 
+const parseTimes = (data) => {
+  const parsed = {};
+  data.forEach((item) => {
+    parsed[item.date] = {
+      state: item.state,
+      time: item.time,
+      exception: item.exception,
+    };
+  });
+  return parsed;
+};
+
 function TimesManagement() {
   const dateMonth = new Date().getMonth();
   const dateYear = new Date().getFullYear();
@@ -39,41 +51,10 @@ function TimesManagement() {
           `http://localhost:8000/api/times/${Cookies.get("id_employee")}`
         );
 
-        const { exceptions, times } = response.data;
-
-        const days = {}; // Mapa para almacenar el estado de cada día
-
-        // Procesar excepciones
-        exceptions.forEach((exception) => {
-          const date = exception.date_start;
-          if (!days[date]) days[date] = { exception: true };
-          else days[date].exception = true;
-        });
-
-        // Procesar horarios
-        times.forEach((time) => {
-          let currentDate = new Date(time.date_start);
-          const endDate = new Date(time.date_end);
-
-          while (currentDate <= endDate) {
-            const dateStr = currentDate.toISOString().split("T")[0];
-            if (!days[dateStr]) days[dateStr] = { schedule: true };
-            else days[dateStr].schedule = true;
-
-            currentDate.setDate(currentDate.getDate() + 1);
-          }
-        });
-
-        // Marcar días mixtos
-        Object.keys(days).forEach((date) => {
-          if (days[date].exception && days[date].schedule) {
-            days[date].mixed = true;
-            delete days[date].exception;
-            delete days[date].schedule;
-          }
-        });
-
-        setDayStates(days);
+        const times = response.data.times;
+        console.log(times);
+        const parsedTimes = parseTimes(times);
+        setDayStates(parsedTimes);
       } catch (error) {
         console.error(error);
       }
@@ -146,7 +127,7 @@ function TimesManagement() {
     </main>
   );
 }
-const Calendar = ({ month2, year2, dayStates }) => {
+const Calendar = ({ month2, dayStates, year2 }) => {
   const [monthInfo, setMonthInfo] = useState({
     month: null,
     year: null,
@@ -200,16 +181,34 @@ const Calendar = ({ month2, year2, dayStates }) => {
 
   const calendar = monthInfo.daysInMonth ? generateCalendar() : [];
 
-  const getDayClass = (day) => {
-    if (!day) return "text-gray-400";
-    const dateStr = `${monthInfo.year}-${String(monthInfo.month + 1).padStart(
-      2,
-      "0"
-    )}-${String(day).padStart(2, "0")}`;
-    if (dayStates[dateStr]?.mixed) return "bg-yellow-400";
-    if (dayStates[dateStr]?.exception) return "bg-red-400";
-    if (dayStates[dateStr]?.schedule) return "bg-green-400";
-    return "bg-transparent";
+  const getColorClass = (date) => {
+    const state = dayStates[date]?.state;
+
+    switch (state) {
+      case "Completa":
+        return "bg-green-100";
+      case "NoLaboral":
+        return "bg-red-100";
+      case "Mixta":
+        return "bg-yellow-100";
+      default:
+        return "bg-transparent";
+    }
+  };
+
+  const getBorderClass = (date) => {
+    const state = dayStates[date]?.state;
+
+    switch (state) {
+      case "Completa":
+        return "border-b-3 border-b-green-500";
+      case "NoLaboral":
+        return "border-b-3 border-b-red-500";
+      case "Mixta":
+        return "border-b-3 border-b-yellow-500";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -234,20 +233,30 @@ const Calendar = ({ month2, year2, dayStates }) => {
             calendar.length <= 5 ? "grid-rows-5" : "grid-rows-6"
           } auto-rows-fr h-full`}
         >
-          {calendar.map((week, index) => (
-            <div key={index} className="grid grid-cols-7">
-              {week.map((day, index) => (
-                <div
-                  key={index}
-                  className={`last:border-r-0 border-r-1 border-t-1 flex justify-center items-center`}
-                >
-                  {day ? (
-                    <ViewDate color={getDayClass(day)} day={day} />
-                  ) : (
-                    <p className="bg-transparent">{day}</p>
-                  )}
-                </div>
-              ))}
+          {calendar.map((week, weekIndex) => (
+            <div key={weekIndex} className="grid grid-cols-7">
+              {week.map((day, dayIndex) => {
+                const dateKey = `${year2}-${String(month2 + 1).padStart(
+                  2,
+                  "0"
+                )}-${String(day).padStart(2, "0")}`;
+                const colorClass = day ? getColorClass(dateKey) : "";
+
+                return (
+                  <div
+                    key={dayIndex}
+                    className={`border-r-1 border-t-1  ${getBorderClass(dateKey)} flex justify-center items-center ${getColorClass(
+                      dateKey
+                    )}`}
+                  >
+                    {day ? (
+                      <ViewDate color={colorClass} day={day} /> // Pasamos el color a ViewDate
+                    ) : (
+                      <p className="bg-transparent"></p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ))}
         </article>

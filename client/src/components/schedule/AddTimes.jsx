@@ -23,7 +23,7 @@ export const AddTimes = () => {
       <Modal
         isOpen={isOpen}
         placement="auto"
-        size={width <= 400 ? "full" : "4xl"}
+        size={width <= 400 ? "full" : "5xl"}
         onOpenChange={onOpenChange}
       >
         <ModalContent>
