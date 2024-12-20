@@ -8,7 +8,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 
 function DropdownSidebar({ links, handleLogout }) {
-  console.log(links);
   return (
     <Dropdown>
       <DropdownTrigger>

@@ -49,6 +49,7 @@ const categories = [
  * The `categories` array is mapped to generate the list of selectable items.
  */
 function SelectCategorie({ category, setCategory, message, invalid, notAll }) {
+  console.log(category);
   const [categories2, setCategories2] = useState(categories);
   const selectCategory = (name) => {
     setCategory(name);

@@ -41,6 +41,7 @@ import ScheduleAppointment from "./pages/employee/ScheduleAppointment.jsx";
 import ServiceProfessional from "./pages/employee/ServicesProfessional.jsx";
 import ReviewsEstablishment from "./pages/establishment/ReviewsEstablishment.jsx";
 import CustomerAppointments from "@/pages/customer/CustomerAppointments.jsx";
+import TimesManagement from "./pages/employee/TimesManagement.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -199,6 +200,10 @@ const routes = createBrowserRouter([
             id: "employee-services",
             path: "services",
             element: <ServiceProfessional />,
+          },
+          {
+            path: "management",
+            element: <TimesManagement />,
           },
           {
             id: "employee-schedule",

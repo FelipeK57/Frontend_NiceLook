@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import ScheduleModal from "@/components/appointmentsEmployee/ScheduleModal";
 import ButtonCustom from "@/components/global/ButtonCustom";
 import { useDisclosure } from "@nextui-org/react";
-import { createEmployeeSchedule} from "@/Api/employee/employee";
+import { createEmployeeSchedule } from "@/Api/employee/employee";
 
 function ScheduleAppointment() {
   const fecha = new Date();
@@ -84,7 +84,7 @@ function ScheduleAppointment() {
         />
       </header>
       <main className="flex flex-col gap-4 pb-2">
-        <ButtonCustom
+        {/* <ButtonCustom
           name="Gestionar Horario"
           classStyles={"sm:mt-0 mt-2 sm:max-w-[280px] text-lg"}
           primary
@@ -95,7 +95,7 @@ function ScheduleAppointment() {
           onSave={handleSaveSchedule}
           onOpenChange={onOpenChange}
           employeeId={employeeId}
-        />
+        /> */}
         <div className="flex flex-row gap-4 justify-between bg-slate-300 p-2 rounded-3xl">
           <div className="flex items-center justify-center px-4 py-2 bg-[#ffffff] rounded-3xl">
             <p className="font-bold text-xl">Citas del dia</p>
