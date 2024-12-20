@@ -21,9 +21,10 @@ export const AddTimes = () => {
     <>
       <ButtonCustom primary action={onOpen} name={"Agregar horarios"} />
       <Modal
+        backdrop="blur"
         isOpen={isOpen}
         placement="auto"
-        size={width <= 400 ? "full" : "5xl"}
+        size={width <= 600 ? "full" : "5xl"}
         onOpenChange={onOpenChange}
       >
         <ModalContent>

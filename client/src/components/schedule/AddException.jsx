@@ -22,9 +22,10 @@ export const AddException = () => {
     <>
       <ButtonCustom secondary action={onOpen} name={"Agregar Excepción"} />
       <Modal
+        backdrop="blur"
         isOpen={isOpen}
         placement="auto"
-        size={width <= 400 ? "full" : "5xl"}
+        size={width <= 600 ? "full" : "5xl"}
         onOpenChange={onOpenChange}
       >
         <ModalContent>
@@ -36,8 +37,7 @@ export const AddException = () => {
               <ModalBody className="grid md:grid-cols-2 text-sm items-stretch gap-2 overflow-y-auto">
                 <section className="flex flex-col items-center gap-4">
                   <p className="font-semibold text-center">
-                    Fecha o rango de fechas en el que no vas a
-                    trabajar
+                    Fecha o rango de fechas en el que no vas a trabajar
                   </p>
                   <RangeCalendar color="danger" />
                 </section>
@@ -57,7 +57,7 @@ export const AddException = () => {
                     />
                     <TimeInput
                       hourCycle={12}
-                      defaultValue={new Time(12, 0)}
+                      defaultValue={new Time(18, 0)}
                       label={"Hora de finalización"}
                       labelPlacement="outside"
                       onChange={() => setEndTimeInterval1}
@@ -68,7 +68,7 @@ export const AddException = () => {
                       description="Esta información va a llegar a la recepcionista con el objetivo de que sepa que no estarás disponible en ese rango de horas y pueda reagendar las citas."
                       label="Razón de la excepción"
                       labelPlacement="outside"
-                      placeholder="Escribe la razón por la que no vas a asistir..."
+                      placeholder="Escribe la razón por la que no vas a asistir"
                     />
                   </div>
                 </section>

@@ -108,7 +108,7 @@ function TimesManagement() {
           <Button
             onPress={() => handleOpenTooltip()}
             isIconOnly
-            className="rounded-full"
+            className="rounded-full font-semibold text-xl"
             variant="bordered"
           >
             ?
@@ -241,19 +241,26 @@ const Calendar = ({ month2, dayStates, year2 }) => {
                   "0"
                 )}-${String(day).padStart(2, "0")}`;
                 const colorClass = day ? getColorClass(dateKey) : "";
+                const dataDay = dayStates[dateKey];
 
                 return (
                   <div
                     key={dayIndex}
-                    className={`border-r-1 border-t-1  ${getBorderClass(dateKey)} flex justify-center items-center ${getColorClass(
+                    className={`border-r-1 last:border-r-0 border-t-1  ${getBorderClass(
+                      dateKey
+                    )} flex justify-center items-center ${getColorClass(
                       dateKey
                     )}`}
+                    j
                   >
                     {day ? (
-                      <ViewDate color={colorClass} day={day} /> // Pasamos el color a ViewDate
-                    ) : (
-                      <p className="bg-transparent"></p>
-                    )}
+                      <ViewDate
+                        month={months[month2].name}
+                        color={colorClass}
+                        day={day}
+                        dataDay={dataDay}
+                      />
+                    ) : null}
                   </div>
                 );
               })}
