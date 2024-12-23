@@ -121,7 +121,7 @@ const EmployeeProfile = () => {
         </div>
 
         {/* Tarjeta de agendar cita */}
-        <div className="sticky top-32 z-40 h-max">
+        <div className="sticky top-32 h-max">
           <ScheduleAppointment
             services={service}
             servicesSelected={servicesSelected}
