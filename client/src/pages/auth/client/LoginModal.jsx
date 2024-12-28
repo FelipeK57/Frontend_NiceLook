@@ -45,7 +45,7 @@ function LoginModal({ isOpen, onClose, onOpenChange }) {
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     try {
       const newErrors = {
         email: "",
