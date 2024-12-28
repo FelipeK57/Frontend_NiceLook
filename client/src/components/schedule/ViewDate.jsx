@@ -137,7 +137,7 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                       onPress={onClose}
                       className="font-semibold"
                     >
-                      Agregar estado
+                      Agregar horario
                     </Button>
                   </>
                 ) : (

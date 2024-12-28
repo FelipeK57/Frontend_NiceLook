@@ -17,6 +17,13 @@ export const AddTimes = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const width = useWindowWidth();
 
+  const [times, setTimes] = useState({
+    firstInterval: { start: "", end: "" },
+    secondInterval: { start: "", end: "" },
+  });
+
+  console.log(times);
+
   return (
     <>
       <ButtonCustom primary action={onOpen} name={"Agregar horarios"} />
@@ -44,7 +51,7 @@ export const AddTimes = () => {
                   <p className="font-semibold text-centerz  ">
                     Intervalos de horas en los que estaras disponible
                   </p>
-                  <HourIntervals />
+                  <HourIntervals times={times} setTimes={setTimes} />
                 </section>
               </ModalBody>
               <ModalFooter className="flex gap-4">
