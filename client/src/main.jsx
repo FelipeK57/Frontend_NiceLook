@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, cssTransition } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import NotFound from "@/pages/NotFound.jsx";
@@ -248,11 +248,21 @@ const routes = createBrowserRouter([
   },
 ]);
 
+const slide = cssTransition({
+  enter: "slide-top",
+  exit: "slide-bottom",
+});
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId="659540305448-65l2ttvn04541tpuke3c411nrocbupdv.apps.googleusercontent.com">
       <RouterProvider router={routes} />
+      <ToastContainer
+        pauseOnFocusLoss
+        pauseOnHover
+        position="bottom-right"
+        transition={slide}
+      />
     </GoogleOAuthProvider>
-    <ToastContainer />
   </React.StrictMode>
 );

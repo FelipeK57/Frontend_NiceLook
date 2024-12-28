@@ -1,10 +1,10 @@
+/* eslint-disable react/prop-types */
 import {
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
   useDisclosure,
 } from "@nextui-org/react";
 import ButtonCustom from "../global/ButtonCustom";
@@ -23,14 +23,7 @@ function EmployeeAvailability({ employee, date }) {
     const fetchAvailability = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/establisment/get_available/${employee.id}/`,
-          {
-            params: {
-              day: day,
-              month: month,
-              year: year,
-            },
-          }
+          `http://localhost:8000/establisment/get_available/${employee.id}/`
         );
         console.log(response.data);
         setTimes(response.data.disponibilidad);
@@ -43,7 +36,7 @@ function EmployeeAvailability({ employee, date }) {
       }
     };
     fetchAvailability();
-  }, [isOpen]);
+  }, [isOpen, employee.id]);
 
   const formatTime = (time) => {
     return time.slice(0, 5);
