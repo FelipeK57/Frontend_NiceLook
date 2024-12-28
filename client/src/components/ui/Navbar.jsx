@@ -8,6 +8,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useState } from "react";
 import Cookies from "js-cookie";
@@ -34,6 +35,7 @@ import { BookCheck } from "lucide-react";
 // };
 
 export default function Navbar() {
+  const { onOpenChange } = useDisclosure();
   const { logoutClient } = useAuthStore();
   const [isModalRegisterOpen, setIsModalRegisterOpen] = useState(false);
   const [isModalLoginOpen, setIsModalLoginOpen] = useState(false);
@@ -48,27 +50,33 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 h-16 items-center bg-white border-b-2 flex justify-center">
       <div className="px-4 sm:px-0 w-full md:w-4/5 max-w-[1280px] grid gap-4 grid-cols-2 items-center h-full">
-        <LogoNiceLook className="text-3xl md:text-4xl" onPress={() => navigate("/@peluqueriastylospalmira")} />
+        <LogoNiceLook
+          className="text-3xl md:text-4xl"
+          onPress={() => navigate("/@peluqueriastylospalmira")}
+        />
         {/* <SearchBar className="hidden md:block" /> */}
         {!Cookies.get("isAuthenticated") ? (
           <div className="flex flex-row justify-end gap-4">
-            <RegisterModal
-              isOpen={isModalRegisterOpen}
-              onClose={handleCloseRegisterModal}
-            />
             <ButtonCustom
               action={handleOpenRegisterModal}
               primary
               name={"Regístrate"}
             />
-            <LoginModal
-              isOpen={isModalLoginOpen}
-              onClose={handleCloseLoginModal}
-            />
             <ButtonCustom
               action={handleOpenLoginModal}
               secondary
               name={"Iniciar sesión"}
+              classStyles="whitespace-normal"
+            />
+            <RegisterModal
+              isOpen={isModalRegisterOpen}
+              onClose={handleCloseRegisterModal}
+              onOpenChange={onOpenChange}
+            />
+            <LoginModal
+              isOpen={isModalLoginOpen}
+              onClose={handleCloseLoginModal}
+              onOpenChange={onOpenChange}
             />
           </div>
         ) : (

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import ButtonCustom from "@/components/global/ButtonCustom";
 import InputCustom from "@/components/global/InputCustom";
 import LogoNiceLook from "@/components/ui/LogoNiceLook";
@@ -8,7 +9,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
+  // useDisclosure,
 } from "@nextui-org/react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
@@ -16,7 +17,7 @@ import useAuthStore from "@/stores/useAuthStore";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-function RegisterModal({ isOpen, onClose }) {
+function RegisterModal({ isOpen, onClose, onOpenChange }) {
   const { loginClient } = useAuthStore();
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -160,9 +161,11 @@ function RegisterModal({ isOpen, onClose }) {
       <Modal
         isOpen={isOpen}
         backdrop="blur"
-        onClose={onClose}
+        // onClose={onClose}
+        onOpenChange={onOpenChange}
         placement="center"
         size="md"
+        hideCloseButton
       >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
@@ -250,10 +253,10 @@ function RegisterModal({ isOpen, onClose }) {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button onPress={handleClose} variant="light" color="danger">
+            <Button onPress={handleClose} variant="bordered">
               Cerrar
             </Button>
-            <ButtonCustom action={handleRegister} primary name={"Registrar"} />
+            <ButtonCustom action={handleRegister} primary name={"Registrarme"} />
           </ModalFooter>
         </ModalContent>
       </Modal>

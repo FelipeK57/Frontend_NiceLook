@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import ButtonCustom from "@/components/global/ButtonCustom";
 import InputCustom from "@/components/global/InputCustom";
 import LogoNiceLook from "@/components/ui/LogoNiceLook";
@@ -8,7 +9,6 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
 } from "@nextui-org/react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
@@ -16,7 +16,7 @@ import useAuthStore from "@/stores/useAuthStore";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-function LoginModal({ isOpen, onClose }) {
+function LoginModal({ isOpen, onClose, onOpenChange }) {
   const { loginClient } = useAuthStore();
 
   const [email, setEmail] = useState("");
@@ -36,7 +36,7 @@ function LoginModal({ isOpen, onClose }) {
         token,
       });
       console.log("Respuesta del servidor", response);
-      Cookies.set("client_id", response.data.client_id)
+      Cookies.set("client_id", response.data.client_id);
       loginClient();
       onClose();
       window.location.reload();
@@ -45,7 +45,7 @@ function LoginModal({ isOpen, onClose }) {
     }
   };
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     try {
       const newErrors = {
         email: "",
@@ -126,7 +126,9 @@ function LoginModal({ isOpen, onClose }) {
     <>
       <Modal
         isOpen={isOpen}
-        onClose={onClose}
+        // onClose={onClose}
+        onOpenChange={onOpenChange}
+        hideCloseButton
         backdrop="blur"
         placement="center"
         size="md"
@@ -177,10 +179,10 @@ function LoginModal({ isOpen, onClose }) {
             />
           </ModalBody>
           <ModalFooter>
-            <Button onPress={handleClose} variant="light" color="danger">
+            <Button onPress={handleClose} variant="bordered">
               Cerrar
             </Button>
-            <ButtonCustom action={handleLogin} primary name={"Iniciar"} />
+            <ButtonCustom action={handleLogin} primary name={"Entrar"} />
           </ModalFooter>
         </ModalContent>
       </Modal>
