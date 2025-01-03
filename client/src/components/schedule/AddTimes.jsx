@@ -12,17 +12,33 @@ import ButtonCustom from "../global/ButtonCustom";
 import { HourIntervals } from "./HourIntervals";
 import { useEffect, useState } from "react";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
+import { today, getLocalTimeZone } from "@internationalized/date";
+
+const parseDate = (date) => {
+  // Ejemplo de formato de fecha: 2024-01-03
+  return date.toString().slice(0, 10);
+};
 
 export const AddTimes = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const width = useWindowWidth();
 
-  const [times, setTimes] = useState({
-    firstInterval: { start: "", end: "" },
-    secondInterval: { start: "", end: "" },
+  const [rangeCalendarValue, setRangeCalendarValue] = useState({
+    start: today(getLocalTimeZone()),
+    end: today(getLocalTimeZone()).add({ weeks: 1 }),
   });
 
-  console.log(times);
+  const [intervals, setIntervals] = useState({
+    firstInterval: { start: "06:00", end: "12:00" },
+    secondInterval: { start: "13:00", end: "19:00" },
+    doubleInterval: false,
+  });
+
+  console.log(intervals);
+  console.log(
+    parseDate(rangeCalendarValue.start),
+    parseDate(rangeCalendarValue.end)
+  );
 
   return (
     <>
@@ -45,13 +61,17 @@ export const AddTimes = () => {
                   <p className="font-semibold text-center">
                     Rango de fechas en la que vas a trabajar
                   </p>
-                  <RangeCalendar />
+                  <RangeCalendar
+                    aria-label="Date (Controlled)"
+                    value={rangeCalendarValue}
+                    onChange={setRangeCalendarValue}
+                  />
                 </section>
                 <section className="flex flex-col gap-4 items-center">
                   <p className="font-semibold text-centerz  ">
                     Intervalos de horas en los que estaras disponible
                   </p>
-                  <HourIntervals times={times} setTimes={setTimes} />
+                  <HourIntervals setIntervals={setIntervals} />
                 </section>
               </ModalBody>
               <ModalFooter className="flex gap-4">
