@@ -123,23 +123,7 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
               </ModalBody>
               <ModalFooter>
                 {!dataDay ? (
-                  <>
-                    <Button
-                      className="font-semibold"
-                      onPress={onClose}
-                      color="danger"
-                      variant="light"
-                    >
-                      Cerrar
-                    </Button>
-                    <Button
-                      color="primary"
-                      onPress={onClose}
-                      className="font-semibold"
-                    >
-                      Agregar horario
-                    </Button>
-                  </>
+                  null
                 ) : (
                   <>
                     <Button
