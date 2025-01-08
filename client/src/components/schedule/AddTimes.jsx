@@ -13,13 +13,15 @@ import { HourIntervals } from "./HourIntervals";
 import { useEffect, useState } from "react";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { today, getLocalTimeZone } from "@internationalized/date";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const parseDate = (date) => {
   // Ejemplo de formato de fecha: 2024-01-03
   return date.toString().slice(0, 10);
 };
 
-export const AddTimes = () => {
+export const AddTimes = ({ reload, setReload }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const width = useWindowWidth();
 
@@ -39,6 +41,28 @@ export const AddTimes = () => {
     parseDate(rangeCalendarValue.start),
     parseDate(rangeCalendarValue.end)
   );
+
+  const createTime = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/employee/create_time/${Cookies.get(
+          "id_employee"
+        )}/`,
+        {
+          date_start: parseDate(rangeCalendarValue.start),
+          date_end: parseDate(rangeCalendarValue.end),
+          time_start_day_one: intervals.firstInterval.start,
+          time_end_day_one: intervals.firstInterval.end,
+          time_start_day_two: intervals.secondInterval.start,
+          time_end_day_two: intervals.secondInterval.end,
+          double_day: intervals.doubleInterval,
+        }
+      );
+      setReload(!reload);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -78,7 +102,14 @@ export const AddTimes = () => {
                 <Button onPress={onClose} color="danger" variant="light">
                   Cancelar
                 </Button>
-                <ButtonCustom action={onClose} name={"Crear"} primary />
+                <ButtonCustom
+                  action={() => {
+                    createTime();
+                    onClose();
+                  }}
+                  name={"Crear"}
+                  primary
+                />
               </ModalFooter>
             </>
           )}
