@@ -34,7 +34,7 @@ const ServiceSelector = ({ services, onSelectService, selectedServices }) => {
         startContent={<Search className="text-default-400" />}
         variant="bordered"
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
         {filteredServices.length > 0 ? (
           filteredServices.map((service) => (
             <ServiceCard
@@ -50,7 +50,7 @@ const ServiceSelector = ({ services, onSelectService, selectedServices }) => {
           ))
         ) : (
           <Card
-            className="w-full h-full min-h-32 space-y-5 p-4 sm:col-span-2 lg:col-span-3"
+            className="w-full h-full min-h-32 space-y-5 p-4 col-span-2 md:col-span-3"
             radius="lg"
           >
             <CardBody className="flex items-center justify-center">
