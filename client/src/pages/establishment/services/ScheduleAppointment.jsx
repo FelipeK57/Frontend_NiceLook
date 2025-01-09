@@ -152,53 +152,27 @@ const ScheduleAppointment = ({
           description="Formato 24 horas (00:00-23:59)"
         />
         <p className="font-semibold text-sm mt-2">Servicios seleccionados:</p>
-        {services.length === 0 ? (
-          <p className="text-sm text-slate-700">
-            No has seleccionado ningún servicio, agrega uno para continuar.
-          </p>
-        ) : (
-          services.map((service) => (
-            // <div
-            //   key={service.id}
-            //   className="flex flex-row justify-between items-center"
-            // >
-            //   <p className="text-sm">{service.id}</p>
-            //   <Button
-            //     onClick={() => removeService(service)}
-            //     isIconOnly
-            //     variant="light"
-            //     size="sm"
-            //     color="danger"
-            //   >
-            //     <svg
-            //       xmlns="http://www.w3.org/2000/svg"
-            //       fill="none"
-            //       viewBox="0 0 24 24"
-            //       strokeWidth={1.5}
-            //       stroke="currentColor"
-            //       className="size-4"
-            //     >
-            //       <path
-            //         strokeLinecap="round"
-            //         strokeLinejoin="round"
-            //         d="M6 18 18 6M6 6l12 12"
-            //       />
-            //     </svg>
-            //   </Button>
-            // </div>
-            <Chip
-              key={service.id}
-              onClose={() => removeService(service)}
-              variant="light"
-              classNames={{
-                base: "bg-tulip-tree-200",
-              }}
-              size="lg"
-            >
-              {service.service.name}
-            </Chip>
-          ))
-        )}
+        <div className="flex flex-wrap gap-2 max-h-[200px] overflow-y-auto">
+          {services.length === 0 ? (
+            <p className="text-sm text-slate-700">
+              No has seleccionado ningún servicio, agrega uno para continuar.
+            </p>
+          ) : (
+            services.map((service) => (
+              <Chip
+                key={service.id}
+                onClose={() => removeService(service)}
+                variant="light"
+                classNames={{
+                  base: "bg-tulip-tree-200",
+                }}
+                size="lg"
+              >
+                {service.service.name}
+              </Chip>
+            ))
+          )}
+        </div>
         {/* Modal de autenticación en caso de que no esté autenticado */}
         <AuthModal />
         {/* Modal de reserva exitosa*/}
