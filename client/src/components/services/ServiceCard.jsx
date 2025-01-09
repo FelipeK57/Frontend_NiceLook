@@ -67,7 +67,7 @@ function ServiceCard({ service, onSelect, duration, color, selectedServices }) {
           action={() => handleSelectService(service)}
           classStyles="self-center"
           color={color}
-          startContent={selectedServices > 0 && <Check />}
+          startContent={selectedServices.includes(service.id) && <Check />}
         >
           {selectedServices.includes(service.id)
             ? "Seleccionado"
