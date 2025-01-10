@@ -36,12 +36,6 @@ export const AddTimes = ({ reload, setReload }) => {
     doubleInterval: false,
   });
 
-  console.log(intervals);
-  console.log(
-    parseDate(rangeCalendarValue.start),
-    parseDate(rangeCalendarValue.end)
-  );
-
   const createTime = async () => {
     try {
       const response = await axios.post(

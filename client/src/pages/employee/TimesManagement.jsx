@@ -117,7 +117,7 @@ function TimesManagement() {
           </Button>
         </Tooltip>
       </header>
-      <section className="flex flex-col h-full items-center gap-4">
+      <section className="flex flex-col h-full justify-evenly items-center gap-4">
         <DateNavbar
           handlePreviousMonth={handlePreviousMonth}
           handleNextMonth={handleNextMonth}
@@ -259,7 +259,6 @@ const Calendar = ({ month2, dayStates, year2 }) => {
                     )} flex justify-center items-center ${getColorClass(
                       dateKey
                     )}`}
-                    j
                   >
                     {day ? (
                       <ViewDate

@@ -8,17 +8,48 @@ import {
   TimeInput,
   useDisclosure,
 } from "@nextui-org/react";
-import ButtonCustom from "../global/ButtonCustom";
 import { Time } from "@internationalized/date";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const parsedTime = (time) => {
+  return time.toString().slice(0, 5);
+};
 
 export const ViewDate = ({ month, color, day, dataDay }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [editMode, setEditMode] = useState(false);
 
+  const [startTime1, setStartTime1] = useState();
+  const [endTime1, setEndTime1] = useState();
+  const [startTime2, setStartTime2] = useState();
+  const [endTime2, setEndTime2] = useState();
+
   const parseTime = (timeString) => {
+    if (!timeString) return [0, 0];
     const [hours, minutes] = timeString.split(":").map(Number);
     return [hours, minutes];
+  };
+
+  useEffect(() => {
+    const updateTimes = () => {
+      if (dataDay?.time) {
+        const timeStartDayOne = parseTime(dataDay.time.time_start_day_one);
+        const timeStartDayTwo = parseTime(dataDay.time.time_start_day_two);
+        const timeEndDayOne = parseTime(dataDay.time.time_end_day_one);
+        const timeEndDayTwo = parseTime(dataDay.time.time_end_day_two);
+
+        setStartTime1(new Time(timeStartDayOne[0], timeStartDayOne[1]));
+        setStartTime2(new Time(timeStartDayTwo[0], timeStartDayTwo[1]));
+        setEndTime1(new Time(timeEndDayOne[0], timeEndDayOne[1]));
+        setEndTime2(new Time(timeEndDayTwo[0], timeEndDayTwo[1]));
+      }
+    };
+
+    updateTimes();
+  }, [dataDay]);
+
+  const saveChanges = () => {
+    console.log("Guardando cambios");
   };
 
   return (
@@ -50,81 +81,152 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                 ) : (
                   <section className="flex flex-col gap-4">
                     <article className="flex flex-col gap-4">
-                      <p className="font-semibold text-medium">
-                        Horario de trabajo
-                      </p>
-                      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-4">
-                        <TimeInput
-                          isReadOnly={editMode ? false : true}
-                          hourCycle={12}
-                          defaultValue={
-                            new Time(
-                              parseTime(dataDay.time.time_start_day_one)[0],
-                              parseTime(dataDay.time.time_start_day_one)[1]
-                            )
-                          }
-                          label={"Inicio jornada"}
-                          labelPlacement="outside"
-                        />
-                        <TimeInput
-                          isReadOnly={editMode ? false : true}
-                          hourCycle={12}
-                          defaultValue={
-                            dataDay.time.double_day
-                              ? new Time(
-                                  parseTime(dataDay.time.time_end_day_two)[0],
-                                  parseTime(dataDay.time.time_end_day_two)[1]
-                                )
-                              : new Time(
-                                  parseTime(dataDay.time.time_end_day_one)[0],
-                                  parseTime(dataDay.time.time_end_day_one)[1]
-                                )
-                          }
-                          label={"Finalización jornada"}
-                          labelPlacement="outside"
-                        />
-                      </div>
+                      {dataDay?.time !== null && dataDay?.time !== undefined ? (
+                        <>
+                          <p className="font-semibold text-medium">
+                            Horario de trabajo
+                          </p>
+                          <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-4">
+                            <TimeInput
+                              isReadOnly={editMode ? false : true}
+                              hourCycle={12}
+                              value={startTime1}
+                              defaultValue={startTime1}
+                              onChange={(value) => setStartTime1(value)}
+                              label={
+                                dataDay?.time.double_day
+                                  ? `Inicio de jornada 1`
+                                  : `Inicio de jornada`
+                              }
+                              labelPlacement="outside"
+                            />
+                            <TimeInput
+                              isReadOnly={editMode ? false : true}
+                              hourCycle={12}
+                              value={endTime1}
+                              defaultValue={endTime1}
+                              onChange={(value) => setEndTime1(value)}
+                              label={
+                                dataDay?.time.double_day
+                                  ? `Finalización de jornada 1`
+                                  : `Finalización de jornada`
+                              }
+                              labelPlacement="outside"
+                            />
+                            {dataDay?.time.double_day === true ? (
+                              <>
+                                <TimeInput
+                                  isReadOnly={editMode ? false : true}
+                                  hourCycle={12}
+                                  value={startTime2}
+                                  defaultValue={startTime2}
+                                  onChange={(value) => setStartTime2(value)}
+                                  label={"Inicio de jornada 2"}
+                                  labelPlacement="outside"
+                                />
+                                <TimeInput
+                                  isReadOnly={editMode ? false : true}
+                                  hourCycle={12}
+                                  value={endTime2}
+                                  defaultValue={endTime2}
+                                  onChange={(value) => setEndTime2(value)}
+                                  label={"Finalización de jornada 2"}
+                                  labelPlacement="outside"
+                                />
+                              </>
+                            ) : null}
+                          </div>
+                        </>
+                      ) : null}
                     </article>
-                    {dataDay.exception !== null ? (
-                      <article className="flex flex-col gap-4">
-                        <p className="font-semibold text-medium">
-                          Excepción del dia
-                        </p>
-                        <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-4">
-                          <TimeInput
-                            isReadOnly={editMode ? false : true}
-                            label={"Inicio excepción"}
-                            labelPlacement="outside"
-                            hourCycle={12}
-                            defaultValue={
-                              new Time(
-                                parseTime(dataDay.exception.time_start)[0],
-                                parseTime(dataDay.exception.time_start)[1]
-                              )
-                            }
-                          />
-                          <TimeInput
-                            isReadOnly={editMode ? false : true}
-                            label={"Finalización excepción"}
-                            labelPlacement="outside"
-                            hourCycle={12}
-                            defaultValue={
-                              new Time(
-                                parseTime(dataDay.exception.time_end)[0],
-                                parseTime(dataDay.exception.time_end)[1]
-                              )
-                            }
-                          />
-                        </div>
-                      </article>
-                    ) : null}
+                    {dataDay?.exception ? (
+                      Array.isArray(dataDay.exception) ? (
+                        dataDay.exception.length > 0 ? (
+                          <article className="flex flex-col gap-4">
+                            <p className="font-semibold text-medium">
+                              {dataDay.exception.length > 1
+                                ? "Excepciones del dia"
+                                : "Excepción del dia"}
+                            </p>
+                            <div className="flex flex-col gap-4 md:grid md:grid-cols-1 md:gap-4">
+                              {dataDay.exception.map((exception, index) => (
+                                <div className="flex gap-4" key={index}>
+                                  <TimeInput
+                                    isReadOnly={editMode ? false : true}
+                                    hourCycle={12}
+                                    defaultValue={
+                                      new Time(
+                                        parseTime(exception.time_start)[0],
+                                        parseTime(exception.time_start)[1]
+                                      )
+                                    }
+                                    label={`Inicio excepción ${index + 1}`}
+                                    labelPlacement="outside"
+                                  />
+                                  <TimeInput
+                                    isReadOnly={editMode ? false : true}
+                                    hourCycle={12}
+                                    defaultValue={
+                                      new Time(
+                                        parseTime(exception.time_end)[0],
+                                        parseTime(exception.time_end)[1]
+                                      )
+                                    }
+                                    label={`Finalización excepción ${
+                                      index + 1
+                                    }`}
+                                    labelPlacement="outside"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </article>
+                        ) : (
+                          <p className="font-light text-sm">
+                            No hay excepciones
+                          </p>
+                        )
+                      ) : (
+                        <article className="flex flex-col gap-4">
+                          <p className="font-semibold text-medium">
+                            Excepción del dia
+                          </p>
+                          <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-4">
+                            <TimeInput
+                              isReadOnly={editMode ? false : true}
+                              hourCycle={12}
+                              defaultValue={
+                                new Time(
+                                  parseTime(dataDay.exception.time_start)[0],
+                                  parseTime(dataDay.exception.time_start)[1]
+                                )
+                              }
+                              label={`Inicio excepción`}
+                              labelPlacement="outside"
+                            />
+                            <TimeInput
+                              isReadOnly={editMode ? false : true}
+                              hourCycle={12}
+                              defaultValue={
+                                new Time(
+                                  parseTime(dataDay.exception.time_end)[0],
+                                  parseTime(dataDay.exception.time_end)[1]
+                                )
+                              }
+                              label={`Finalización excepción`}
+                              labelPlacement="outside"
+                            />
+                          </div>
+                        </article>
+                      )
+                    ) : (
+                      <p>No hay excepciones</p>
+                    )}
                   </section>
                 )}
               </ModalBody>
               <ModalFooter>
-                {!dataDay ? (
-                  null
-                ) : (
+                {!dataDay ? null : (
                   <>
                     <Button
                       color="danger"
@@ -138,10 +240,9 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                       color="primary"
                       onPress={
                         !editMode
-                          ? () => {
-                              setEditMode(true);
-                            }
+                          ? () => setEditMode(true)
                           : () => {
+                              saveChanges();
                               setEditMode(false);
                               onClose();
                             }
@@ -166,7 +267,7 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                       }
                       className="font-semibold"
                     >
-                      {editMode ? " Guardar cambios" : " Editar horario"}
+                      {editMode ? "Guardar cambios" : "Editar horario"}
                     </Button>
                   </>
                 )}
