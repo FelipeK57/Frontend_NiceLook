@@ -124,7 +124,13 @@ function TimesManagement() {
           month={months[month].name}
           year={year}
         />
-        <Calendar month2={month} year2={year} dayStates={dayStates} />
+        <Calendar
+          month2={month}
+          year2={year}
+          dayStates={dayStates}
+          reload={reload}
+          setReload={setReload}
+        />
         <section className="flex flex-col gap-6">
           <div className="flex flex-row gap-6 flex-grow justify-between md:justify-start">
             <AddTimes reload={reload} setReload={setReload} />
@@ -135,7 +141,7 @@ function TimesManagement() {
     </main>
   );
 }
-const Calendar = ({ month2, dayStates, year2 }) => {
+const Calendar = ({ month2, dayStates, year2, reload, setReload }) => {
   const [monthInfo, setMonthInfo] = useState({
     month: null,
     year: null,
@@ -266,6 +272,8 @@ const Calendar = ({ month2, dayStates, year2 }) => {
                         color={colorClass}
                         day={day}
                         dataDay={dataDay}
+                        reload={reload}
+                        setReload={setReload}
                       />
                     ) : null}
                   </div>

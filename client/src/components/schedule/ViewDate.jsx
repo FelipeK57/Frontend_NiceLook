@@ -10,19 +10,35 @@ import {
 } from "@nextui-org/react";
 import { Time } from "@internationalized/date";
 import { useEffect, useState } from "react";
+import { useWindowWidth } from "@/hooks/useWindowWidth";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { ConfirmDialog } from "../global/ConfirmDialog";
 
 const parsedTime = (time) => {
   return time.toString().slice(0, 5);
 };
 
-export const ViewDate = ({ month, color, day, dataDay }) => {
+export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [editMode, setEditMode] = useState(false);
 
+  const width = useWindowWidth();
+
+  // Times
   const [startTime1, setStartTime1] = useState();
   const [endTime1, setEndTime1] = useState();
   const [startTime2, setStartTime2] = useState();
   const [endTime2, setEndTime2] = useState();
+
+  // Exceptions
+  const [exceptions, setExceptions] = useState([]);
+
+  // Confirm Dialog
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const handleOpen = () => setDialogOpen(true);
+  const handleClose = () => setDialogOpen(false);
 
   const parseTime = (timeString) => {
     if (!timeString) return [0, 0];
@@ -42,6 +58,9 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
         setStartTime2(new Time(timeStartDayTwo[0], timeStartDayTwo[1]));
         setEndTime1(new Time(timeEndDayOne[0], timeEndDayOne[1]));
         setEndTime2(new Time(timeEndDayTwo[0], timeEndDayTwo[1]));
+        if (dataDay.exception) {
+          setExceptions(dataDay.exception);
+        }
       }
     };
 
@@ -50,6 +69,44 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
 
   const saveChanges = () => {
     console.log("Guardando cambios");
+  };
+
+  const deleteException = async (
+    date_start,
+    date_end,
+    time_start,
+    time_end
+  ) => {
+    try {
+      setDialogOpen(true);
+      console.log(date_start, date_end, time_start, time_end);
+      const response = await axios.delete(
+        `http://localhost:8000/employee/delete_exception/${Cookies.get(
+          "id_employee"
+        )}/`,
+        {
+          params: {
+            date_start,
+            date_end,
+            time_start,
+            time_end,
+          },
+        }
+      );
+      console.log(response.data);
+      const deleteException = exceptions.filter(
+        (exception) =>
+          exception.date_start === date_start &&
+          exception.date_end === date_end &&
+          exception.time_start === time_start &&
+          exception.time_end === time_end
+      );
+      exceptions.splice(exceptions.indexOf(deleteException), 1);
+      setExceptions([...exceptions]);
+      setReload(!reload);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -63,7 +120,7 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
       </Button>
       <Modal
         backdrop="blur"
-        size="lg"
+        size={width <= 600 ? "full" : "lg"}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
@@ -75,64 +132,92 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                   {editMode ? "Edita" : "Visualiza"} el Dia {day} de {month}
                 </h1>
               </ModalHeader>
-              <ModalBody>
+              <ModalBody className="overflow-y-auto">
                 {!dataDay ? (
                   <p>No hay horario</p>
                 ) : (
                   <section className="flex flex-col gap-4">
-                    <article className="flex flex-col gap-4">
+                    <article className="flex flex-col gap-1">
                       {dataDay?.time !== null && dataDay?.time !== undefined ? (
                         <>
-                          <p className="font-semibold text-medium">
-                            Horario de trabajo
-                          </p>
-                          <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-4">
-                            <TimeInput
-                              isReadOnly={editMode ? false : true}
-                              hourCycle={12}
-                              value={startTime1}
-                              defaultValue={startTime1}
-                              onChange={(value) => setStartTime1(value)}
-                              label={
-                                dataDay?.time.double_day
-                                  ? `Inicio de jornada 1`
-                                  : `Inicio de jornada`
-                              }
-                              labelPlacement="outside"
-                            />
-                            <TimeInput
-                              isReadOnly={editMode ? false : true}
-                              hourCycle={12}
-                              value={endTime1}
-                              defaultValue={endTime1}
-                              onChange={(value) => setEndTime1(value)}
-                              label={
-                                dataDay?.time.double_day
-                                  ? `Finalización de jornada 1`
-                                  : `Finalización de jornada`
-                              }
-                              labelPlacement="outside"
-                            />
+                          <div className="flex flex-row justify-between items-center">
+                            <p className="font-semibold text-lg">
+                              Horario de trabajo
+                            </p>
+                            <Button
+                              size="sm"
+                              isIconOnly
+                              color="danger"
+                              variant="light"
+                              onPress={() => console.log("Eliminar horario")}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={2}
+                                stroke="currentColor"
+                                className="size-4"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                />
+                              </svg>
+                            </Button>
+                          </div>
+                          <div className="flex flex-col gap-4 md:grid md:grid-cols-1 md:gap-4">
+                            <p className="font-semibold text-sm">
+                              {dataDay?.time.double_day
+                                ? "Jornada 1"
+                                : "Jornada"}
+                            </p>
+                            <div className="flex gap-4">
+                              <TimeInput
+                                isReadOnly={editMode ? false : true}
+                                hourCycle={12}
+                                value={startTime1}
+                                defaultValue={startTime1}
+                                onChange={(value) => setStartTime1(value)}
+                                label="Inicio de jornada"
+                                labelPlacement="outside"
+                              />
+                              <TimeInput
+                                isReadOnly={editMode ? false : true}
+                                hourCycle={12}
+                                value={endTime1}
+                                defaultValue={endTime1}
+                                onChange={(value) => setEndTime1(value)}
+                                label="Finalización de jornada"
+                                labelPlacement="outside"
+                              />
+                            </div>
                             {dataDay?.time.double_day === true ? (
                               <>
-                                <TimeInput
-                                  isReadOnly={editMode ? false : true}
-                                  hourCycle={12}
-                                  value={startTime2}
-                                  defaultValue={startTime2}
-                                  onChange={(value) => setStartTime2(value)}
-                                  label={"Inicio de jornada 2"}
-                                  labelPlacement="outside"
-                                />
-                                <TimeInput
-                                  isReadOnly={editMode ? false : true}
-                                  hourCycle={12}
-                                  value={endTime2}
-                                  defaultValue={endTime2}
-                                  onChange={(value) => setEndTime2(value)}
-                                  label={"Finalización de jornada 2"}
-                                  labelPlacement="outside"
-                                />
+                                <p className="font-semibold text-sm">
+                                  Jornada 2
+                                </p>
+                                <div className="flex gap-4">
+                                  <TimeInput
+                                    isReadOnly={editMode ? false : true}
+                                    hourCycle={12}
+                                    value={startTime2}
+                                    defaultValue={startTime2}
+                                    onChange={(value) => setStartTime2(value)}
+                                    label={"Inicio de jornada"}
+                                    labelPlacement="outside"
+                                  />
+                                  <TimeInput
+                                    isReadOnly={editMode ? false : true}
+                                    hourCycle={12}
+                                    value={endTime2}
+                                    defaultValue={endTime2}
+                                    onChange={(value) => setEndTime2(value)}
+                                    label={"Finalización de jornada"}
+                                    labelPlacement="outside"
+                                  />
+                                </div>
                               </>
                             ) : null}
                           </div>
@@ -143,55 +228,105 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                       Array.isArray(dataDay.exception) ? (
                         dataDay.exception.length > 0 ? (
                           <article className="flex flex-col gap-4">
-                            <p className="font-semibold text-medium">
-                              {dataDay.exception.length > 1
+                            <p className="font-semibold text-lg">
+                              {exceptions > 1
                                 ? "Excepciones del dia"
-                                : "Excepción del dia"}
+                                : exceptions === 1
+                                ? "Excepción del dia"
+                                : null}
                             </p>
-                            <div className="flex flex-col gap-4 md:grid md:grid-cols-1 md:gap-4">
-                              {dataDay.exception.map((exception, index) => (
-                                <div className="flex gap-4" key={index}>
-                                  <TimeInput
-                                    isReadOnly={editMode ? false : true}
-                                    hourCycle={12}
-                                    defaultValue={
-                                      new Time(
-                                        parseTime(exception.time_start)[0],
-                                        parseTime(exception.time_start)[1]
-                                      )
-                                    }
-                                    label={`Inicio excepción ${index + 1}`}
-                                    labelPlacement="outside"
-                                  />
-                                  <TimeInput
-                                    isReadOnly={editMode ? false : true}
-                                    hourCycle={12}
-                                    defaultValue={
-                                      new Time(
-                                        parseTime(exception.time_end)[0],
-                                        parseTime(exception.time_end)[1]
-                                      )
-                                    }
-                                    label={`Finalización excepción ${
-                                      index + 1
-                                    }`}
-                                    labelPlacement="outside"
-                                  />
-                                </div>
+                            <div className="flex flex-col gap-4 md:grid md:grid-cols-1 md:gap-2">
+                              {exceptions.map((exception, index) => (
+                                <>
+                                  <div className="flex flex-row justify-between items-center">
+                                    <p className="text-sm font-semibold">
+                                      Excepción {index + 1}
+                                    </p>
+                                    <ConfirmDialog
+                                      isOpen={isDialogOpen}
+                                      onClose={handleClose}
+                                      onConfirm={() => {
+                                        deleteException(
+                                          exception.date_start,
+                                          exception.date_end,
+                                          exception.time_start,
+                                          exception.time_end
+                                        );
+                                      }}
+                                      title={"Eliminar excepción"}
+                                      message={`¿Estás seguro de eliminar la excepción del día ${
+                                        exception.date_start
+                                      } al día ${
+                                        exception.date_end
+                                      } de ${parsedTime(
+                                        exception.time_start
+                                      )} a ${parsedTime(exception.time_end)}?`}
+                                      buttonText={"Eliminar"}
+                                    />
+                                    <Button
+                                      size="sm"
+                                      isIconOnly
+                                      color="danger"
+                                      variant="light"
+                                      onPress={() => handleOpen()}
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={2}
+                                        stroke="currentColor"
+                                        className="size-4"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                        />
+                                      </svg>
+                                    </Button>
+                                  </div>
+                                  <div className="flex gap-4" key={index}>
+                                    <TimeInput
+                                      isReadOnly={editMode ? false : true}
+                                      hourCycle={12}
+                                      defaultValue={
+                                        new Time(
+                                          parseTime(exception.time_start)[0],
+                                          parseTime(exception.time_start)[1]
+                                        )
+                                      }
+                                      label={`Inicio excepción`}
+                                      labelPlacement="outside"
+                                    />
+                                    <TimeInput
+                                      isReadOnly={editMode ? false : true}
+                                      hourCycle={12}
+                                      defaultValue={
+                                        new Time(
+                                          parseTime(exception.time_end)[0],
+                                          parseTime(exception.time_end)[1]
+                                        )
+                                      }
+                                      label={`Finalización excepción`}
+                                      labelPlacement="outside"
+                                    />
+                                  </div>
+                                </>
                               ))}
                             </div>
                           </article>
                         ) : (
-                          <p className="font-light text-sm">
+                          <p className="font-light text-sm w-full text-center mt-5">
                             No hay excepciones
                           </p>
                         )
                       ) : (
                         <article className="flex flex-col gap-4">
-                          <p className="font-semibold text-medium">
+                          <p className="font-semibold text-lg">
                             Excepción del dia
                           </p>
-                          <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-4">
+                          <div className="flex gap-4">
                             <TimeInput
                               isReadOnly={editMode ? false : true}
                               hourCycle={12}
@@ -201,6 +336,7 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                                   parseTime(dataDay.exception.time_start)[1]
                                 )
                               }
+                              classNames={"font-semibold text-sm"}
                               label={`Inicio excepción`}
                               labelPlacement="outside"
                             />
@@ -230,7 +366,6 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                   <>
                     <Button
                       color="danger"
-                      className="font-semibold"
                       variant="light"
                       onPress={editMode ? () => setEditMode(false) : onClose}
                     >
@@ -267,7 +402,11 @@ export const ViewDate = ({ month, color, day, dataDay }) => {
                       }
                       className="font-semibold"
                     >
-                      {editMode ? "Guardar cambios" : "Editar horario"}
+                      {editMode
+                        ? "Guardar cambios"
+                        : dataDay?.time === null
+                        ? "Editar excepción"
+                        : "Editar horario"}
                     </Button>
                   </>
                 )}
