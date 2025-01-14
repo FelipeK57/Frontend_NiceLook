@@ -46,9 +46,9 @@ function ServiceCard({ service, onSelect, duration, color, selectedServices }) {
     >
       <CardBody className="overflow-visible p-0">
         <div className="aspect-square rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center mb-4">
-          {service.image_base64 ? (
+          {service.service.image_base64 ? (
             <Image
-              src={service.image_base64}
+              src={service.service.image_base64}
               alt="Imagen de perfil"
               className="object-cover w-full h-auto"
               // removeWrapper
