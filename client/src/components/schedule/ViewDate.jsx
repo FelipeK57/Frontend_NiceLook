@@ -14,6 +14,7 @@ import { useWindowWidth } from "@/hooks/useWindowWidth";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ConfirmDialog } from "../global/ConfirmDialog";
+import { TrashIcon } from "../icons/TrashIcon";
 
 const parsedTime = (time) => {
   return time.toString().slice(0, 5);
@@ -34,11 +35,17 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
   // Exceptions
   const [exceptions, setExceptions] = useState([]);
 
-  // Confirm Dialog
+  // Confirm Dialog Exceptions
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   const handleOpen = () => setDialogOpen(true);
   const handleClose = () => setDialogOpen(false);
+
+  // Confirm Dialog Time
+  const [isDialogTimeOpen, setDialogTimeOpen] = useState(false);
+
+  const handleTimeOpen = () => setDialogTimeOpen(true);
+  const handleTimeClose = () => setDialogTimeOpen(false);
 
   const parseTime = (timeString) => {
     if (!timeString) return [0, 0];
@@ -67,8 +74,41 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
     updateTimes();
   }, [dataDay]);
 
-  const saveChanges = () => {
-    console.log("Guardando cambios");
+  // const saveChanges = async () => {
+  //   try {
+  //     const response = await axios.patch(
+  //       `http://localhost:8000/employee/update_time/${Cookies.get(
+  //         "id_employee"
+  //       )}/`
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const changeTimeToException = async (date) => {
+    try {
+      setDialogTimeOpen(true);
+      console.log(date);
+      const response = await axios.delete(
+        `http://localhost:8000/employee/delete_time/${Cookies.get(
+          "id_employee"
+        )}/`,
+        {
+          params: {
+            date,
+          },
+        }
+      );
+      setStartTime1(null);
+      setStartTime2(null);
+      setEndTime1(null);
+      setEndTime2(null);
+      setReload(!reload);
+      setDialogTimeOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const deleteException = async (
@@ -79,7 +119,6 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
   ) => {
     try {
       setDialogOpen(true);
-      console.log(date_start, date_end, time_start, time_end);
       const response = await axios.delete(
         `http://localhost:8000/employee/delete_exception/${Cookies.get(
           "id_employee"
@@ -104,6 +143,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
       exceptions.splice(exceptions.indexOf(deleteException), 1);
       setExceptions([...exceptions]);
       setReload(!reload);
+      setDialogOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -146,26 +186,22 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                             </p>
                             <Button
                               size="sm"
-                              isIconOnly
                               color="danger"
                               variant="light"
-                              onPress={() => console.log("Eliminar horario")}
+                              onPress={() => handleTimeOpen()}
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={2}
-                                stroke="currentColor"
-                                className="size-4"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                />
-                              </svg>
+                              Definir como excepción
                             </Button>
+                            <ConfirmDialog
+                              isOpen={isDialogTimeOpen}
+                              onClose={handleTimeClose}
+                              onConfirm={() =>
+                                changeTimeToException(dataDay.time.date_start)
+                              }
+                              title={"Definir como excepción"}
+                              message={`¿Estás seguro de convertir el día ${day} de ${month} en una excepción?, puedes eliminarla en cualquier momento y volver a tener tu horario.`}
+                              buttonText={"Cambiar a excepción"}
+                            />
                           </div>
                           <div className="flex flex-col gap-4 md:grid md:grid-cols-1 md:gap-4">
                             <p className="font-semibold text-sm">
@@ -175,7 +211,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                             </p>
                             <div className="flex gap-4">
                               <TimeInput
-                                isReadOnly={editMode ? false : true}
+                                isReadOnly
                                 hourCycle={12}
                                 value={startTime1}
                                 defaultValue={startTime1}
@@ -184,7 +220,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                                 labelPlacement="outside"
                               />
                               <TimeInput
-                                isReadOnly={editMode ? false : true}
+                                isReadOnly
                                 hourCycle={12}
                                 value={endTime1}
                                 defaultValue={endTime1}
@@ -200,7 +236,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                                 </p>
                                 <div className="flex gap-4">
                                   <TimeInput
-                                    isReadOnly={editMode ? false : true}
+                                    isReadOnly
                                     hourCycle={12}
                                     value={startTime2}
                                     defaultValue={startTime2}
@@ -209,7 +245,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                                     labelPlacement="outside"
                                   />
                                   <TimeInput
-                                    isReadOnly={editMode ? false : true}
+                                    isReadOnly
                                     hourCycle={12}
                                     value={endTime2}
                                     defaultValue={endTime2}
@@ -270,20 +306,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                                       variant="light"
                                       onPress={() => handleOpen()}
                                     >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={2}
-                                        stroke="currentColor"
-                                        className="size-4"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                        />
-                                      </svg>
+                                      <TrashIcon />
                                     </Button>
                                   </div>
                                   <div className="flex gap-4" key={index}>
@@ -323,9 +346,41 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                         )
                       ) : (
                         <article className="flex flex-col gap-4">
-                          <p className="font-semibold text-lg">
-                            Excepción del dia
-                          </p>
+                          <div className="flex flex-row justify-between items-center">
+                            <p className="font-semibold text-lg">
+                              Excepción del dia
+                            </p>
+                            <ConfirmDialog
+                              isOpen={isDialogOpen}
+                              onClose={handleClose}
+                              onConfirm={() => {
+                                deleteException(
+                                  dataDay.exception.date_start,
+                                  dataDay.exception.date_end,
+                                  dataDay.exception.time_start,
+                                  dataDay.exception.time_end
+                                );
+                              }}
+                              title={"Eliminar excepción"}
+                              message={`¿Estás seguro de eliminar la excepción del día ${
+                                dataDay.exception.date_start
+                              } al día ${
+                                dataDay.exception.date_end
+                              } de ${parsedTime(
+                                dataDay.exception.time_start
+                              )} a ${parsedTime(dataDay.exception.time_end)}?`}
+                              buttonText={"Eliminar"}
+                            />
+                            <Button
+                              size="sm"
+                              isIconOnly
+                              color="danger"
+                              variant="light"
+                              onPress={() => handleOpen()}
+                            >
+                              <TrashIcon />
+                            </Button>
+                          </div>
                           <div className="flex gap-4">
                             <TimeInput
                               isReadOnly={editMode ? false : true}
@@ -365,49 +420,47 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                 {!dataDay ? null : (
                   <>
                     <Button
-                      color="danger"
+                      color="default"
                       variant="light"
                       onPress={editMode ? () => setEditMode(false) : onClose}
                     >
-                      {editMode ? "Cancelar cambios" : "Cerrar horario"}
+                      Salir
                     </Button>
-                    <Button
-                      color="primary"
-                      onPress={
-                        !editMode
-                          ? () => setEditMode(true)
-                          : () => {
-                              saveChanges();
-                              setEditMode(false);
-                              onClose();
-                            }
-                      }
-                      startContent={
-                        !editMode ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={2}
-                            stroke="currentColor"
-                            className="size-4"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                            />
-                          </svg>
-                        ) : null
-                      }
-                      className="font-semibold"
-                    >
-                      {editMode
-                        ? "Guardar cambios"
-                        : dataDay?.time === null
-                        ? "Editar excepción"
-                        : "Editar horario"}
-                    </Button>
+                    {/* {dataDay.state === "Completa" ? null : (
+                      <Button
+                        color="primary"
+                        onPress={
+                          !editMode
+                            ? () => setEditMode(true)
+                            : () => {
+                                saveChanges();
+                                setEditMode(false);
+                                onClose();
+                              }
+                        }
+                        startContent={
+                          !editMode ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={2}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                              />
+                            </svg>
+                          ) : null
+                        }
+                        className="font-semibold"
+                      >
+                        {editMode ? "Guardar cambios" : "Editar excepción"}
+                      </Button>
+                    )} */}
                   </>
                 )}
               </ModalFooter>

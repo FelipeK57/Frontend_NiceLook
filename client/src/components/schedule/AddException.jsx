@@ -57,8 +57,13 @@ export const AddException = ({ reload, setReload }) => {
       );
       console.log(response);
       setReload(!reload);
+      onOpenChange();
     } catch (error) {
-      console.log(error);
+      if (error.response.data.limit_exceptions) {
+        alert(
+          "No puedes tener más de 2 excepciones activas, elimina una y asociala con la excepción que deseas crear."
+        );
+      }
     }
   };
 
@@ -134,7 +139,6 @@ export const AddException = ({ reload, setReload }) => {
                 <ButtonCustom
                   action={() => {
                     createException();
-                    onClose();
                   }}
                   name={"Crear"}
                   primary
