@@ -25,7 +25,7 @@ const ServiceSelector = ({ services, onSelectService, selectedServices }) => {
   );
 
   return (
-    <div className="w-full space-y-4 max-h-[500px]">
+    <div className="w-full space-y-4">
       <h3 className="text-lg font-semibold">Selecciona un servicio</h3>
       <Input
         placeholder="Buscar servicio"
@@ -34,7 +34,7 @@ const ServiceSelector = ({ services, onSelectService, selectedServices }) => {
         startContent={<Search className="text-default-400" />}
         variant="bordered"
       />
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 max-h-[500px] overflow-auto px-1">
         {filteredServices.length > 0 ? (
           filteredServices.map((service) => (
             <ServiceCard
