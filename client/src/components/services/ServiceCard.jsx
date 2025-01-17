@@ -40,7 +40,7 @@ function ServiceCard({ service, onSelect, duration, color, selectedServices }) {
   const formattedDuration = formatDuration(duration);
   return (
     <Card
-      className="h-fit w-full max-w-64 p-4"
+      className="h-fit w-full max-w-64 p-4 my-1"
       shadow="sm"
       //   isPressable
     >
@@ -62,7 +62,7 @@ function ServiceCard({ service, onSelect, duration, color, selectedServices }) {
         <p className="text-default-600 text-sm mb-4">{formattedDuration}</p>
         <AuthModal />
       </CardBody>
-      <CardFooter className="text-small items-start flex flex-col gap-2 whitespace-nowrap pb-0">
+      <CardFooter className="text-small items-start flex flex-col gap-2 whitespace-nowrap py-0">
         <ButtonCustom
           action={() => handleSelectService(service)}
           classStyles="self-center"
