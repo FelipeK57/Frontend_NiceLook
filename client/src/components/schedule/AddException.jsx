@@ -13,10 +13,59 @@ import ButtonCustom from "../global/ButtonCustom";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { TimeInput } from "@nextui-org/react";
 import { Time } from "@internationalized/date";
+import axios from "axios";
+import { useState } from "react";
+import Cookies from "js-cookie";
+import { today, getLocalTimeZone } from "@internationalized/date";
 
-export const AddException = () => {
+const parseDate = (date) => {
+  // Ejemplo de formato de fecha: 2024-01-03
+  return date.toString().slice(0, 10);
+};
+
+const parseTime = (time) => {
+  return time.toString().slice(0, 5);
+};
+
+export const AddException = ({ reload, setReload }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const width = useWindowWidth();
+
+  const [startTime, setStartTime] = useState(new Time(6, 0));
+  const [endTime, setEndTime] = useState(new Time(12, 0));
+
+  const [rangeCalendarValue, setRangeCalendarValue] = useState({
+    start: today(getLocalTimeZone()),
+    end: today(getLocalTimeZone()).add({ weeks: 1 }),
+  });
+
+  const [reason, setReason] = useState("");
+
+  const createException = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/employee/create_exception/${Cookies.get(
+          "id_employee"
+        )}/`,
+        {
+          start_date: parseDate(rangeCalendarValue.start),
+          end_date: parseDate(rangeCalendarValue.end),
+          reason: reason,
+          time_start: parseTime(startTime),
+          time_end: parseTime(endTime),
+        }
+      );
+      console.log(response);
+      setReload(!reload);
+      onOpenChange();
+    } catch (error) {
+      if (error.response.data.limit_exceptions) {
+        alert(
+          "No puedes tener más de 2 excepciones activas, elimina una y asociala con la excepción que deseas crear."
+        );
+      }
+    }
+  };
 
   return (
     <>
@@ -39,28 +88,36 @@ export const AddException = () => {
                   <p className="font-semibold text-center">
                     Fecha o rango de fechas en el que no vas a trabajar
                   </p>
-                  <RangeCalendar color="danger" />
+                  <RangeCalendar
+                    value={rangeCalendarValue}
+                    onChange={setRangeCalendarValue}
+                    color="danger"
+                  />
                 </section>
                 <section className="flex flex-col gap-4 px-10">
                   <p className="font-semibold text-center">
-                    Intervalos de horas en la no estaras disponible
+                    Intervalos de horas en la que no estaras disponible
                   </p>
                   <div className="flex flex-col gap-4 w-full">
                     <TimeInput
                       hourCycle={12}
-                      defaultValue={new Time(6, 0)}
+                      value={startTime}
+                      defaultValue={startTime}
                       label={"Hora de inicio"}
                       labelPlacement="outside"
-                      onChange={() => {
-                        setStartTimeInterval1;
+                      onChange={(value) => {
+                        setStartTime(value);
                       }}
                     />
                     <TimeInput
                       hourCycle={12}
-                      defaultValue={new Time(18, 0)}
+                      value={endTime}
+                      defaultValue={endTime}
                       label={"Hora de finalización"}
                       labelPlacement="outside"
-                      onChange={() => setEndTimeInterval1}
+                      onChange={(value) => {
+                        setEndTime(value);
+                      }}
                     />
                   </div>
                   <div>
@@ -69,6 +126,8 @@ export const AddException = () => {
                       label="Razón de la excepción"
                       labelPlacement="outside"
                       placeholder="Escribe la razón por la que no vas a asistir"
+                      value={reason}
+                      onValueChange={setReason}
                     />
                   </div>
                 </section>
@@ -77,7 +136,13 @@ export const AddException = () => {
                 <Button onPress={onClose} color="danger" variant="light">
                   Cancelar
                 </Button>
-                <ButtonCustom action={onClose} name={"Crear"} primary />
+                <ButtonCustom
+                  action={() => {
+                    createException();
+                  }}
+                  name={"Crear"}
+                  primary
+                />
               </ModalFooter>
             </>
           )}

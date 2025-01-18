@@ -44,6 +44,8 @@ function TimesManagement() {
   const [dayStates, setDayStates] = useState({});
   const [openTooltip, setOpenTooltip] = useState(false);
 
+  const [reload, setReload] = useState(false);
+
   useEffect(() => {
     const fetchTimes = async () => {
       try {
@@ -61,7 +63,7 @@ function TimesManagement() {
     };
 
     fetchTimes();
-  }, [month]);
+  }, [month, reload]);
 
   const handleNextMonth = () => {
     if (month !== 11) {
@@ -115,19 +117,31 @@ function TimesManagement() {
           </Button>
         </Tooltip>
       </header>
-      <section className="flex flex-col h-full items-center gap-4">
+      <section className="flex flex-col h-full justify-evenly items-center gap-4">
         <DateNavbar
           handlePreviousMonth={handlePreviousMonth}
           handleNextMonth={handleNextMonth}
           month={months[month].name}
           year={year}
         />
-        <Calendar month2={month} year2={year} dayStates={dayStates} />
+        <Calendar
+          month2={month}
+          year2={year}
+          dayStates={dayStates}
+          reload={reload}
+          setReload={setReload}
+        />
+        <section className="flex flex-col gap-6">
+          <div className="flex flex-row gap-6 flex-grow justify-between md:justify-start">
+            <AddTimes reload={reload} setReload={setReload} />
+            <AddException reload={reload} setReload={setReload} />
+          </div>
+        </section>
       </section>
     </main>
   );
 }
-const Calendar = ({ month2, dayStates, year2 }) => {
+const Calendar = ({ month2, dayStates, year2, reload, setReload }) => {
   const [monthInfo, setMonthInfo] = useState({
     month: null,
     year: null,
@@ -251,7 +265,6 @@ const Calendar = ({ month2, dayStates, year2 }) => {
                     )} flex justify-center items-center ${getColorClass(
                       dateKey
                     )}`}
-                    j
                   >
                     {day ? (
                       <ViewDate
@@ -259,6 +272,8 @@ const Calendar = ({ month2, dayStates, year2 }) => {
                         color={colorClass}
                         day={day}
                         dataDay={dataDay}
+                        reload={reload}
+                        setReload={setReload}
                       />
                     ) : null}
                   </div>
@@ -268,12 +283,6 @@ const Calendar = ({ month2, dayStates, year2 }) => {
           ))}
         </article>
       </div>
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-row gap-6 flex-grow justify-between md:justify-start">
-          <AddTimes />
-          <AddException />
-        </div>
-      </section>
     </>
   );
 };
