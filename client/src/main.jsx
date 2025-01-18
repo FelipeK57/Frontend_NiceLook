@@ -262,6 +262,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         pauseOnHover
         position="bottom-right"
         transition={slide}
+        limit={4}
       />
     </GoogleOAuthProvider>
   </React.StrictMode>

@@ -40,15 +40,15 @@ function ServiceCard({ service, onSelect, duration, color, selectedServices }) {
   const formattedDuration = formatDuration(duration);
   return (
     <Card
-      className="h-fit w-full max-w-64 p-4"
+      className="h-fit w-full max-w-64 p-4 my-1"
       shadow="sm"
       //   isPressable
     >
       <CardBody className="overflow-visible p-0">
         <div className="aspect-square rounded-xl overflow-hidden border-1 bg-neutral-100 flex items-center justify-center mb-4">
-          {service.image_base64 ? (
+          {service.service.image_base64 ? (
             <Image
-              src={service.image_base64}
+              src={service.service.image_base64}
               alt="Imagen de perfil"
               className="object-cover w-full h-auto"
               // removeWrapper
@@ -62,12 +62,12 @@ function ServiceCard({ service, onSelect, duration, color, selectedServices }) {
         <p className="text-default-600 text-sm mb-4">{formattedDuration}</p>
         <AuthModal />
       </CardBody>
-      <CardFooter className="text-small items-start flex flex-col gap-2 whitespace-nowrap pb-0">
+      <CardFooter className="text-small items-start flex flex-col gap-2 whitespace-nowrap py-0">
         <ButtonCustom
           action={() => handleSelectService(service)}
           classStyles="self-center"
           color={color}
-          startContent={selectedServices > 0 && <Check />}
+          startContent={selectedServices.includes(service.id) && <Check />}
         >
           {selectedServices.includes(service.id)
             ? "Seleccionado"

@@ -50,7 +50,7 @@ const EmployeeProfile = () => {
         "Servicio seleccionado",
         `Seleccionaste ${selectedService.service.name}`
       );
-      setPriceTotal((prev) => prev + selectedService.price);
+      setPriceTotal((prev) => prev + selectedService.service.price);
     } else {
       handleRemoveService(selectedService);
     }
@@ -61,7 +61,7 @@ const EmployeeProfile = () => {
       prev.filter((id) => id !== serviceToRemove.id)
     );
     setService((prev) => prev.filter((item) => item.id !== serviceToRemove.id));
-    setPriceTotal((prev) => prev - serviceToRemove.price);
+    setPriceTotal((prev) => prev - serviceToRemove.service.price);
   };
 
   return (
@@ -75,12 +75,12 @@ const EmployeeProfile = () => {
         Volver
       </Button>
 
-      <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
+      <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
         <div className="space-y-6">
           {/* Employee Info */}
           <Card>
             <CardBody className="flex flex-row items-start gap-4 p-8">
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-neutral-100 flex items-center justify-center">
+              <div className="w-24 h-24 rounded-md overflow-hidden bg-neutral-100 flex items-center justify-center">
                 {employee.image ? (
                   <Image
                     src={employee.image}
@@ -95,7 +95,7 @@ const EmployeeProfile = () => {
                 {loading ? (
                   <Skeleton className="w-32 h-8 mb-2" />
                 ) : (
-                  <h1 className="text-2xl font-bold mb-2">
+                  <h1 className="text-2xl font-bold -translate-y-1">
                     {employee.first_name} {employee.last_name}
                   </h1>
                 )}
@@ -121,7 +121,7 @@ const EmployeeProfile = () => {
         </div>
 
         {/* Tarjeta de agendar cita */}
-        <div className="sticky top-32 h-max">
+        <div className="lg:sticky lg:top-32 h-max">
           <ScheduleAppointment
             services={service}
             servicesSelected={servicesSelected}
