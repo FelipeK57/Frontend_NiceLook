@@ -20,7 +20,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./client/src/"),
+      "@": path.resolve(__dirname, "./src"), // Este alias sigue apuntando a src dentro de client
     },
   },
+  root: "./", // Opcional, si estás ejecutando directamente desde la carpeta client
 });
