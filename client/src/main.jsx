@@ -42,6 +42,7 @@ import ServiceProfessional from "./pages/employee/ServicesProfessional.jsx";
 import ReviewsEstablishment from "./pages/establishment/ReviewsEstablishment.jsx";
 import CustomerAppointments from "@/pages/customer/CustomerAppointments.jsx";
 import TimesManagement from "./pages/employee/TimesManagement.jsx";
+import { EmployeesLogin } from "./pages/auth/employee/EmployeesLogin.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -189,7 +190,7 @@ const routes = createBrowserRouter([
       {
         id: "employee-login",
         path: "login",
-        element: <EmployeeLogin />,
+        element: <EmployeesLogin />,
       },
       {
         id: "employee-dashboard",
