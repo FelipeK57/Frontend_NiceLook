@@ -1,27 +1,27 @@
 import axios from "axios";
 
 const employeeServicesApi = axios.create({
-    baseURL: "http://localhost:8000/employee_services",
+    baseURL: `${process.env.API_URL}/employee_services`,
 });
 
 const establishmentServicesApi = axios.create({
-    baseURL: "http://localhost:8000/establisment",
+    baseURL: `${process.env.API_URL}/establisment`,
 });
 
 const employeeApi = axios.create({
-    baseURL: "http://localhost:8000/employee",
+    baseURL: `${process.env.API_URL}/employee`,
 });
 
 const serviceApi = axios.create({
-    baseURL: "http://localhost:8000/service",
+    baseURL: `${process.env.API_URL}/service`,
 });
 
 const review = axios.create({
-    baseURL: "http://localhost:8000/review_employee",
+    baseURL: `${process.env.API_URL}/review_employee`,
 });
 
 const clientApi = axios.create({
-    baseURL: "http://localhost:8000/client",
+    baseURL: `${process.env.API_URL}/client`,
 });
 
 //=====================================================================================

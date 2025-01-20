@@ -77,7 +77,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
   // const saveChanges = async () => {
   //   try {
   //     const response = await axios.patch(
-  //       `http://localhost:8000/employee/update_time/${Cookies.get(
+  //       `${process.env.API_URL}/employee/update_time/${Cookies.get(
   //         "id_employee"
   //       )}/`
   //     );
@@ -91,7 +91,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
       setDialogTimeOpen(true);
       console.log(date);
       const response = await axios.delete(
-        `http://localhost:8000/employee/delete_time/${Cookies.get(
+        `${process.env.API_URL}/employee/delete_time/${Cookies.get(
           "id_employee"
         )}/`,
         {
@@ -120,7 +120,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
     try {
       setDialogOpen(true);
       const response = await axios.delete(
-        `http://localhost:8000/employee/delete_exception/${Cookies.get(
+        `${process.env.API_URL}/employee/delete_exception/${Cookies.get(
           "id_employee"
         )}/`,
         {

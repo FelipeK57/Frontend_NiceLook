@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const AppointmentApi = axios.create({
-    baseURL: "http://localhost:8000/client/",
+    baseURL: `${process.env.API_URL}/client/`,
 });
 
 export function getClientHistory(client_id) {
@@ -11,7 +11,7 @@ export function getClientHistory(client_id) {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 const ReviewApi = axios.create({
-    baseURL: "http://localhost:8000/review_employee/",
+    baseURL: `${process.env.API_URL}/review_employee/`,
 });
 
 export function getClientReviews(client_id) {
@@ -21,7 +21,7 @@ export function getClientReviews(client_id) {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 const ServicesApi = axios.create({
-    baseURL: "http://localhost:8000/api/list_service/",
+    baseURL: `${process.env.API_URL}/api/list_service/`,
 });
 
 export function getServices(establishment_id) {
@@ -31,7 +31,7 @@ export function getServices(establishment_id) {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 const ProductsApi = axios.create({
-    baseURL: "http://localhost:8000/client/client_product_purchases",
+    baseURL: `${process.env.API_URL}/client/client_product_purchases `,
 });
 
 export function getProductsHistory(client_id) {

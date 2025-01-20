@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const ReceptionistApi = axios.create({
-    baseURL: "http://localhost:8000/receptionist",
+    baseURL: `${process.env.API_URL}/receptionist`,
 });
 
 export function loginReceptionist(token) {

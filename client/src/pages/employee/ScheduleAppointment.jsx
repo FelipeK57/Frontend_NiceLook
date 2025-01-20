@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import ScheduleModal from "@/components/appointmentsEmployee/ScheduleModal";
 import ButtonCustom from "@/components/global/ButtonCustom";
 import { useDisclosure } from "@nextui-org/react";
-import { createEmployeeSchedule} from "@/api/employee/employee";
+import { createEmployeeSchedule} from "@/Api/employee/employee";
 
 function ScheduleAppointment() {
   const fecha = new Date();
@@ -28,7 +28,7 @@ function ScheduleAppointment() {
       const year = date.toDate().getFullYear();
       try {
         const response = await axios.get(
-          `http://localhost:8000/employee/schedule_employee/${Cookies.get(
+          `${process.env.API_URL}/employee/schedule_employee/${Cookies.get(
             "id_employee"
           )}/`,
           {

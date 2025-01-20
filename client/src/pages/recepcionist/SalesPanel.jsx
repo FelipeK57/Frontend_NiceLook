@@ -34,7 +34,7 @@ function SalesPanel() {
         const month = date.toDate().getMonth() + 1;
         const year = date.toDate().getFullYear();
         const response = await axios.get(
-          `http://localhost:8000/receptionist/products_sold/`,
+          `${process.env.API_URL}/receptionist/products_sold/`,
           {
             params: {
               id_establisment: establishmentId,
@@ -61,7 +61,7 @@ function SalesPanel() {
       const month = date.toDate().getMonth() + 1;
       const year = date.toDate().getFullYear();
       const response = await axios.get(
-        `http://localhost:8000/establisment/get-filter-payments-service/${establishmentId}/`,
+        `${process.env.API_URL}/establisment/get-filter-payments-service/${establishmentId}/`,
         {
           params: {
             day: day,

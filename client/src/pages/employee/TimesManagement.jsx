@@ -50,7 +50,7 @@ function TimesManagement() {
     const fetchTimes = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/times/${Cookies.get("id_employee")}`
+          `${process.env.API_URL}/api/times/${Cookies.get("id_employee")}`
         );
 
         const times = response.data.times;

@@ -87,7 +87,7 @@ function ModalNewService({ isOpen, onClose }) {
     console.log("Creating service...");
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/create_service/",
+        `${process.env.API_URL}/api/create_service/`,
         formData,
         {
           headers: {

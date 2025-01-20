@@ -32,7 +32,7 @@ function LoginModal({ isOpen, onClose, onOpenChange }) {
         console.error("No se recibio el token de google");
         return;
       }
-      const response = await axios.post("http://localhost:8000/client/login/", {
+      const response = await axios.post(`${process.env.API_URL}/client/login/`, {
         token,
       });
       console.log("Respuesta del servidor", response);
@@ -75,7 +75,7 @@ function LoginModal({ isOpen, onClose, onOpenChange }) {
       }
   
       const response = await axios.post(
-        "http://localhost:8000/client/client_login/",
+        `${process.env.API_URL}/client/client_login/`,
         { email, password }
       );
   

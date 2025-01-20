@@ -125,7 +125,7 @@ function ModalEditService({
       }
       console.log(idService, name, price, commission, category, state);
       const response = await axios.put(
-        "http://localhost:8000/api/update_service/",
+        `${process.env.API_URL}/api/update_service/`,
         formData,
         {
           headers: {

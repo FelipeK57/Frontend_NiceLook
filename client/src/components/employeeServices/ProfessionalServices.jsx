@@ -31,7 +31,7 @@ function ProfessionalServices({ reload, setReload }) {
     const fetchProfessionalServices = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/employee_services/employeeServicesList/${Cookies.get(
+          `${process.env.API_URL}/employee_services/employeeServicesList/${Cookies.get(
             "id_employee"
           )}/`
         );
@@ -48,8 +48,8 @@ function ProfessionalServices({ reload, setReload }) {
   const deleteService = async (service) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/employee_services/employeeServiceDelete/${Cookies.get(
-          `id_employee`
+        `${process.env.API_URL}/employee_services/employeeServiceDelete/${Cookies.get(
+          "id_employee")}
         )}/${service.service.id}/`
       );
       console.log(response.data);
@@ -187,7 +187,7 @@ function ModalSetDuration({ isOpen, onClose, service_id, setReload, reload }) {
       ).padStart(2, "0")}:00`;
       console.log(duration);
       const response = await axios.post(
-        `http://localhost:8000/employee/setduration/${Cookies.get(
+        `${process.env.API_URL}/employee/setduration/${Cookies.get(
           "id_employee"
         )}/`,
         {

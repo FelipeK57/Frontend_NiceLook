@@ -34,7 +34,7 @@ function ServicesManagement() {
       console.log("Fetching services");
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/list_service/", {
+          `${process.env.API_URL}/api/list_service/`, {
             params: {
               establishment_id: Cookies.get("establishmentId"),
             }

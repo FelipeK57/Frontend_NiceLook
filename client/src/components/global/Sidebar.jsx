@@ -295,7 +295,7 @@ function Sidebar() {
     const fetchProfesionalImage = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/employee/get_photo/${Cookies.get(
+          `${process.env.API_URL}/employee/get_photo/${Cookies.get(
             "establishmentId"
           )}/${Cookies.get("id_employee")}/`
         );
@@ -311,7 +311,7 @@ function Sidebar() {
     const fetchLogo = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/image/get-logo/${Cookies.get(
+          `${process.env.API_URL}/image/get-logo/${Cookies.get(
             "establishmentId"
           )}`
         );
@@ -331,7 +331,7 @@ function Sidebar() {
     formData.append("image", profesionalImage);
     try {
       const response = await axios.post(
-        `http://localhost:8000/employee/upload_employee_photo/${Cookies.get(
+        `${process.env.API_URL}/employee/upload_employee_photo/${Cookies.get(
           "establishmentId"
         )}/${Cookies.get("id_employee")}/`,
         formData

@@ -44,7 +44,7 @@ export const AddException = ({ reload, setReload }) => {
   const createException = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/employee/create_exception/${Cookies.get(
+        `${process.env.API_URL}/employee/create_exception/${Cookies.get(
           "id_employee"
         )}/`,
         {

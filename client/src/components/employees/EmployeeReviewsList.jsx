@@ -3,7 +3,7 @@ import EmployeeReview from "./EmployeeReview";
 import { AccordionCustomContent, AccordionCustomTitle } from "./AccordionCustomContent";
 import PropTypes from "prop-types"
 import { useEffect, useState } from "react";
-import { getEmployeeReviews } from "@/api/employee/employee";
+import { getEmployeeReviews } from "@/Api/employee/employee";
 
 function EmployeeReviewsList({ employee }) {
 
