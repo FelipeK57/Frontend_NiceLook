@@ -1,4 +1,4 @@
-import { createReview, getService, updateReview } from "@/Api/employeeServices/employeeServicesApi";
+import { createReview, getService, updateReview } from "@/api/employeeServices/employeeServicesApi";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, useDisclosure } from "@nextui-org/react"
 import { Skeleton } from "@nextui-org/skeleton"
 import PropTypes from "prop-types"
