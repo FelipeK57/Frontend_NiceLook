@@ -3,7 +3,8 @@ import { DatePicker } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { parseDate } from "@internationalized/date";
 import dayjs from "dayjs";
-import { getHistoryAppointments } from "../../api/employee/employee";
+// import { getHistoryAppointments } from "../../api/employee/employee";
+import { getHistoryAppointments } from "@/api_feats/employee/employee";
 
 const RecordManagement = () => {
     const fecha = new Date();

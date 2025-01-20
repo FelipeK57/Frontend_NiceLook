@@ -1,7 +1,8 @@
 import { forwardRef, lazy, Suspense, useEffect, useImperativeHandle, useState } from "react";
 import { Accordion, AccordionItem, Button } from "@nextui-org/react";
 import { AccordionCustomTitle, AccordionCustomContent } from "./AccordionCustomContent";
-import { getEmployees } from "@/Api/employee/employee"
+// import { getEmployees } from "@/api/employee/employee"
+import { getEmployees } from "@/api_feats/employee/employee";
 import PropTypes from "prop-types"
 import Cookies from "js-cookie";
 

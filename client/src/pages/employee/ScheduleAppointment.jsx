@@ -7,7 +7,8 @@ import Cookies from "js-cookie";
 import ScheduleModal from "@/components/appointmentsEmployee/ScheduleModal";
 import ButtonCustom from "@/components/global/ButtonCustom";
 import { useDisclosure } from "@nextui-org/react";
-import { createEmployeeSchedule} from "@/api/employee/employee";
+// import { createEmployeeSchedule} from "@/api/employee/employee";
+import { createEmployeeSchedule } from "@/api_feats/employee/employee";
 
 function ScheduleAppointment() {
   const fecha = new Date();

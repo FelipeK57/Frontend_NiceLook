@@ -1,6 +1,7 @@
 import { Button } from "@nextui-org/react";
 import defaultImage from "../../assets/hola.png";
-import { addProductToCart, deleteProduct, removeProductFromCart } from "../../Api/product/product";
+// import { addProductToCart, deleteProduct, removeProductFromCart } from "../../Api/product/product";
+import { addProductToCart, deleteProduct, removeProductFromCart } from "@/api_feats/product/product";
 import useAddCart from "@/stores/useAddCart";
 import Cookies from "js-cookie";
 
