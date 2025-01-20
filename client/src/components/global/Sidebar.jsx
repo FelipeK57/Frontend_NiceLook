@@ -212,7 +212,27 @@ const employeeNavLinks = [
     path: "services",
   },
   {
-    name: "Mi agenda",
+    name: "Gestionar Agenda",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="size-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+        />
+      </svg>
+    ),
+    path: "management",
+  },
+  {
+    name: "Mis Citas",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -232,7 +252,7 @@ const employeeNavLinks = [
     path: "schedule",
   },
   {
-    name: "Historial de citas",
+    name: "Historial de Citas",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -275,11 +295,10 @@ function Sidebar() {
     const fetchProfesionalImage = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/employee/get_photo/${Cookies.get(
+          `${import.meta.env.VITE_API_URL}/employee/get_photo/${Cookies.get(
             "establishmentId"
           )}/${Cookies.get("id_employee")}/`
         );
-        console.log(response.data);
         setProfesionalImage(response.data.imagen_base64);
       } catch (error) {
         console.error(error);
@@ -292,7 +311,7 @@ function Sidebar() {
     const fetchLogo = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/image/get-logo/${Cookies.get(
+          `${import.meta.env.VITE_API_URL}/image/get-logo/${Cookies.get(
             "establishmentId"
           )}`
         );
@@ -312,7 +331,7 @@ function Sidebar() {
     formData.append("image", profesionalImage);
     try {
       const response = await axios.post(
-        `http://localhost:8000/employee/upload_employee_photo/${Cookies.get(
+        `${import.meta.env.VITE_API_URL}/employee/upload_employee_photo/${Cookies.get(
           "establishmentId"
         )}/${Cookies.get("id_employee")}/`,
         formData

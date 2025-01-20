@@ -36,7 +36,7 @@ function Service({ id, name, price, commission, category, state, image }) {
   const handleDeleteService = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:8000/api/delete_service/",
+        `${import.meta.env.VITE_API_URL}/api/delete_service/`,
         {
           params: {
             idService: id,

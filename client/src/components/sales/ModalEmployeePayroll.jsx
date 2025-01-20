@@ -28,7 +28,7 @@ function ModalEmployeePayroll({ isOpen, onClose, day, month, year }) {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:8000/receptionist/sales/`,
+        `${import.meta.env.VITE_API_URL}/receptionist/sales/`,
         {
           params: {
             code_employee: code,

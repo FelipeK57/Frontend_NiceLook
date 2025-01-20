@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, cssTransition } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import NotFound from "@/pages/NotFound.jsx";
@@ -41,6 +41,8 @@ import ScheduleAppointment from "./pages/employee/ScheduleAppointment.jsx";
 import ServiceProfessional from "./pages/employee/ServicesProfessional.jsx";
 import ReviewsEstablishment from "./pages/establishment/ReviewsEstablishment.jsx";
 import CustomerAppointments from "@/pages/customer/CustomerAppointments.jsx";
+import TimesManagement from "./pages/employee/TimesManagement.jsx";
+import { EmployeesLogin } from "./pages/auth/employee/EmployeesLogin.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -188,7 +190,7 @@ const routes = createBrowserRouter([
       {
         id: "employee-login",
         path: "login",
-        element: <EmployeeLogin />,
+        element: <EmployeesLogin />,
       },
       {
         id: "employee-dashboard",
@@ -199,6 +201,10 @@ const routes = createBrowserRouter([
             id: "employee-services",
             path: "services",
             element: <ServiceProfessional />,
+          },
+          {
+            path: "management",
+            element: <TimesManagement />,
           },
           {
             id: "employee-schedule",
@@ -243,11 +249,22 @@ const routes = createBrowserRouter([
   },
 ]);
 
+const slide = cssTransition({
+  enter: "slide-top",
+  exit: "slide-bottom",
+});
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId="659540305448-65l2ttvn04541tpuke3c411nrocbupdv.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
       <RouterProvider router={routes} />
+      <ToastContainer
+        pauseOnFocusLoss
+        pauseOnHover
+        position="bottom-right"
+        transition={slide}
+        limit={4}
+      />
     </GoogleOAuthProvider>
-    <ToastContainer />
   </React.StrictMode>
 );

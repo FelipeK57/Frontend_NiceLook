@@ -1,27 +1,27 @@
 import axios from "axios";
 
 const employeeServicesApi = axios.create({
-    baseURL: "http://localhost:8000/employee_services",
+    baseURL: `${import.meta.env.VITE_API_URL}/employee_services`,
 });
 
 const establishmentServicesApi = axios.create({
-    baseURL: "http://localhost:8000/establisment",
+    baseURL: `${import.meta.env.VITE_API_URL}/establisment`,
 });
 
 const employeeApi = axios.create({
-    baseURL: "http://localhost:8000/employee",
+    baseURL: `${import.meta.env.VITE_API_URL}/employee`,
 });
 
 const serviceApi = axios.create({
-    baseURL: "http://localhost:8000/service",
+    baseURL: `${import.meta.env.VITE_API_URL}/service`,
 });
 
 const review = axios.create({
-    baseURL: "http://localhost:8000/review_employee",
+    baseURL: `${import.meta.env.VITE_API_URL}/review_employee`,
 });
 
 const clientApi = axios.create({
-    baseURL: "http://localhost:8000/client",
+    baseURL: `${import.meta.env.VITE_API_URL}/client`,
 });
 
 //=====================================================================================

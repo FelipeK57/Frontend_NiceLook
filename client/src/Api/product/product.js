@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const ProductApi = axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: `${import.meta.env.VITE_API_URL}/api`,
 });
 
 // API para obtener productos por establecimiento (hasta 4 productos)

@@ -78,7 +78,7 @@ function AppointmentsManagement() {
       try {
         // Realizar la solicitud POST a la API
         const response = await axios.post(
-          "http://localhost:8000/api/appointment_list/",
+          `${import.meta.env.VITE_API_URL}/api/appointment_list/`,
           {
             id: Cookies.get("establishmentId"),
             day: day,

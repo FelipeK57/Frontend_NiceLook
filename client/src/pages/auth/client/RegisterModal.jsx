@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import ButtonCustom from "@/components/global/ButtonCustom";
 import InputCustom from "@/components/global/InputCustom";
 import LogoNiceLook from "@/components/ui/LogoNiceLook";
@@ -8,7 +9,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
+  // useDisclosure,
 } from "@nextui-org/react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
@@ -16,7 +17,7 @@ import useAuthStore from "@/stores/useAuthStore";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-function RegisterModal({ isOpen, onClose }) {
+function RegisterModal({ isOpen, onClose, onOpenChange }) {
   const { loginClient } = useAuthStore();
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -37,7 +38,7 @@ function RegisterModal({ isOpen, onClose }) {
         console.error("No se recibio el token de google");
         return;
       }
-      const response = await axios.post("http://localhost:8000/client/login/", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/client/login/`, {
         token,
       });
       console.log("Respuesta del servidor", response);
@@ -50,60 +51,94 @@ function RegisterModal({ isOpen, onClose }) {
     }
   };
 
-  const handleRegister = () => {
-    const newErrors = {
-      name: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      password: "",
-    };
+  const handleRegister = async () => {
+    try {
+      // Validación inicial de los campos
+      const newErrors = {
+        name: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        password: "",
+      };
 
-    if (!name) {
-      newErrors.name = "El nombre es requerido";
+      if (!name) {
+        newErrors.name = "El nombre es requerido";
+      }
+
+      if (!lastName) {
+        newErrors.lastName = "El apellido es requerido";
+      }
+
+      if (!phone) {
+        newErrors.phone = "El número de teléfono es requerido";
+      }
+
+      if (!email) {
+        newErrors.email = "El correo es requerido";
+      } else if (!email.includes("@")) {
+        newErrors.email = "El correo no es válido: debe contener un @";
+      }
+
+      if (!password) {
+        newErrors.password = "La contraseña es requerida";
+      } else if (password.length < 6) {
+        newErrors.password = "La contraseña debe tener al menos 6 caracteres";
+      }
+
+      setError(newErrors);
+
+      if (Object.values(newErrors).some((error) => error !== "")) {
+        return; // Salimos si hay errores de validación
+      }
+
+      // Solicitud al backend
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/client/client_signup/`,
+        {
+          first_name: name,
+          last_name: lastName,
+          phone,
+          email,
+          password,
+        }
+      );
+
+      // Si el registro es exitoso
+      if (response.status === 201) {
+        const { client_id } = response.data;
+        Cookies.set("client_id", client_id);
+        loginClient();
+        onClose();
+        window.location.reload();
+      }
+    } catch (error) {
+      // Manejar errores del backend
+      if (error.response && error.response.data) {
+        const backendError = error.response.data.Error; // Capturar el mensaje de error del backend
+        const newErrors = {};
+
+        if (backendError.includes("correo")) {
+          newErrors.email = backendError;
+        } else {
+          newErrors.general = backendError;
+        }
+
+        setError((prevErrors) => ({
+          ...prevErrors,
+          ...newErrors,
+        }));
+      } else {
+        console.error("Error inesperado:", error);
+        setError((prevErrors) => ({
+          ...prevErrors,
+          general: "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
+        }));
+      }
     }
-
-    if (!lastName) {
-      newErrors.lastName = "El apellido es requerido";
-    }
-
-    if (!email) {
-      newErrors.email = "El correo es requerido";
-    }
-
-    if (!email.includes("@")) {
-      newErrors.email = "El correo no es valido: debe contener un @";
-    }
-
-    if (!password) {
-      newErrors.password = "La contraseña es requerida";
-    }
-
-    if (password.length < 6) {
-      newErrors.password = "La contraseña debe tener al menos 6 caracteres";
-    }
-
-    setError(newErrors);
-
-    if (Object.values(newErrors).some((error) => error !== "")) {
-      return;
-    }
-
-    console.log(name, lastName, phone, email, password);
-
-    setName("");
-    setLastName("");
-    setPhone("");
-    setEmail("");
-    setPassword("");
-    setError({
-      name: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      password: "",
-    });
   };
+
+
 
   const handleClose = () => {
     setName("");
@@ -126,9 +161,11 @@ function RegisterModal({ isOpen, onClose }) {
       <Modal
         isOpen={isOpen}
         backdrop="blur"
-        onClose={onClose}
+        // onClose={onClose}
+        onOpenChange={onOpenChange}
         placement="center"
         size="md"
+        hideCloseButton
       >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
@@ -149,6 +186,8 @@ function RegisterModal({ isOpen, onClose }) {
               </p>
               <hr className="border-1 w-full border-slate-200" />
             </div>
+
+            {/* Campos de nombre y apellido */}
             <div className="flex flex-row gap-2 w-full">
               <InputCustom
                 value={name}
@@ -157,7 +196,7 @@ function RegisterModal({ isOpen, onClose }) {
                 label={"Nombre"}
                 placeholder={"Nombre"}
                 type={"text"}
-                errorMessage={error.name}
+                errorMessage={error.name} // Mostrar mensaje de error para "name"
                 isInvalid={!!error.name}
               />
               <InputCustom
@@ -167,27 +206,36 @@ function RegisterModal({ isOpen, onClose }) {
                 label={"Apellido"}
                 placeholder={"Apellido"}
                 type={"text"}
-                errorMessage={error.lastName}
+                errorMessage={error.lastName} // Mostrar mensaje de error para "lastName"
                 isInvalid={!!error.lastName}
               />
             </div>
+
+            {/* Campo de teléfono */}
             <InputCustom
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              label={"Número de telefono"}
-              placeholder={"Telefono"}
+              required
+              label={"Número de teléfono"}
+              placeholder={"Teléfono"}
               type={"number"}
+              errorMessage={error.phone} // Mostrar mensaje de error para "phone"
+              isInvalid={!!error.phone}
             />
+
+            {/* Campo de correo electrónico */}
             <InputCustom
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              label={"Correo electronico"}
-              placeholder={"Correo electronico"}
+              label={"Correo electrónico"}
+              placeholder={"Correo electrónico"}
               type={"email"}
-              errorMessage={error.email}
+              errorMessage={error.email} // Mostrar mensaje de error para "email"
               isInvalid={!!error.email}
             />
+
+            {/* Campo de contraseña */}
             <InputCustom
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -195,15 +243,20 @@ function RegisterModal({ isOpen, onClose }) {
               label={"Contraseña"}
               placeholder={"Contraseña"}
               type={"password"}
-              errorMessage={error.password}
+              errorMessage={error.password} // Mostrar mensaje de error para "password"
               isInvalid={!!error.password}
             />
+
+            {/* Mostrar mensaje de error general */}
+            {error.general && (
+              <p className="text-red-500 text-sm mt-2">{error.general}</p>
+            )}
           </ModalBody>
           <ModalFooter>
-            <Button onPress={handleClose} variant="light" color="danger">
+            <Button onPress={handleClose} variant="bordered">
               Cerrar
             </Button>
-            <ButtonCustom action={handleRegister} primary name={"Registrar"} />
+            <ButtonCustom action={handleRegister} primary name={"Registrarme"} />
           </ModalFooter>
         </ModalContent>
       </Modal>

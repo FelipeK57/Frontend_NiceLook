@@ -28,7 +28,7 @@ function ScheduleAppointment() {
       const year = date.toDate().getFullYear();
       try {
         const response = await axios.get(
-          `http://localhost:8000/employee/schedule_employee/${Cookies.get(
+          `${import.meta.env.VITE_API_URL}/employee/schedule_employee/${Cookies.get(
             "id_employee"
           )}/`,
           {
@@ -84,7 +84,7 @@ function ScheduleAppointment() {
         />
       </header>
       <main className="flex flex-col gap-4 pb-2">
-        <ButtonCustom
+        {/* <ButtonCustom
           name="Gestionar Horario"
           classStyles={"sm:mt-0 mt-2 sm:max-w-[280px] text-lg"}
           primary
@@ -95,7 +95,7 @@ function ScheduleAppointment() {
           onSave={handleSaveSchedule}
           onOpenChange={onOpenChange}
           employeeId={employeeId}
-        />
+        /> */}
         <div className="flex flex-row gap-4 justify-between bg-slate-300 p-2 rounded-3xl">
           <div className="flex items-center justify-center px-4 py-2 bg-[#ffffff] rounded-3xl">
             <p className="font-bold text-xl">Citas del dia</p>

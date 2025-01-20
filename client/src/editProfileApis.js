@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL para la API (cambiar según sea necesario)
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = `${import.meta.env.VITE_API_URL}`;
 
 // Función para obtener los datos del establecimiento (GET)
 export const obtenerEstablemiento = async (id) => {
