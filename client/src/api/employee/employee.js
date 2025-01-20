@@ -3,7 +3,7 @@ import axios from "axios";
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
 const EmployeesApi = axios.create({
-    baseURL: `${process.env.API_URL}/employee`,
+    baseURL: `${import.meta.env.VITE_API_URL}/employee`,
 });
 
 //query para obtener todos los empleados
@@ -50,7 +50,7 @@ export function getEmployeeReviews(professional_id){
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
 const CategoryApi = axios.create({
-    baseURL: "${process.env.API_URL}/category",
+    baseURL: "${import.meta.env.VITE_API_URL}/category",
 });
 
 export function getCategories() {
@@ -93,7 +93,7 @@ export function loginEmployee(token) {
 //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
 const RecepcionistApi = axios.create({
-    baseURL: "${process.env.API_URL}/receptionist",
+    baseURL: "${import.meta.env.VITE_API_URL}/receptionist",
 });
 
 export function updateReceptionist(receptionistId, first_name, last_name, phone, email, state) {

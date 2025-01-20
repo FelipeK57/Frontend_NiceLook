@@ -255,7 +255,7 @@ const slide = cssTransition({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={process.env.CLIENT_ID}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
       <RouterProvider router={routes} />
       <ToastContainer
         pauseOnFocusLoss

@@ -22,7 +22,7 @@ function ModalAddReview({ reload, setReload }) {
   const handleCompleteReview = async () => {
     try {
       const response = await axios.post(
-        `${process.env.API_URL}/reviews_establisment/create_review/${client_id}/${establishment_id}/`,
+        `${import.meta.env.VITE_API_URL}/reviews_establisment/create_review/${client_id}/${establishment_id}/`,
         {
           comment: comment,
           rating: rating,

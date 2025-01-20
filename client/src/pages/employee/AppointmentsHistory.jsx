@@ -24,7 +24,7 @@ function AppointmentsHistory() {
       const year = date.toDate().getFullYear();
       try {
         const response = await axios.get(
-          `${process.env.API_URL}/employee/history_appointments/${Cookies.get(
+          `${import.meta.env.VITE_API_URL}/employee/history_appointments/${Cookies.get(
             "id_employee"
           )}/`,
           {

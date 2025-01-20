@@ -38,7 +38,7 @@ function RegisterModal({ isOpen, onClose, onOpenChange }) {
         console.error("No se recibio el token de google");
         return;
       }
-      const response = await axios.post(`${process.env.API_URL}/client/login/`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/client/login/`, {
         token,
       });
       console.log("Respuesta del servidor", response);
@@ -94,7 +94,7 @@ function RegisterModal({ isOpen, onClose, onOpenChange }) {
 
       // Solicitud al backend
       const response = await axios.post(
-        `${process.env.API_URL}/client/client_signup/`,
+        `${import.meta.env.VITE_API_URL}/client/client_signup/`,
         {
           first_name: name,
           last_name: lastName,

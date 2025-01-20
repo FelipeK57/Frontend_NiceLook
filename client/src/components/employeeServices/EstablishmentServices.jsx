@@ -15,7 +15,7 @@ function EstablishmentServices({ reload, setReload }) {
     const fetchEstablismentServices = async () => {
       try {
         const response = await axios.get(
-          `${process.env.API_URL}/establisment/servicesByEstablisment/${Cookies.get(
+          `${import.meta.env.VITE_API_URL}/establisment/servicesByEstablisment/${Cookies.get(
             "id_employee"
           )}/`
         );
@@ -125,7 +125,7 @@ function ModalAddService({ isOpen, onClose, service_id, setReload, reload }) {
       ).padStart(2, "0")}:00`;
       console.log(duration);
       const response = await axios.post(
-        `${process.env.API_URL}/employee/addservice/${Cookies.get(
+        `${import.meta.env.VITE_API_URL}/employee/addservice/${Cookies.get(
           "id_employee"
         )}/`,
         {

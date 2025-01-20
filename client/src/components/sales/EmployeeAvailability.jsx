@@ -23,7 +23,7 @@ function EmployeeAvailability({ employee, date }) {
     const fetchAvailability = async () => {
       try {
         const response = await axios.get(
-          `${process.env.API_URL}/establisment/get_available/${employee.id}/`
+          `${import.meta.env.VITE_API_URL}/establisment/get_available/${employee.id}/`
         );
         console.log(response.data);
         setTimes(response.data.disponibilidad);

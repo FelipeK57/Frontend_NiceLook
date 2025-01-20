@@ -13,7 +13,7 @@ function ReviewsEstablishment() {
     const fetchReviews = async () => {
       try {
         const response = await axios.get(
-          `${process.env.API_URL}/reviews_establisment/get_reviews/${establishmentId}/`
+          `${import.meta.env.VITE_API_URL}/reviews_establisment/get_reviews/${establishmentId}/`
         );
         console.log("Reseñas:", response.data.reviews);
         setReviews(response.data.reviews);

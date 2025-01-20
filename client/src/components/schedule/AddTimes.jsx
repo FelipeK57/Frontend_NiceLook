@@ -39,7 +39,7 @@ export const AddTimes = ({ reload, setReload }) => {
   const createTime = async () => {
     try {
       const response = await axios.post(
-        `${process.env.API_URL}/employee/create_time/${Cookies.get(
+        `${import.meta.env.VITE_API_URL}/employee/create_time/${Cookies.get(
           "id_employee"
         )}/`,
         {

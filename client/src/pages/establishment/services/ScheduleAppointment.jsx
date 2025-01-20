@@ -76,7 +76,7 @@ const ScheduleAppointment = ({
       }
       setLoading(true);
       const response = await axios.post(
-        `${process.env.API_URL}/api/create_appointment/`,
+        `${import.meta.env.VITE_API_URL}/api/create_appointment/`,
         {
           cliente_id: Cookies.get("client_id"),
           employee_id: employeeId,

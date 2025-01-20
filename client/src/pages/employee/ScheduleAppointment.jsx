@@ -28,7 +28,7 @@ function ScheduleAppointment() {
       const year = date.toDate().getFullYear();
       try {
         const response = await axios.get(
-          `${process.env.API_URL}/employee/schedule_employee/${Cookies.get(
+          `${import.meta.env.VITE_API_URL}/employee/schedule_employee/${Cookies.get(
             "id_employee"
           )}/`,
           {

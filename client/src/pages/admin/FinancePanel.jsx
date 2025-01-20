@@ -35,7 +35,7 @@ function FinancePanel() {
       const month = date.toDate().getMonth() + 1;
       const year = date.toDate().getFullYear();
       const response = await axios.get(
-        `${process.env.API_URL}/establisment/get-filter-payments-service/${establishmentId}/`,
+        `${import.meta.env.VITE_API_URL}/establisment/get-filter-payments-service/${establishmentId}/`,
         {
           params: {
             day: day,
@@ -60,7 +60,7 @@ function FinancePanel() {
         const month = date.toDate().getMonth() + 1;
         const year = date.toDate().getFullYear();
         const response = await axios.get(
-          `${process.env.API_URL}/receptionist/products_sold/`,
+          `${import.meta.env.VITE_API_URL}/receptionist/products_sold/`,
           {
             params: {
               day: day,

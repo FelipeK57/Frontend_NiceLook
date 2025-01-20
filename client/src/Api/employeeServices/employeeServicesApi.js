@@ -1,27 +1,27 @@
 import axios from "axios";
 
 const employeeServicesApi = axios.create({
-    baseURL: `${process.env.API_URL}/employee_services`,
+    baseURL: `${import.meta.env.VITE_API_URL}/employee_services`,
 });
 
 const establishmentServicesApi = axios.create({
-    baseURL: `${process.env.API_URL}/establisment`,
+    baseURL: `${import.meta.env.VITE_API_URL}/establisment`,
 });
 
 const employeeApi = axios.create({
-    baseURL: `${process.env.API_URL}/employee`,
+    baseURL: `${import.meta.env.VITE_API_URL}/employee`,
 });
 
 const serviceApi = axios.create({
-    baseURL: `${process.env.API_URL}/service`,
+    baseURL: `${import.meta.env.VITE_API_URL}/service`,
 });
 
 const review = axios.create({
-    baseURL: `${process.env.API_URL}/review_employee`,
+    baseURL: `${import.meta.env.VITE_API_URL}/review_employee`,
 });
 
 const clientApi = axios.create({
-    baseURL: `${process.env.API_URL}/client`,
+    baseURL: `${import.meta.env.VITE_API_URL}/client`,
 });
 
 //=====================================================================================

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import EmployeeLoginForm from "./EmployeeLoginForm";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { loginEmployee } from "../../../Api/employee/employeeApi";
+import { loginEmployee } from "@/Api/employee/employee";
 import useAuthStore from "../../../stores/useAuthStore";
 import { loginReceptionist } from "../../../Api/receptionist/receptionistApi";
 import Cookies from "js-cookie";
@@ -123,7 +123,7 @@ function EmployeeLogin() {
 
       try {
         const response = await axios.post(
-          `${process.env.API_URL}/employee/EmployeeLogin/`,
+          `${import.meta.env.VITE_API_URL}/employee/EmployeeLogin/`,
           {
             auth_code: authCode,
           }

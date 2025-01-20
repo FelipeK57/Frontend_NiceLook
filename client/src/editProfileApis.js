@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL para la API (cambiar según sea necesario)
-const BASE_URL = `${process.env.API_URL}`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}`;
 
 // Función para obtener los datos del establecimiento (GET)
 export const obtenerEstablemiento = async (id) => {
@@ -69,7 +69,7 @@ export const obtenerBanner = async (id) => {
 // Función para subir el banner del establecimiento (POST)
 export const subirBanner = async (id, formData) => {
   try {
-    const response = await axios.post(`${BASE_URL}image/upload-banner/${id}/`, formData, {
+    const response = await axios.post(`${BASE_URL}/image/upload-banner/${id}/`, formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
     return response;
