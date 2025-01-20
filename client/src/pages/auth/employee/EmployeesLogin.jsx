@@ -42,7 +42,7 @@ export const EmployeesLogin = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:8000/employee/EmployeeLogin/",
+          `${import.meta.env.VITE_API_URL}/employee/EmployeeLogin/`,
           {
             auth_code: authCode,
           }
@@ -115,7 +115,7 @@ export const EmployeesLogin = () => {
             animate={{ x: "65%", y: userRole !== "" ? "-50%" : "5%" }}
             transition={{ duration: 2 }}
             className="absolute rounded-full top-0 right-0 w-[1300px] h-[1300px] bg-tulip-tree-500"
-          ></motion.div>  
+          ></motion.div>
         </>
       )}
 
@@ -131,7 +131,9 @@ export const EmployeesLogin = () => {
               <h1 className="font-medium text-bold text-xl md:text-2xl ">
                 Esto es <LogoNiceLook className={"text-2xl md:text-4xl"} />
               </h1>
-              <p className="text-sm font-medium text-slate-700">¿Cuál es tu rol?</p>
+              <p className="text-sm font-medium text-slate-700">
+                ¿Cuál es tu rol?
+              </p>
               <div className="grid grid-cols-2 gap-6 w-full">
                 <Button
                   color="secondary"
