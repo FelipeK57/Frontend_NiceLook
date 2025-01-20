@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import EmployeeLoginForm from "./EmployeeLoginForm";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { loginEmployee } from "@/Api/employee/employee.js";
+import { loginEmployee } from "../../Api/employee/employee.js";
 import useAuthStore from "../../../stores/useAuthStore";
 import { loginReceptionist } from "@/Api/receptionist/receptionist.js";
 import Cookies from "js-cookie";
