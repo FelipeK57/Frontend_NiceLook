@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import {
   getEmployeeServices,
   getEstablishmentServices,
-} from "../../Api/employeeServices/employeeServicesApi";
+} from "@api_feats/employeeServices/employeeServicesApi";
 import Cookies from "js-cookie";
 
 function ServicesList() {

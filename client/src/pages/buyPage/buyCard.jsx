@@ -7,7 +7,7 @@ import {
   getProductsByEstablishment,
   searchProductsByName,
   addProductToCart,
-} from "../../Api/product/product";
+} from "@api_feats/product/product";
 import useAuthStore from "@/stores/useAuthStore";
 import AuthModal from "@/components/auth/AuthModal";
 import Cookies from "js-cookie";

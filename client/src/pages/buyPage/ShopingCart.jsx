@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CartItem from "../../components/ui/CartItem";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import { Button } from "@nextui-org/react";
-import { getCartDetails, completePurchase } from "../../Api/product/product";
+import { getCartDetails, completePurchase } from "@api_feats/product/product";
 import useAddCart from "@/stores/useAddCart";
 import Cookies from "js-cookie"; // Importa js-cookie
 
