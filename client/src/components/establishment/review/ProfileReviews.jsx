@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ComentList from "./ComentList";
-import { getEstablishmentServices } from "@/Api/employeeServices/employeeServicesApi";
+import { getEstablishmentServices } from "@/api/employeeServices/employeeServicesApi";
 import ServiceCardList from "./ServiceCardList";
 
 function ProfileReviews() {

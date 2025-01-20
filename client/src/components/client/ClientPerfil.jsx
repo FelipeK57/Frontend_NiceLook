@@ -1,4 +1,4 @@
-import { editClient } from "@/Api/employeeServices/employeeServicesApi";
+import { editClient } from "@/api/employeeServices/employeeServicesApi";
 import { Input } from "@nextui-org/input"
 import { AnimatePresence, motion } from "framer-motion";
 import PropTypes from "prop-types"
