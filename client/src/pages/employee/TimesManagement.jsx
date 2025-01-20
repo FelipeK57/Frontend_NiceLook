@@ -269,6 +269,8 @@ const Calendar = ({ month2, dayStates, year2, reload, setReload }) => {
                     {day ? (
                       <ViewDate
                         month={months[month2].name}
+                        year={year2}
+                        monthKey={month2 + 1}
                         color={colorClass}
                         day={day}
                         dataDay={dataDay}

@@ -20,7 +20,16 @@ const parsedTime = (time) => {
   return time.toString().slice(0, 5);
 };
 
-export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
+export const ViewDate = ({
+  month,
+  monthKey,
+  year,
+  color,
+  day,
+  dataDay,
+  reload,
+  setReload,
+}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [editMode, setEditMode] = useState(false);
 
@@ -86,17 +95,17 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
   //   }
   // };
 
-  const changeTimeToException = async (date) => {
+  const changeTimeToException = async () => {
     try {
       setDialogTimeOpen(true);
-      console.log(date);
+      const date = new Date(year, monthKey, day).toISOString().split("T")[0];
       const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/employee/delete_time/${Cookies.get(
           "id_employee"
         )}/`,
         {
           params: {
-            date,
+            date: date,
           },
         }
       );
@@ -196,7 +205,7 @@ export const ViewDate = ({ month, color, day, dataDay, reload, setReload }) => {
                               isOpen={isDialogTimeOpen}
                               onClose={handleTimeClose}
                               onConfirm={() =>
-                                changeTimeToException(dataDay.time.date_start)
+                                changeTimeToException()
                               }
                               title={"Definir como excepción"}
                               message={`¿Estás seguro de convertir el día ${day} de ${month} en una excepción?, puedes eliminarla en cualquier momento y volver a tener tu horario.`}
