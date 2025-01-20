@@ -1,10 +1,11 @@
 import { Select, SelectItem } from "@nextui-org/react";
 import Services from "./Services";
 import { useEffect, useState } from "react";
-import {
-  getEmployeeServices,
-  getEstablishmentServices,
-} from "../../Api/employeeServices/employeeServicesApi";
+// import {
+//   getEmployeeServices,
+//   getEstablishmentServices,
+// } from "../../Api/employeeServices/employeeServicesApi";
+import { getEmployeeServices, getEstablishmentServices } from "@/api_feats/employeeServices/employeeServicesApi";
 import Cookies from "js-cookie";
 
 function ServicesList() {

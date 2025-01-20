@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Modal, Button, Switch, ModalFooter, ModalHeader, ModalBody, ModalContent } from '@nextui-org/react';
-import { getEmployeeSchedules, updateEmployeeSchedule } from '../../api/employee/employee';
+// import { getEmployeeSchedules, updateEmployeeSchedule } from '../../api/employee/employee';
+import { getEmployeeSchedules, updateEmployeeSchedule } from '@/api_feats/employee/employee';
 
 const ScheduleModal = ({ isOpen, onOpenChange, onSave, employeeId }) => {
     const [isTwoShifts, setIsTwoShifts] = useState(() => {

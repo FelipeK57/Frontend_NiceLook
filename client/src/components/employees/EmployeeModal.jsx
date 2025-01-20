@@ -3,7 +3,8 @@ import ButtonCustom from "../global/ButtonCustom";
 import EmployeeReviewsList from "./EmployeeReviewsList";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { createEmployee, getCategories, updateEmployee, updateReceptionist } from "@/api/employee/employee";
+// import { createEmployee, getCategories, updateEmployee, updateReceptionist } from "@/api/employee/employee";
+import { createEmployee, getCategories, updateEmployee, updateReceptionist } from "@/api_feats/employee/employee";
 import Cookies from "js-cookie";
 
 const categories = [

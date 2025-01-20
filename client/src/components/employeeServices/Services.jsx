@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { addEmployeeService, deleteEmployeeService } from "../../Api/employeeServices/employeeServicesApi"
+// import { addEmployeeService, deleteEmployeeService } from "../../Api/employeeServices/employeeServicesApi"
+import { addEmployeeService, deleteEmployeeService } from "@/api_feats/employeeServices/employeeServicesApi";
 import ButtonCustom from "../global/ButtonCustom"
 import PropTypes from "prop-types"
 

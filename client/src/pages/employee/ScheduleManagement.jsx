@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import {
-  createEmployeeSchedule,
-  getEmployeeSchedule,
-} from "../../api/employee/employee";
+// import {
+//   createEmployeeSchedule,
+//   getEmployeeSchedule,
+// } from "../../api/employee/employee";
+import { createEmployeeSchedule, getEmployeeSchedule } from "@/api_feats/employee/employee";
 import ButtonCustom from "../../components/global/ButtonCustom";
 import Day from "../../components/appointmentsEmployee/Day";
 import ScheduleModal from "../../components/appointmentsEmployee/ScheduleModal";

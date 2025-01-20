@@ -3,11 +3,12 @@ import Product from "../../components/ui/Product";
 import InputCart from "../../components/ui/InputCart";
 import { Badge, Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
-import {
-  getProductsByEstablishment,
-  searchProductsByName,
-  addProductToCart,
-} from "../../Api/product/product";
+// import {
+//   getProductsByEstablishment,
+//   searchProductsByName,
+//   addProductToCart,
+// } from "../../Api/product/product";
+import { getProductsByEstablishment, searchProductsByName, addProductToCart } from "@/api_feats/product/product";
 import useAuthStore from "@/stores/useAuthStore";
 import AuthModal from "@/components/auth/AuthModal";
 import Cookies from "js-cookie";
